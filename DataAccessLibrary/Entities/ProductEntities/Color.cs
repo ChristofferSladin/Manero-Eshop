@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DataAccessLibrary.Entities;
+namespace DataAccessLibrary.Entities.ProductEntities;
 
 public class Color
 {

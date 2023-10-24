@@ -1,16 +1,15 @@
-﻿
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DataAccessLibrary.Entities;
+namespace DataAccessLibrary.Entities.ProductEntities;
 
 public class Product
 {
     [Key]
     public int ProductId { get; set; }
     [Required]
-    [Column(TypeName = "nvarchar(10)")]
-    public string ProductNumber { get; set; } = null!;
+    [Column(TypeName = "nvarchar(12)")]
+    public int ProductNumber {  get; set; }
     [Required]
     [Column(TypeName = "nvarchar(50)")]
     public string ProductName { get; set; } = null!;
@@ -22,6 +21,7 @@ public class Product
     public string? Type { get; set; }
     public virtual ICollection<ProductColor>? ProductColors { get; set; }
     public string? Size { get; set; }
+    [Required]
     public decimal Price { get; set; }
     public decimal SalePrice { get; set; }
     public bool IsOnSale { get; set; }
