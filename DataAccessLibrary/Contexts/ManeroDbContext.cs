@@ -1,11 +1,8 @@
-﻿
+﻿using DataAccessLibrary.Entities;
 using DataAccessLibrary.Entities.ProductEntities;
 using DataAccessLibrary.Entities.UserEntities;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
-using System.Runtime.CompilerServices;
 
 namespace DataAccessLibrary.Contexts;
 
@@ -33,7 +30,7 @@ public class ManeroDbContext : IdentityDbContext
     public DbSet<Color> Colors { get; set; }
     public DbSet<ProductColor> ProductColors { get; set; }
     public DbSet<Review> Reviews { get; set; }
-    public DbSet<Adress> Adresses { get; set; }
+    public DbSet<Address> Addresses { get; set; }
     public DbSet<Card> Cards { get; set; }
     public DbSet<FavoriteProduct> FavoriteProducts { get; set; }
     public DbSet<Order> Orders { get; set; }

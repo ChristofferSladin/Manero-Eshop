@@ -1,7 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using DataAccessLibrary.Entities.ProductEntities;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DataAccessLibrary.Entities.ProductEntities;
+namespace DataAccessLibrary.Entities;
 
 public class Product
 {

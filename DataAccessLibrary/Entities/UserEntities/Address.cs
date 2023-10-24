@@ -1,14 +1,12 @@
-﻿
-using DataAccessLibrary.Entities.ProductEntities;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataAccessLibrary.Entities.UserEntities;
 
-public class Adress
+public class Address
 {
     [Key] 
-    public int AdressId { get; set; }
+    public int AddressId { get; set; }
     [Required]
     [Column(TypeName = "nvarchar(50)")]
     public string Country { get; set; } = null!;
