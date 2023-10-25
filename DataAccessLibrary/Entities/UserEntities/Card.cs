@@ -7,18 +7,30 @@ public class Card
 {
     [Key]
     public int CardId { get; set; }
+
     [Required]
+    [Column(TypeName = "nvarchar(50)")]
     public string CardNumber { get; set; } = null!;
+
     [Required]
+    [Column(TypeName = "nvarchar(100)")]
     public string CardHolderName { get; set; } = null!;
+
     [Required]
-    public DateTime ExpirationDate { get; set; } 
+    public DateTime ExpirationDate { get; set; }
+    
     [Required]
-    public int SecurityCode { get; set; }
+    [Column(TypeName = "nvarchar(50)")]
+    public string SecurityCode { get; set; } = null!;
+
     [Required]
+    [Column(TypeName = "nvarchar(50)")]
     public string CardType { get; set; } = null!;
+
     [Required]
+    [Column(TypeName = "nvarchar(100)")]
     public string IssuerBank { get; set; } = null!;
+
 
     [Required]
     public string Id { get; set; } = null!;

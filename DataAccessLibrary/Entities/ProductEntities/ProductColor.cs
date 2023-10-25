@@ -8,9 +8,11 @@ public class ProductColor
     [Key]
     public int ProductColorId { get; set; }
 
+
     [ForeignKey(nameof(ProductId))]
     public int ProductId { get; set; }
     public Product Product { get; set; } = null!;
+
 
     [ForeignKey(nameof(ColorId))]
     public int ColorId { get; set; }

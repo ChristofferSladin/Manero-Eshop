@@ -97,7 +97,7 @@ public class DataInitializer
 
             if (addedProduct != null)
             {
-                addedProduct.Entity.ProductNumber = "P" + addedProduct.Entity.ProductId.ToString("D11");
+                addedProduct.Entity.GenerateProductNumber();
                 _context.Update(addedProduct.Entity);
             }
 
@@ -112,7 +112,7 @@ public class DataInitializer
             }
             _context.SaveChanges();
         }
-        catch (Exception ex) { Debug.WriteLine(ex.Message); Debug.WriteLine(ex.StackTrace); throw; }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); Debug.WriteLine(ex.StackTrace); }
     }
 
     private void AddUserIfNotExists(string userName, string password, string[] roles)
