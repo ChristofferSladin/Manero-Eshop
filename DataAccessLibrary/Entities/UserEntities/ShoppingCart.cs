@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using DataAccessLibrary.Entities.ProductEntities;
 
 namespace DataAccessLibrary.Entities.UserEntities;
 
+[Table("ShoppingCart")]
 public class ShoppingCart
 {
     [Key] 

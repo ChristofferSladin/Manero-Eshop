@@ -4,6 +4,7 @@ using DataAccessLibrary.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLibrary.Migrations
 {
     [DbContext(typeof(ManeroDbContext))]
-    partial class ManeroDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231025180648_new clean migration")]
+    partial class newcleanmigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -333,7 +336,7 @@ namespace DataAccessLibrary.Migrations
                     b.HasIndex("Id")
                         .IsUnique();
 
-                    b.ToTable("ShoppingCart");
+                    b.ToTable("ShoppingCarts");
                 });
 
             modelBuilder.Entity("DataAccessLibrary.Entities.UserEntities.ShoppingCartProduct", b =>

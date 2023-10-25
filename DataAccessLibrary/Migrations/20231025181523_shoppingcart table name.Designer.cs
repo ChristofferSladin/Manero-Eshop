@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLibrary.Migrations
 {
     [DbContext(typeof(ManeroDbContext))]
-    [Migration("20231025171801_new clean migration")]
-    partial class newcleanmigration
+    [Migration("20231025181523_shoppingcart table name")]
+    partial class shoppingcarttablename
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -333,9 +333,10 @@ namespace DataAccessLibrary.Migrations
 
                     b.HasKey("ShoppingCartId");
 
-                    b.HasIndex("Id");
+                    b.HasIndex("Id")
+                        .IsUnique();
 
-                    b.ToTable("ShoppingCarts");
+                    b.ToTable("ShoppingCart");
                 });
 
             modelBuilder.Entity("DataAccessLibrary.Entities.UserEntities.ShoppingCartProduct", b =>
@@ -695,8 +696,8 @@ namespace DataAccessLibrary.Migrations
             modelBuilder.Entity("DataAccessLibrary.Entities.UserEntities.ShoppingCart", b =>
                 {
                     b.HasOne("DataAccessLibrary.Entities.ApplicationUser", "ApplicationUser")
-                        .WithMany("ShoppingCarts")
-                        .HasForeignKey("Id")
+                        .WithOne("ShoppingCart")
+                        .HasForeignKey("DataAccessLibrary.Entities.UserEntities.ShoppingCart", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -824,7 +825,7 @@ namespace DataAccessLibrary.Migrations
 
                     b.Navigation("Reviews");
 
-                    b.Navigation("ShoppingCarts");
+                    b.Navigation("ShoppingCart");
                 });
 #pragma warning restore 612, 618
         }

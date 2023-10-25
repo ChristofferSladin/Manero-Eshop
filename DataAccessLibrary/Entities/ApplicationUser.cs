@@ -10,6 +10,6 @@ public class ApplicationUser : IdentityUser
     public virtual ICollection<Address>? Addresses { get; set; }
     public virtual ICollection<Order>? Orders { get; set; }
     public virtual ICollection<Card>? Cards { get; set; }
-    public virtual ICollection<ShoppingCart>? ShoppingCarts { get; set; }
+    public virtual ShoppingCart? ShoppingCart { get; set; }
     public virtual ICollection<FavoriteProduct>? FavoriteProducts { get; set; }
 }

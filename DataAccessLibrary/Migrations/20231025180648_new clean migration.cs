@@ -538,7 +538,8 @@ namespace DataAccessLibrary.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_ShoppingCarts_Id",
                 table: "ShoppingCarts",
-                column: "Id");
+                column: "Id",
+                unique: true);
         }
 
         /// <inheritdoc />

@@ -16,7 +16,6 @@ public class ManeroDbContext : IdentityDbContext
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-        builder.Entity<Order>().Property(e => e.OrderStatus).HasConversion<string>();
     }
 
     public DbSet<Product> Products { get; set; }
