@@ -1,4 +1,5 @@
 ﻿using DataAccessLibrary.Entities.ProductEntities;
+using DataAccessLibrary.Entities.UserEntities;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -8,9 +9,8 @@ public class Product
 {
     [Key]
     public int ProductId { get; set; }
-    [Required]
     [Column(TypeName = "nvarchar(12)")]
-    public int ProductNumber {  get; set; }
+    public string? ProductNumber { get; set; }
     [Required]
     [Column(TypeName = "nvarchar(50)")]
     public string ProductName { get; set; } = null!;
@@ -28,4 +28,8 @@ public class Product
     public bool IsOnSale { get; set; }
     public bool IsFeatured { get; set; }
     public decimal Rating { get; set; }
+    public string? ImageUrl { get; set; }
+    public virtual ICollection<FavoriteProduct>? FavoriteProducts { get; set; }
+    public virtual ICollection<Order>? Orders { get; set; }
+    public virtual ICollection<ShoppingCart>? ShoppingCarts { get; set; }
 }

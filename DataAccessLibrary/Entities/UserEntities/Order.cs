@@ -28,7 +28,7 @@ public class Order
     public int OrderId { get; set; }
     [Required]
     [Column(TypeName = "nvarchar(12)")]
-    public int OrderNumber { get; set; }
+    public string OrderNumber => GenerateOrderNumber();
     [Required]
     public ICollection<Product> Products { get; set; } = null!;
     [Required]
@@ -45,4 +45,10 @@ public class Order
     public PaymentMethod PaymentMethod { get; set; }
     [Required]
     public decimal TotalAmount { get; set; }
+
+    private string GenerateOrderNumber()
+    {
+        var format = "000000000000";
+        return OrderId.ToString(format);
+    }
 }

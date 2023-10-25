@@ -4,6 +4,7 @@ using DataAccessLibrary.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLibrary.Migrations
 {
     [DbContext(typeof(ManeroDbContext))]
-    partial class ManeroDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231025104241_fixed relations in product table")]
+    partial class fixedrelationsinproducttable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,6 +56,7 @@ namespace DataAccessLibrary.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("ProductNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(12)");
 
                     b.Property<decimal>("Rating")
@@ -68,6 +72,9 @@ namespace DataAccessLibrary.Migrations
                         .HasColumnType("nvarchar(20)");
 
                     b.HasKey("ProductId");
+
+                    b.HasIndex("ProductNumber")
+                        .IsUnique();
 
                     b.ToTable("Products");
                 });
@@ -258,6 +265,10 @@ namespace DataAccessLibrary.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("OrderNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(12)");
+
                     b.Property<string>("OrderStatus")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -274,6 +285,9 @@ namespace DataAccessLibrary.Migrations
                     b.HasKey("OrderId");
 
                     b.HasIndex("Id");
+
+                    b.HasIndex("OrderNumber")
+                        .IsUnique();
 
                     b.ToTable("Orders");
                 });

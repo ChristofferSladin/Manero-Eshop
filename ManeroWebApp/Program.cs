@@ -1,4 +1,5 @@
 using DataAccessLibrary.Contexts;
+using DataAccessLibrary.Initializers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,15 +7,21 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<ManeroDbContext>(options =>
-    options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<ManeroDbContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ManeroDbContext>();
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddRoles<IdentityRole>().AddEntityFrameworkStores<ManeroDbContext>();
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddScoped<DataInitializer>();
+
 var app = builder.Build();
+
+
+using (var scope = app.Services.CreateScope())
+{
+    scope.ServiceProvider.GetService<DataInitializer>().SeedData();
+}
 
 // Configure the HTTP request pipeline..
 if (app.Environment.IsDevelopment())

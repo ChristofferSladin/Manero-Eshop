@@ -3,6 +3,7 @@ using DataAccessLibrary.Entities.ProductEntities;
 using DataAccessLibrary.Entities.UserEntities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 
 namespace DataAccessLibrary.Contexts;
 
@@ -16,14 +17,6 @@ public class ManeroDbContext : IdentityDbContext
     {
         base.OnModelCreating(builder);
         builder.Entity<Order>().Property(e => e.OrderStatus).HasConversion<string>();
-
-        builder.Entity<Product>()
-        .HasIndex(u => u.ProductNumber)
-        .IsUnique();
-
-        builder.Entity<Order>()
-        .HasIndex(u => u.OrderNumber)
-        .IsUnique();
     }
 
     public DbSet<Product> Products { get; set; }

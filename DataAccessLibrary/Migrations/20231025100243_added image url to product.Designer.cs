@@ -4,6 +4,7 @@ using DataAccessLibrary.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLibrary.Migrations
 {
     [DbContext(typeof(ManeroDbContext))]
-    partial class ManeroDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231025100243_added image url to product")]
+    partial class addedimageurltoproduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,6 +39,9 @@ namespace DataAccessLibrary.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<int?>("FavoriteProductId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
@@ -45,6 +51,9 @@ namespace DataAccessLibrary.Migrations
                     b.Property<bool>("IsOnSale")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
@@ -53,6 +62,7 @@ namespace DataAccessLibrary.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("ProductNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(12)");
 
                     b.Property<decimal>("Rating")
@@ -61,6 +71,9 @@ namespace DataAccessLibrary.Migrations
                     b.Property<decimal>("SalePrice")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int?>("ShoppingCartId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Size")
                         .HasColumnType("nvarchar(max)");
 
@@ -68,6 +81,15 @@ namespace DataAccessLibrary.Migrations
                         .HasColumnType("nvarchar(20)");
 
                     b.HasKey("ProductId");
+
+                    b.HasIndex("FavoriteProductId");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductNumber")
+                        .IsUnique();
+
+                    b.HasIndex("ShoppingCartId");
 
                     b.ToTable("Products");
                 });
@@ -258,6 +280,10 @@ namespace DataAccessLibrary.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("OrderNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(12)");
+
                     b.Property<string>("OrderStatus")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -274,6 +300,9 @@ namespace DataAccessLibrary.Migrations
                     b.HasKey("OrderId");
 
                     b.HasIndex("Id");
+
+                    b.HasIndex("OrderNumber")
+                        .IsUnique();
 
                     b.ToTable("Orders");
                 });
@@ -295,21 +324,6 @@ namespace DataAccessLibrary.Migrations
                     b.HasIndex("Id");
 
                     b.ToTable("ShoppingCarts");
-                });
-
-            modelBuilder.Entity("FavoriteProductProduct", b =>
-                {
-                    b.Property<int>("FavoriteProductsFavoriteProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductsProductId")
-                        .HasColumnType("int");
-
-                    b.HasKey("FavoriteProductsFavoriteProductId", "ProductsProductId");
-
-                    b.HasIndex("ProductsProductId");
-
-                    b.ToTable("FavoriteProductProduct");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -522,41 +536,26 @@ namespace DataAccessLibrary.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("OrderProduct", b =>
-                {
-                    b.Property<int>("OrdersOrderId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductsProductId")
-                        .HasColumnType("int");
-
-                    b.HasKey("OrdersOrderId", "ProductsProductId");
-
-                    b.HasIndex("ProductsProductId");
-
-                    b.ToTable("OrderProduct");
-                });
-
-            modelBuilder.Entity("ProductShoppingCart", b =>
-                {
-                    b.Property<int>("ProductsProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ShoppingCartsShoppingCartId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProductsProductId", "ShoppingCartsShoppingCartId");
-
-                    b.HasIndex("ShoppingCartsShoppingCartId");
-
-                    b.ToTable("ProductShoppingCart");
-                });
-
             modelBuilder.Entity("DataAccessLibrary.Entities.ApplicationUser", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
                     b.HasDiscriminator().HasValue("ApplicationUser");
+                });
+
+            modelBuilder.Entity("DataAccessLibrary.Entities.Product", b =>
+                {
+                    b.HasOne("DataAccessLibrary.Entities.UserEntities.FavoriteProduct", null)
+                        .WithMany("Products")
+                        .HasForeignKey("FavoriteProductId");
+
+                    b.HasOne("DataAccessLibrary.Entities.UserEntities.Order", null)
+                        .WithMany("Products")
+                        .HasForeignKey("OrderId");
+
+                    b.HasOne("DataAccessLibrary.Entities.UserEntities.ShoppingCart", null)
+                        .WithMany("Products")
+                        .HasForeignKey("ShoppingCartId");
                 });
 
             modelBuilder.Entity("DataAccessLibrary.Entities.ProductEntities.ProductColor", b =>
@@ -644,21 +643,6 @@ namespace DataAccessLibrary.Migrations
                     b.Navigation("ApplicationUser");
                 });
 
-            modelBuilder.Entity("FavoriteProductProduct", b =>
-                {
-                    b.HasOne("DataAccessLibrary.Entities.UserEntities.FavoriteProduct", null)
-                        .WithMany()
-                        .HasForeignKey("FavoriteProductsFavoriteProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DataAccessLibrary.Entities.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -710,36 +694,6 @@ namespace DataAccessLibrary.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("OrderProduct", b =>
-                {
-                    b.HasOne("DataAccessLibrary.Entities.UserEntities.Order", null)
-                        .WithMany()
-                        .HasForeignKey("OrdersOrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DataAccessLibrary.Entities.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("ProductShoppingCart", b =>
-                {
-                    b.HasOne("DataAccessLibrary.Entities.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DataAccessLibrary.Entities.UserEntities.ShoppingCart", null)
-                        .WithMany()
-                        .HasForeignKey("ShoppingCartsShoppingCartId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("DataAccessLibrary.Entities.Product", b =>
                 {
                     b.Navigation("ProductColors");
@@ -748,6 +702,21 @@ namespace DataAccessLibrary.Migrations
             modelBuilder.Entity("DataAccessLibrary.Entities.ProductEntities.Color", b =>
                 {
                     b.Navigation("ProductColors");
+                });
+
+            modelBuilder.Entity("DataAccessLibrary.Entities.UserEntities.FavoriteProduct", b =>
+                {
+                    b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("DataAccessLibrary.Entities.UserEntities.Order", b =>
+                {
+                    b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("DataAccessLibrary.Entities.UserEntities.ShoppingCart", b =>
+                {
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("DataAccessLibrary.Entities.ApplicationUser", b =>
