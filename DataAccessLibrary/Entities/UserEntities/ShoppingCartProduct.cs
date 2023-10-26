@@ -6,7 +6,7 @@ namespace DataAccessLibrary.Entities.UserEntities;
 public class ShoppingCartProduct
 {
     [Key]
-    public int OrderProductId { get; set; }
+    public int ShoppingCartProductId { get; set; }
 
     [Required]
     public decimal TotalPrice { get; set; }

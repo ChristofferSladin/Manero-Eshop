@@ -28,11 +28,10 @@ public class Order
     [Key]
     public int OrderId { get; set; }
 
-    [Required]
     [Column(TypeName = "nvarchar(12)")]
     public string? OrderNumber { get; private set; }
 
-    public void GenerateProductNumber()
+    public void GenerateOrderNumber()
     {
         OrderNumber = OrderId.ToString("D12");
     }
