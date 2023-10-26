@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using System.Diagnostics;
 using DataAccessLibrary.Entities.UserEntities;
+using System.Data;
 
 
 namespace DataAccessLibrary.Initializers;
@@ -31,6 +32,7 @@ public class DataInitializer
         SeedShoppingCarts();
         SeedOrders();
         SeedFavoriteProducts();
+        SeedAddresses();
     }
 
     private void SeedUsers()
@@ -68,13 +70,45 @@ public class DataInitializer
     {
         AddOrdersIfNotExisting();
     }
-    private void SeedFavoriteProducts() 
+    private void SeedFavoriteProducts()
     {
         AddFavoriteProductsIfNotExisting();
     }
-    private void SeedAddresses() { }
+    private void SeedAddresses()
+    {
+        AddAddressIfNotExists("Olofgatan 13", "158 89", "Stockholm", "Sweden");
+        AddAddressIfNotExists("Grove Street 21", "9000 52", "Los Angeles", "USA");
+        AddAddressIfNotExists("Calle La Revolucion", "10 400", "Havana", "Cuba");
+    }
     private void SeedReviews() { }
     private void SeedCards() { }
+
+    private void AddAddressIfNotExists(string streetName, string zipCode, string city, string country)
+    {
+        var user = _context.ApplicationUsers.Include(u => u.Addresses).FirstOrDefault(u => u.Email == "customer1@customer.com");
+
+        bool addressExistsForUser = user.Addresses.Any(a =>
+            a.StreetName == streetName &&
+            a.ZipCode == zipCode &&
+            a.City == city &&
+            a.Country == country
+        );
+
+        if (!addressExistsForUser)
+        {
+            var address = new Address
+            {
+                StreetName = streetName,
+                ZipCode = zipCode,
+                City = city,
+                Country = country,
+                Id = user.Id
+            };
+
+            user.Addresses.Add(address);
+            _context.SaveChanges();
+        }
+    }
 
     private void AddFavoriteProductsIfNotExisting()
     {
@@ -110,10 +144,10 @@ public class DataInitializer
 
                     if (favoriteProduct3 != null)
                         favoriteProductsExists.Products.Add(favoriteProduct3);
-                    
+
                     if (favoriteProduct4 != null)
                         favoriteProductsExists.Products.Add(favoriteProduct4);
-                    
+
                     _context.SaveChanges();
                 }
             }
