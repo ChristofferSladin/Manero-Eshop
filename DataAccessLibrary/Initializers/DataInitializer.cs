@@ -32,7 +32,6 @@ public class DataInitializer
         SeedShoppingCarts();
         SeedOrders();
         SeedFavoriteProducts();
-        SeedAddresses();
     }
 
     private void SeedUsers()
@@ -76,38 +75,14 @@ public class DataInitializer
     }
     private void SeedAddresses()
     {
-        AddAddressIfNotExists("Olofgatan 13", "158 89", "Stockholm", "Sweden");
-        AddAddressIfNotExists("Grove Street 21", "9000 52", "Los Angeles", "USA");
-        AddAddressIfNotExists("Calle La Revolucion", "10 400", "Havana", "Cuba");
+        
     }
     private void SeedReviews() { }
     private void SeedCards() { }
 
-    private void AddAddressIfNotExists(string streetName, string zipCode, string city, string country)
+    private void AddAddressIfNotExists()
     {
-        var user = _context.ApplicationUsers.Include(u => u.Addresses).FirstOrDefault(u => u.Email == "customer1@customer.com");
-
-        bool addressExistsForUser = user.Addresses.Any(a =>
-            a.StreetName == streetName &&
-            a.ZipCode == zipCode &&
-            a.City == city &&
-            a.Country == country
-        );
-
-        if (!addressExistsForUser)
-        {
-            var address = new Address
-            {
-                StreetName = streetName,
-                ZipCode = zipCode,
-                City = city,
-                Country = country,
-                Id = user.Id
-            };
-
-            user.Addresses.Add(address);
-            _context.SaveChanges();
-        }
+      
     }
 
     private void AddFavoriteProductsIfNotExisting()
@@ -153,7 +128,6 @@ public class DataInitializer
             }
         }
     }
-
 
     private void AddOrdersIfNotExisting()
     {
