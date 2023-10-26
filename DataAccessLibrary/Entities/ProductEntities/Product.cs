@@ -54,5 +54,5 @@ public class Product
     public virtual ICollection<OrderProduct>? OrdersProducts { get; set; }
     public virtual ICollection<ProductColor>? ProductColors { get; set; }
     public virtual ICollection<ShoppingCartProduct>? ShoppingCartProducts { get; set; }
-    public virtual ICollection<FavoriteProduct>? FavoriteProducts { get; set; }
+    public virtual ICollection<FavoriteProductList>? FavoriteProductList { get; set; }
 }

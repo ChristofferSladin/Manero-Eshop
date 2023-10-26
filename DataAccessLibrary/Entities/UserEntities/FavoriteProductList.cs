@@ -4,7 +4,7 @@ using DataAccessLibrary.Entities.ProductEntities;
 
 namespace DataAccessLibrary.Entities.UserEntities;
 
-public class FavoriteProduct
+public class FavoriteProductList
 {
     [Key]
     public int FavoriteProductId { get; set; }

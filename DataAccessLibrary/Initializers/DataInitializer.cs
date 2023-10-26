@@ -30,6 +30,7 @@ public class DataInitializer
         SeedProducts();
         SeedShoppingCarts();
         SeedOrders();
+        SeedFavoriteProducts();
     }
 
     private void SeedUsers()
@@ -63,15 +64,63 @@ public class DataInitializer
     {
         AddShoppingCartIfNotExisting();
     }
-
     private void SeedOrders()
     {
         AddOrdersIfNotExisting();
     }
-    private void SeedFavoriteProducts() { }
+    private void SeedFavoriteProducts() 
+    {
+        AddFavoriteProductsIfNotExisting();
+    }
     private void SeedAddresses() { }
     private void SeedReviews() { }
     private void SeedCards() { }
+
+    private void AddFavoriteProductsIfNotExisting()
+    {
+        var userExists = _context.Users.FirstOrDefault(u => u.Email == "customer1@customer.com");
+        if (userExists != null)
+        {
+            var favoriteProductsExists = _context.FavoriteProductList.Include(o => o.Products).FirstOrDefault(o => o.Id == userExists.Id);
+            if (favoriteProductsExists == null)
+            {
+                var favoriteProducts = new FavoriteProductList
+                {
+                    Id = userExists.Id,
+                };
+                _context.Add(favoriteProducts);
+                _context.SaveChanges();
+            }
+
+            favoriteProductsExists = _context.FavoriteProductList.Include(o => o.Products).FirstOrDefault(o => o.Id == userExists.Id);
+            if (favoriteProductsExists != null)
+            {
+                if (!favoriteProductsExists.Products.Any())
+                {
+                    var favoriteProduct1 = _context.Products.Skip(0).Take(1).FirstOrDefault();
+                    var favoriteProduct2 = _context.Products.Skip(1).Take(1).FirstOrDefault();
+                    var favoriteProduct3 = _context.Products.Skip(3).Take(1).FirstOrDefault();
+                    var favoriteProduct4 = _context.Products.Skip(5).Take(1).FirstOrDefault();
+
+                    if (favoriteProduct1 != null)
+                        favoriteProductsExists.Products.Add(favoriteProduct1);
+
+                    if (favoriteProduct2 != null)
+                        favoriteProductsExists.Products.Add(favoriteProduct2);
+
+                    if (favoriteProduct3 != null)
+                        favoriteProductsExists.Products.Add(favoriteProduct3);
+                    
+                    if (favoriteProduct4 != null)
+                        favoriteProductsExists.Products.Add(favoriteProduct4);
+                    
+                    _context.SaveChanges();
+                }
+            }
+        }
+    }
+
+
     private void AddOrdersIfNotExisting()
     {
         var userExists = _context.Users.FirstOrDefault(u => u.Email == "customer1@customer.com");
@@ -103,7 +152,6 @@ public class DataInitializer
             {
                 if (!orderExists.OrderProducts.Any())
                 {
-
                     var orderProduct1 = new OrderProduct
                     {
                         ItemQuantity = 2,
@@ -166,7 +214,6 @@ public class DataInitializer
                 }
             }
         }
-
     }
 
     private void AddProductIfNotExisting(int quantity, string colorName, string productName, string? description, string? category, string? type, string? size, decimal price, decimal salePrice, bool isOnSale, bool isFeatured, decimal rating, string? imageUrl)
@@ -192,7 +239,6 @@ public class DataInitializer
                 ImageUrl = imageUrl,
             };
             addedProduct = _context.Products.Add(product);
-
         }
 
         if (!_context.Colors.Any(p => p.ColorName == colorName))
@@ -201,7 +247,6 @@ public class DataInitializer
             {
                 ColorName = colorName
             };
-
             addedColor = _context.Colors.Add(color);
         }
 
