@@ -77,14 +77,26 @@ public class DataInitializer
     {
 
     }
-    private void SeedReviews() { }
-    private void SeedCards() { }
 
-    private void AddAddressIfNotExists()
+    private void SeedReviews()
     {
 
     }
 
+    private void SeedCards()
+    {
+
+    }
+
+    private void AddAddressIfNotExists()
+    {
+    
+    }
+
+    private void AddReviewsIfNotExisting()
+    {
+
+    }
     private void AddFavoriteProductsIfNotExisting()
     {
         var userExists = _context.Users.FirstOrDefault(u => u.Email == "customer1@customer.com");

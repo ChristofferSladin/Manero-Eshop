@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLibrary.Migrations
 {
     [DbContext(typeof(ManeroDbContext))]
-    [Migration("20231027081134_clean migration")]
+    [Migration("20231027092832_clean migration")]
     partial class cleanmigration
     {
         /// <inheritdoc />
@@ -179,6 +179,8 @@ namespace DataAccessLibrary.Migrations
                     b.HasKey("ReviewId");
 
                     b.HasIndex("Id");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("Reviews");
                 });
@@ -653,6 +655,12 @@ namespace DataAccessLibrary.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("DataAccessLibrary.Entities.ProductEntities.Product", null)
+                        .WithMany("Reviews")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("ApplicationUser");
                 });
 
@@ -812,6 +820,8 @@ namespace DataAccessLibrary.Migrations
                     b.Navigation("OrdersProducts");
 
                     b.Navigation("ProductColors");
+
+                    b.Navigation("Reviews");
 
                     b.Navigation("ShoppingCartProducts");
                 });

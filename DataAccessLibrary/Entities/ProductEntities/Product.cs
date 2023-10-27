@@ -55,4 +55,5 @@ public class Product
     public virtual ICollection<ProductColor>? ProductColors { get; set; }
     public virtual ICollection<ShoppingCartProduct>? ShoppingCartProducts { get; set; }
     public virtual ICollection<FavoriteProduct>? FavoriteProducts { get; set; }
+    public virtual ICollection<Review>? Reviews { get; set; }
 }

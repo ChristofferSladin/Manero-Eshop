@@ -177,6 +177,8 @@ namespace DataAccessLibrary.Migrations
 
                     b.HasIndex("Id");
 
+                    b.HasIndex("ProductId");
+
                     b.ToTable("Reviews");
                 });
 
@@ -650,6 +652,12 @@ namespace DataAccessLibrary.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("DataAccessLibrary.Entities.ProductEntities.Product", null)
+                        .WithMany("Reviews")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("ApplicationUser");
                 });
 
@@ -809,6 +817,8 @@ namespace DataAccessLibrary.Migrations
                     b.Navigation("OrdersProducts");
 
                     b.Navigation("ProductColors");
+
+                    b.Navigation("Reviews");
 
                     b.Navigation("ShoppingCartProducts");
                 });
