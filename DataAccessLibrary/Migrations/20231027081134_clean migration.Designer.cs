@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLibrary.Migrations
 {
     [DbContext(typeof(ManeroDbContext))]
-    [Migration("20231027073522_clean migration")]
+    [Migration("20231027081134_clean migration")]
     partial class cleanmigration
     {
         /// <inheritdoc />
@@ -299,7 +299,7 @@ namespace DataAccessLibrary.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("FavoriteProduct");
+                    b.ToTable("FavoriteProducts");
                 });
 
             modelBuilder.Entity("DataAccessLibrary.Entities.UserEntities.Order", b =>

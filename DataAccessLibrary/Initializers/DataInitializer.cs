@@ -71,63 +71,67 @@ public class DataInitializer
     }
     private void SeedFavoriteProducts()
     {
-        //AddFavoriteProductsIfNotExisting();
+        AddFavoriteProductsIfNotExisting();
     }
     private void SeedAddresses()
     {
-        
+
     }
     private void SeedReviews() { }
     private void SeedCards() { }
 
     private void AddAddressIfNotExists()
     {
-      
+
     }
 
-    //private void AddFavoriteProductsIfNotExisting()
-    //{
-    //    var userExists = _context.Users.FirstOrDefault(u => u.Email == "customer1@customer.com");
-    //    if (userExists != null)
-    //    {
-    //        var favoriteProductsExists = _context.FavoriteProductList.Include(o => o.Products).FirstOrDefault(o => o.Id == userExists.Id);
-    //        if (favoriteProductsExists == null)
-    //        {
-    //            var favoriteProducts = new Favorite
-    //            {
-    //                Id = userExists.Id,
-    //            };
-    //            _context.Add(favoriteProducts);
-    //            _context.SaveChanges();
-    //        }
+    private void AddFavoriteProductsIfNotExisting()
+    {
+        var userExists = _context.Users.FirstOrDefault(u => u.Email == "customer1@customer.com");
+        if (userExists != null)
+        {
+            var favoriteProductsExists = _context.Favorite.Include(o => o.FavoriteProducts).FirstOrDefault(o => o.Id == userExists.Id);
+            if (favoriteProductsExists == null)
+            {
+                var favoriteProducts = new Favorite
+                {
+                    Id = userExists.Id,
+                };
+                _context.Add(favoriteProducts);
+                _context.SaveChanges();
+            }
 
-    //        favoriteProductsExists = _context.FavoriteProductList.Include(o => o.Products).FirstOrDefault(o => o.Id == userExists.Id);
-    //        if (favoriteProductsExists != null)
-    //        {
-    //            if (!favoriteProductsExists.Products.Any())
-    //            {
-    //                var favoriteProduct1 = _context.Products.Skip(0).Take(1).FirstOrDefault();
-    //                var favoriteProduct2 = _context.Products.Skip(1).Take(1).FirstOrDefault();
-    //                var favoriteProduct3 = _context.Products.Skip(3).Take(1).FirstOrDefault();
-    //                var favoriteProduct4 = _context.Products.Skip(5).Take(1).FirstOrDefault();
-
-    //                if (favoriteProduct1 != null)
-    //                    favoriteProductsExists.Products.Add(favoriteProduct1);
-
-    //                if (favoriteProduct2 != null)
-    //                    favoriteProductsExists.Products.Add(favoriteProduct2);
-
-    //                if (favoriteProduct3 != null)
-    //                    favoriteProductsExists.Products.Add(favoriteProduct3);
-
-    //                if (favoriteProduct4 != null)
-    //                    favoriteProductsExists.Products.Add(favoriteProduct4);
-
-    //                _context.SaveChanges();
-    //            }
-    //        }
-    //    }
-    //}
+            favoriteProductsExists = _context.Favorite.Include(o => o.FavoriteProducts).FirstOrDefault(o => o.Id == userExists.Id);
+            if (favoriteProductsExists != null)
+            {
+                if (favoriteProductsExists.FavoriteProducts != null && !favoriteProductsExists.FavoriteProducts.Any())
+                {
+                    var favoriteProduct1 = new FavoriteProduct
+                    {
+                        ProductId = _context.Products.Skip(0).Take(1).FirstOrDefault()!.ProductId,
+                        FavoriteId = favoriteProductsExists.FavoriteId
+                    };
+                    var favoriteProduct2 = new FavoriteProduct
+                    {
+                        ProductId = _context.Products.Skip(1).Take(1).FirstOrDefault()!.ProductId,
+                        FavoriteId = favoriteProductsExists.FavoriteId
+                    };
+                    var favoriteProduct3 = new FavoriteProduct
+                    {
+                        ProductId = _context.Products.Skip(2).Take(1).FirstOrDefault()!.ProductId,
+                        FavoriteId = favoriteProductsExists.FavoriteId
+                    };
+                    var favoriteProduct4 = new FavoriteProduct
+                    {
+                        ProductId = _context.Products.Skip(3).Take(1).FirstOrDefault()!.ProductId,
+                        FavoriteId = favoriteProductsExists.FavoriteId
+                    };
+                    _context.AddRange(favoriteProduct1, favoriteProduct2, favoriteProduct3, favoriteProduct4);
+                    _context.SaveChanges();
+                }
+            }
+        }
+    }
 
     private void AddOrdersIfNotExisting()
     {

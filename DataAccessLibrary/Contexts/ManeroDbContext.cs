@@ -30,4 +30,6 @@ public class ManeroDbContext : IdentityDbContext
     public DbSet<ApplicationUser> ApplicationUsers { get; set; }
     public DbSet<OrderProduct> OrderProducts { get; set; }
     public DbSet<ShoppingCartProduct> ShoppingCartProducts { get; set; }
+    public DbSet<FavoriteProduct> FavoriteProducts { get; set; }
+
 }

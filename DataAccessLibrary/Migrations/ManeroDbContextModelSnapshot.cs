@@ -296,7 +296,7 @@ namespace DataAccessLibrary.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("FavoriteProduct");
+                    b.ToTable("FavoriteProducts");
                 });
 
             modelBuilder.Entity("DataAccessLibrary.Entities.UserEntities.Order", b =>

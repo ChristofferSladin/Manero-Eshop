@@ -357,7 +357,7 @@ namespace DataAccessLibrary.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "FavoriteProduct",
+                name: "FavoriteProducts",
                 columns: table => new
                 {
                     FavoriteProductId = table.Column<int>(type: "int", nullable: false)
@@ -367,15 +367,15 @@ namespace DataAccessLibrary.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FavoriteProduct", x => x.FavoriteProductId);
+                    table.PrimaryKey("PK_FavoriteProducts", x => x.FavoriteProductId);
                     table.ForeignKey(
-                        name: "FK_FavoriteProduct_Favorite_FavoriteId",
+                        name: "FK_FavoriteProducts_Favorite_FavoriteId",
                         column: x => x.FavoriteId,
                         principalTable: "Favorite",
                         principalColumn: "FavoriteId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_FavoriteProduct_Products_ProductId",
+                        name: "FK_FavoriteProducts_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "ProductId",
@@ -493,13 +493,13 @@ namespace DataAccessLibrary.Migrations
                 column: "Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FavoriteProduct_FavoriteId",
-                table: "FavoriteProduct",
+                name: "IX_FavoriteProducts_FavoriteId",
+                table: "FavoriteProducts",
                 column: "FavoriteId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FavoriteProduct_ProductId",
-                table: "FavoriteProduct",
+                name: "IX_FavoriteProducts_ProductId",
+                table: "FavoriteProducts",
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
@@ -574,7 +574,7 @@ namespace DataAccessLibrary.Migrations
                 name: "Cards");
 
             migrationBuilder.DropTable(
-                name: "FavoriteProduct");
+                name: "FavoriteProducts");
 
             migrationBuilder.DropTable(
                 name: "OrderProducts");
