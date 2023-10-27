@@ -52,19 +52,6 @@ namespace DataAccessLibrary.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Colors",
-                columns: table => new
-                {
-                    ColorId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ColorName = table.Column<string>(type: "nvarchar(50)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Colors", x => x.ColorId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Products",
                 columns: table => new
                 {
@@ -77,6 +64,7 @@ namespace DataAccessLibrary.Migrations
                     Type = table.Column<string>(type: "nvarchar(50)", nullable: true),
                     Size = table.Column<string>(type: "nvarchar(20)", nullable: true),
                     QuantityInStock = table.Column<int>(type: "int", nullable: false),
+                    Color = table.Column<string>(type: "nvarchar(100)", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     SalePrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     IsOnSale = table.Column<bool>(type: "bit", nullable: false),
@@ -307,32 +295,6 @@ namespace DataAccessLibrary.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductColors",
-                columns: table => new
-                {
-                    ProductColorId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ProductId = table.Column<int>(type: "int", nullable: false),
-                    ColorId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductColors", x => x.ProductColorId);
-                    table.ForeignKey(
-                        name: "FK_ProductColors_Colors_ColorId",
-                        column: x => x.ColorId,
-                        principalTable: "Colors",
-                        principalColumn: "ColorId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProductColors_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "ProductId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Reviews",
                 columns: table => new
                 {
@@ -524,16 +486,6 @@ namespace DataAccessLibrary.Migrations
                 column: "Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductColors_ColorId",
-                table: "ProductColors",
-                column: "ColorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductColors_ProductId",
-                table: "ProductColors",
-                column: "ProductId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Reviews_Id",
                 table: "Reviews",
                 column: "Id");
@@ -591,9 +543,6 @@ namespace DataAccessLibrary.Migrations
                 name: "OrderProducts");
 
             migrationBuilder.DropTable(
-                name: "ProductColors");
-
-            migrationBuilder.DropTable(
                 name: "Reviews");
 
             migrationBuilder.DropTable(
@@ -607,9 +556,6 @@ namespace DataAccessLibrary.Migrations
 
             migrationBuilder.DropTable(
                 name: "Orders");
-
-            migrationBuilder.DropTable(
-                name: "Colors");
 
             migrationBuilder.DropTable(
                 name: "Products");

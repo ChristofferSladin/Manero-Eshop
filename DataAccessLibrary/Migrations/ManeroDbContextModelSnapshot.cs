@@ -22,23 +22,6 @@ namespace DataAccessLibrary.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("DataAccessLibrary.Entities.ProductEntities.Color", b =>
-                {
-                    b.Property<int>("ColorId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ColorId"));
-
-                    b.Property<string>("ColorName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("ColorId");
-
-                    b.ToTable("Colors");
-                });
-
             modelBuilder.Entity("DataAccessLibrary.Entities.ProductEntities.OrderProduct", b =>
                 {
                     b.Property<int>("OrderProductId")
@@ -78,6 +61,9 @@ namespace DataAccessLibrary.Migrations
 
                     b.Property<string>("Category")
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Color")
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(500)");
@@ -119,29 +105,6 @@ namespace DataAccessLibrary.Migrations
                     b.HasKey("ProductId");
 
                     b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("DataAccessLibrary.Entities.ProductEntities.ProductColor", b =>
-                {
-                    b.Property<int>("ProductColorId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductColorId"));
-
-                    b.Property<int>("ColorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProductColorId");
-
-                    b.HasIndex("ColorId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("ProductColors");
                 });
 
             modelBuilder.Entity("DataAccessLibrary.Entities.ProductEntities.Review", b =>
@@ -625,25 +588,6 @@ namespace DataAccessLibrary.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("DataAccessLibrary.Entities.ProductEntities.ProductColor", b =>
-                {
-                    b.HasOne("DataAccessLibrary.Entities.ProductEntities.Color", "Color")
-                        .WithMany("ProductColors")
-                        .HasForeignKey("ColorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DataAccessLibrary.Entities.ProductEntities.Product", "Product")
-                        .WithMany("ProductColors")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Color");
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("DataAccessLibrary.Entities.ProductEntities.Review", b =>
                 {
                     b.HasOne("DataAccessLibrary.Entities.ApplicationUser", "ApplicationUser")
@@ -805,18 +749,11 @@ namespace DataAccessLibrary.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("DataAccessLibrary.Entities.ProductEntities.Color", b =>
-                {
-                    b.Navigation("ProductColors");
-                });
-
             modelBuilder.Entity("DataAccessLibrary.Entities.ProductEntities.Product", b =>
                 {
                     b.Navigation("FavoriteProducts");
 
                     b.Navigation("OrdersProducts");
-
-                    b.Navigation("ProductColors");
 
                     b.Navigation("Reviews");
 

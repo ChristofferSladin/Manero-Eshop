@@ -36,6 +36,10 @@ public class Product
     [Required]
     public int QuantityInStock { get; set; }
 
+
+    [Column(TypeName = "nvarchar(100)")]
+    public string? Color { get; set; }
+
     [Required]
     public decimal Price { get; set; }
 
@@ -52,7 +56,6 @@ public class Product
 
 
     public virtual ICollection<OrderProduct>? OrdersProducts { get; set; }
-    public virtual ICollection<ProductColor>? ProductColors { get; set; }
     public virtual ICollection<ShoppingCartProduct>? ShoppingCartProducts { get; set; }
     public virtual ICollection<FavoriteProduct>? FavoriteProducts { get; set; }
     public virtual ICollection<Review>? Reviews { get; set; }

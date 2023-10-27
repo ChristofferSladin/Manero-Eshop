@@ -90,7 +90,7 @@ public class DataInitializer
 
     private void AddAddressIfNotExists()
     {
-    
+
     }
 
     private void AddReviewsIfNotExisting()
@@ -240,10 +240,9 @@ public class DataInitializer
         }
     }
 
-    private void AddProductIfNotExisting(int quantity, string colorName, string productName, string? description, string? category, string? type, string? size, decimal price, decimal salePrice, bool isOnSale, bool isFeatured, decimal rating, string? imageUrl)
+    private void AddProductIfNotExisting(int quantity, string color, string productName, string? description, string? category, string? type, string? size, decimal price, decimal salePrice, bool isOnSale, bool isFeatured, decimal rating, string? imageUrl)
     {
-        EntityEntry<Product> addedProduct = null;
-        EntityEntry<Color> addedColor = null;
+        EntityEntry<Product> addedProduct = null!;
 
         if (!_context.Products.Any(p => p.ProductName == productName))
         {
@@ -252,6 +251,7 @@ public class DataInitializer
                 ProductName = productName,
                 Description = description,
                 Category = category,
+                Color = color,
                 Type = type,
                 Size = size,
                 Price = price,
@@ -263,39 +263,16 @@ public class DataInitializer
                 ImageUrl = imageUrl,
             };
             addedProduct = _context.Products.Add(product);
-        }
-
-        if (!_context.Colors.Any(p => p.ColorName == colorName))
-        {
-            var color = new Color
-            {
-                ColorName = colorName
-            };
-            addedColor = _context.Colors.Add(color);
-        }
-
-        try
-        {
-            _context.SaveChanges();
-
-            if (addedProduct != null)
-            {
-                addedProduct.Entity.GenerateProductNumber();
-                _context.Update(addedProduct.Entity);
-            }
-
-            if (addedProduct != null && addedColor != null)
-            {
-                var productColor = new ProductColor
-                {
-                    ColorId = addedColor.Entity.ColorId,
-                    ProductId = addedProduct.Entity.ProductId,
-                };
-                _context.ProductColors.Add(productColor);
-            }
             _context.SaveChanges();
         }
-        catch (Exception ex) { Debug.WriteLine(ex.Message); Debug.WriteLine(ex.StackTrace); }
+
+        if (addedProduct != null)
+        {
+            addedProduct.Entity.GenerateProductNumber();
+            _context.Update(addedProduct.Entity);
+        }
+        _context.SaveChanges();
+
     }
 
     private void AddUserIfNotExists(string userName, string password, string[] roles)

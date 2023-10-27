@@ -19,8 +19,6 @@ public class ManeroDbContext : IdentityDbContext
     }
 
     public DbSet<Product> Products { get; set; }
-    public DbSet<Color> Colors { get; set; }
-    public DbSet<ProductColor> ProductColors { get; set; }
     public DbSet<Review> Reviews { get; set; }
     public DbSet<Address> Addresses { get; set; }
     public DbSet<Card> Cards { get; set; }
