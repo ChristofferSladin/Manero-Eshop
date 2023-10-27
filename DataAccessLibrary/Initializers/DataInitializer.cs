@@ -71,7 +71,7 @@ public class DataInitializer
     }
     private void SeedFavoriteProducts()
     {
-        AddFavoriteProductsIfNotExisting();
+        //AddFavoriteProductsIfNotExisting();
     }
     private void SeedAddresses()
     {
@@ -85,49 +85,49 @@ public class DataInitializer
       
     }
 
-    private void AddFavoriteProductsIfNotExisting()
-    {
-        var userExists = _context.Users.FirstOrDefault(u => u.Email == "customer1@customer.com");
-        if (userExists != null)
-        {
-            var favoriteProductsExists = _context.FavoriteProductList.Include(o => o.Products).FirstOrDefault(o => o.Id == userExists.Id);
-            if (favoriteProductsExists == null)
-            {
-                var favoriteProducts = new FavoriteProductList
-                {
-                    Id = userExists.Id,
-                };
-                _context.Add(favoriteProducts);
-                _context.SaveChanges();
-            }
+    //private void AddFavoriteProductsIfNotExisting()
+    //{
+    //    var userExists = _context.Users.FirstOrDefault(u => u.Email == "customer1@customer.com");
+    //    if (userExists != null)
+    //    {
+    //        var favoriteProductsExists = _context.FavoriteProductList.Include(o => o.Products).FirstOrDefault(o => o.Id == userExists.Id);
+    //        if (favoriteProductsExists == null)
+    //        {
+    //            var favoriteProducts = new Favorite
+    //            {
+    //                Id = userExists.Id,
+    //            };
+    //            _context.Add(favoriteProducts);
+    //            _context.SaveChanges();
+    //        }
 
-            favoriteProductsExists = _context.FavoriteProductList.Include(o => o.Products).FirstOrDefault(o => o.Id == userExists.Id);
-            if (favoriteProductsExists != null)
-            {
-                if (!favoriteProductsExists.Products.Any())
-                {
-                    var favoriteProduct1 = _context.Products.Skip(0).Take(1).FirstOrDefault();
-                    var favoriteProduct2 = _context.Products.Skip(1).Take(1).FirstOrDefault();
-                    var favoriteProduct3 = _context.Products.Skip(3).Take(1).FirstOrDefault();
-                    var favoriteProduct4 = _context.Products.Skip(5).Take(1).FirstOrDefault();
+    //        favoriteProductsExists = _context.FavoriteProductList.Include(o => o.Products).FirstOrDefault(o => o.Id == userExists.Id);
+    //        if (favoriteProductsExists != null)
+    //        {
+    //            if (!favoriteProductsExists.Products.Any())
+    //            {
+    //                var favoriteProduct1 = _context.Products.Skip(0).Take(1).FirstOrDefault();
+    //                var favoriteProduct2 = _context.Products.Skip(1).Take(1).FirstOrDefault();
+    //                var favoriteProduct3 = _context.Products.Skip(3).Take(1).FirstOrDefault();
+    //                var favoriteProduct4 = _context.Products.Skip(5).Take(1).FirstOrDefault();
 
-                    if (favoriteProduct1 != null)
-                        favoriteProductsExists.Products.Add(favoriteProduct1);
+    //                if (favoriteProduct1 != null)
+    //                    favoriteProductsExists.Products.Add(favoriteProduct1);
 
-                    if (favoriteProduct2 != null)
-                        favoriteProductsExists.Products.Add(favoriteProduct2);
+    //                if (favoriteProduct2 != null)
+    //                    favoriteProductsExists.Products.Add(favoriteProduct2);
 
-                    if (favoriteProduct3 != null)
-                        favoriteProductsExists.Products.Add(favoriteProduct3);
+    //                if (favoriteProduct3 != null)
+    //                    favoriteProductsExists.Products.Add(favoriteProduct3);
 
-                    if (favoriteProduct4 != null)
-                        favoriteProductsExists.Products.Add(favoriteProduct4);
+    //                if (favoriteProduct4 != null)
+    //                    favoriteProductsExists.Products.Add(favoriteProduct4);
 
-                    _context.SaveChanges();
-                }
-            }
-        }
-    }
+    //                _context.SaveChanges();
+    //            }
+    //        }
+    //    }
+    //}
 
     private void AddOrdersIfNotExisting()
     {

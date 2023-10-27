@@ -11,5 +11,5 @@ public class ApplicationUser : IdentityUser
     public virtual ICollection<Order>? Orders { get; set; }
     public virtual ICollection<Card>? Cards { get; set; }
     public virtual ShoppingCart? ShoppingCart { get; set; }
-    public virtual ICollection<FavoriteProductList>? FavoriteProducts { get; set; }
+    public virtual ICollection<Favorite>? FavoriteProducts { get; set; }
 }

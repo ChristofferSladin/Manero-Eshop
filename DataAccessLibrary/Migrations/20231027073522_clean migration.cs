@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DataAccessLibrary.Migrations
 {
     /// <inheritdoc />
-    public partial class newcleanmigration : Migration
+    public partial class cleanmigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -244,18 +244,18 @@ namespace DataAccessLibrary.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "FavoriteProducts",
+                name: "Favorite",
                 columns: table => new
                 {
-                    FavoriteProductId = table.Column<int>(type: "int", nullable: false)
+                    FavoriteId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FavoriteProducts", x => x.FavoriteProductId);
+                    table.PrimaryKey("PK_Favorite", x => x.FavoriteId);
                     table.ForeignKey(
-                        name: "FK_FavoriteProducts_AspNetUsers_Id",
+                        name: "FK_Favorite_AspNetUsers_Id",
                         column: x => x.Id,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -268,7 +268,7 @@ namespace DataAccessLibrary.Migrations
                 {
                     OrderId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderNumber = table.Column<string>(type: "nvarchar(12)", nullable: false),
+                    OrderNumber = table.Column<string>(type: "nvarchar(12)", nullable: true),
                     PromoCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     OrderStatus = table.Column<string>(type: "nvarchar(20)", nullable: false),
                     PaymentMethod = table.Column<string>(type: "nvarchar(20)", nullable: false),
@@ -312,7 +312,7 @@ namespace DataAccessLibrary.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ShoppingCarts",
+                name: "ShoppingCart",
                 columns: table => new
                 {
                     ShoppingCartId = table.Column<int>(type: "int", nullable: false)
@@ -321,9 +321,9 @@ namespace DataAccessLibrary.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ShoppingCarts", x => x.ShoppingCartId);
+                    table.PrimaryKey("PK_ShoppingCart", x => x.ShoppingCartId);
                     table.ForeignKey(
-                        name: "FK_ShoppingCarts_AspNetUsers_Id",
+                        name: "FK_ShoppingCart_AspNetUsers_Id",
                         column: x => x.Id,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -357,24 +357,26 @@ namespace DataAccessLibrary.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "FavoriteProductProduct",
+                name: "FavoriteProduct",
                 columns: table => new
                 {
-                    FavoriteProductsFavoriteProductId = table.Column<int>(type: "int", nullable: false),
-                    ProductsProductId = table.Column<int>(type: "int", nullable: false)
+                    FavoriteProductId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    FavoriteId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FavoriteProductProduct", x => new { x.FavoriteProductsFavoriteProductId, x.ProductsProductId });
+                    table.PrimaryKey("PK_FavoriteProduct", x => x.FavoriteProductId);
                     table.ForeignKey(
-                        name: "FK_FavoriteProductProduct_FavoriteProducts_FavoriteProductsFavoriteProductId",
-                        column: x => x.FavoriteProductsFavoriteProductId,
-                        principalTable: "FavoriteProducts",
-                        principalColumn: "FavoriteProductId",
+                        name: "FK_FavoriteProduct_Favorite_FavoriteId",
+                        column: x => x.FavoriteId,
+                        principalTable: "Favorite",
+                        principalColumn: "FavoriteId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_FavoriteProductProduct_Products_ProductsProductId",
-                        column: x => x.ProductsProductId,
+                        name: "FK_FavoriteProduct_Products_ProductId",
+                        column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "ProductId",
                         onDelete: ReferentialAction.Cascade);
@@ -412,7 +414,7 @@ namespace DataAccessLibrary.Migrations
                 name: "ShoppingCartProducts",
                 columns: table => new
                 {
-                    OrderProductId = table.Column<int>(type: "int", nullable: false)
+                    ShoppingCartProductId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ItemQuantity = table.Column<int>(type: "int", nullable: false),
@@ -421,7 +423,7 @@ namespace DataAccessLibrary.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ShoppingCartProducts", x => x.OrderProductId);
+                    table.PrimaryKey("PK_ShoppingCartProducts", x => x.ShoppingCartProductId);
                     table.ForeignKey(
                         name: "FK_ShoppingCartProducts_Products_ProductId",
                         column: x => x.ProductId,
@@ -429,9 +431,9 @@ namespace DataAccessLibrary.Migrations
                         principalColumn: "ProductId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ShoppingCartProducts_ShoppingCarts_ShoppingCartId",
+                        name: "FK_ShoppingCartProducts_ShoppingCart_ShoppingCartId",
                         column: x => x.ShoppingCartId,
-                        principalTable: "ShoppingCarts",
+                        principalTable: "ShoppingCart",
                         principalColumn: "ShoppingCartId",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -486,14 +488,19 @@ namespace DataAccessLibrary.Migrations
                 column: "Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FavoriteProductProduct_ProductsProductId",
-                table: "FavoriteProductProduct",
-                column: "ProductsProductId");
+                name: "IX_Favorite_Id",
+                table: "Favorite",
+                column: "Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FavoriteProducts_Id",
-                table: "FavoriteProducts",
-                column: "Id");
+                name: "IX_FavoriteProduct_FavoriteId",
+                table: "FavoriteProduct",
+                column: "FavoriteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FavoriteProduct_ProductId",
+                table: "FavoriteProduct",
+                column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderProducts_OrderId",
@@ -526,6 +533,12 @@ namespace DataAccessLibrary.Migrations
                 column: "Id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ShoppingCart_Id",
+                table: "ShoppingCart",
+                column: "Id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ShoppingCartProducts_ProductId",
                 table: "ShoppingCartProducts",
                 column: "ProductId");
@@ -534,12 +547,6 @@ namespace DataAccessLibrary.Migrations
                 name: "IX_ShoppingCartProducts_ShoppingCartId",
                 table: "ShoppingCartProducts",
                 column: "ShoppingCartId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ShoppingCarts_Id",
-                table: "ShoppingCarts",
-                column: "Id",
-                unique: true);
         }
 
         /// <inheritdoc />
@@ -567,7 +574,7 @@ namespace DataAccessLibrary.Migrations
                 name: "Cards");
 
             migrationBuilder.DropTable(
-                name: "FavoriteProductProduct");
+                name: "FavoriteProduct");
 
             migrationBuilder.DropTable(
                 name: "OrderProducts");
@@ -585,7 +592,7 @@ namespace DataAccessLibrary.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "FavoriteProducts");
+                name: "Favorite");
 
             migrationBuilder.DropTable(
                 name: "Orders");
@@ -597,7 +604,7 @@ namespace DataAccessLibrary.Migrations
                 name: "Products");
 
             migrationBuilder.DropTable(
-                name: "ShoppingCarts");
+                name: "ShoppingCart");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

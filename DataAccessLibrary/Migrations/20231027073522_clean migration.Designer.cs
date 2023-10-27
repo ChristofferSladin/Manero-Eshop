@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLibrary.Migrations
 {
     [DbContext(typeof(ManeroDbContext))]
-    [Migration("20231026095548_fixed wrong id name in shoppingcart")]
-    partial class fixedwrongidnameinshoppingcart
+    [Migration("20231027073522_clean migration")]
+    partial class cleanmigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -260,6 +260,25 @@ namespace DataAccessLibrary.Migrations
                     b.ToTable("Cards");
                 });
 
+            modelBuilder.Entity("DataAccessLibrary.Entities.UserEntities.Favorite", b =>
+                {
+                    b.Property<int>("FavoriteId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FavoriteId"));
+
+                    b.Property<string>("Id")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("FavoriteId");
+
+                    b.HasIndex("Id");
+
+                    b.ToTable("Favorite");
+                });
+
             modelBuilder.Entity("DataAccessLibrary.Entities.UserEntities.FavoriteProduct", b =>
                 {
                     b.Property<int>("FavoriteProductId")
@@ -268,15 +287,19 @@ namespace DataAccessLibrary.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FavoriteProductId"));
 
-                    b.Property<string>("Id")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("FavoriteId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
 
                     b.HasKey("FavoriteProductId");
 
-                    b.HasIndex("Id");
+                    b.HasIndex("FavoriteId");
 
-                    b.ToTable("FavoriteProducts");
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("FavoriteProduct");
                 });
 
             modelBuilder.Entity("DataAccessLibrary.Entities.UserEntities.Order", b =>
@@ -295,7 +318,6 @@ namespace DataAccessLibrary.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("OrderNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(12)");
 
                     b.Property<string>("OrderStatus")
@@ -366,21 +388,6 @@ namespace DataAccessLibrary.Migrations
                     b.HasIndex("ShoppingCartId");
 
                     b.ToTable("ShoppingCartProducts");
-                });
-
-            modelBuilder.Entity("FavoriteProductProduct", b =>
-                {
-                    b.Property<int>("FavoriteProductsFavoriteProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductsProductId")
-                        .HasColumnType("int");
-
-                    b.HasKey("FavoriteProductsFavoriteProductId", "ProductsProductId");
-
-                    b.HasIndex("ProductsProductId");
-
-                    b.ToTable("FavoriteProductProduct");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -671,7 +678,7 @@ namespace DataAccessLibrary.Migrations
                     b.Navigation("ApplicationUser");
                 });
 
-            modelBuilder.Entity("DataAccessLibrary.Entities.UserEntities.FavoriteProduct", b =>
+            modelBuilder.Entity("DataAccessLibrary.Entities.UserEntities.Favorite", b =>
                 {
                     b.HasOne("DataAccessLibrary.Entities.ApplicationUser", "ApplicationUser")
                         .WithMany("FavoriteProducts")
@@ -680,6 +687,25 @@ namespace DataAccessLibrary.Migrations
                         .IsRequired();
 
                     b.Navigation("ApplicationUser");
+                });
+
+            modelBuilder.Entity("DataAccessLibrary.Entities.UserEntities.FavoriteProduct", b =>
+                {
+                    b.HasOne("DataAccessLibrary.Entities.UserEntities.Favorite", "Favorite")
+                        .WithMany("FavoriteProducts")
+                        .HasForeignKey("FavoriteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataAccessLibrary.Entities.ProductEntities.Product", "Product")
+                        .WithMany("FavoriteProducts")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Favorite");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("DataAccessLibrary.Entities.UserEntities.Order", b =>
@@ -721,21 +747,6 @@ namespace DataAccessLibrary.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("ShoppingCart");
-                });
-
-            modelBuilder.Entity("FavoriteProductProduct", b =>
-                {
-                    b.HasOne("DataAccessLibrary.Entities.UserEntities.FavoriteProduct", null)
-                        .WithMany()
-                        .HasForeignKey("FavoriteProductsFavoriteProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DataAccessLibrary.Entities.ProductEntities.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -796,11 +807,18 @@ namespace DataAccessLibrary.Migrations
 
             modelBuilder.Entity("DataAccessLibrary.Entities.ProductEntities.Product", b =>
                 {
+                    b.Navigation("FavoriteProducts");
+
                     b.Navigation("OrdersProducts");
 
                     b.Navigation("ProductColors");
 
                     b.Navigation("ShoppingCartProducts");
+                });
+
+            modelBuilder.Entity("DataAccessLibrary.Entities.UserEntities.Favorite", b =>
+                {
+                    b.Navigation("FavoriteProducts");
                 });
 
             modelBuilder.Entity("DataAccessLibrary.Entities.UserEntities.Order", b =>

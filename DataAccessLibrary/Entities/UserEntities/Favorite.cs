@@ -1,13 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using DataAccessLibrary.Entities.ProductEntities;
 
 namespace DataAccessLibrary.Entities.UserEntities;
 
-public class FavoriteProductList
+public class Favorite
 {
     [Key]
-    public int FavoriteProductId { get; set; }
+    public int FavoriteId { get; set; }
 
 
     [Required]
@@ -17,5 +16,5 @@ public class FavoriteProductList
     public ApplicationUser ApplicationUser { get; set; } = null!;
 
 
-    public virtual ICollection<Product>? Products { get; set; }
+    public virtual ICollection<FavoriteProduct>? FavoriteProducts { get; set; }
 }
