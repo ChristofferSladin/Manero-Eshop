@@ -1,24 +1,25 @@
 ﻿
 using DataAccessLibrary.Contexts;
-using DataAccessLibrary.Entities;
 using DataAccessLibrary.Entities.ProductEntities;
 using DataAccessLibrary.Entities.UserEntities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System;
+
 namespace DataAccessLibrary.Initializers;
 
 public class DataInitializer
 {
     private readonly ManeroDbContext _context;
     private readonly UserManager<IdentityUser> _userManager;
+
     public DataInitializer(ManeroDbContext context, UserManager<IdentityUser> userManager)
     {
         _context = context;
         _userManager = userManager;
 
     }
-
     public void SeedData()
     {
         SeedRoles();
@@ -29,8 +30,8 @@ public class DataInitializer
         SeedFavoriteProducts();
         SeedReviews();
         SeedCards();
+        SeedAddresses();
     }
-
     private void SeedUsers()
     {
         AddUserIfNotExists("admin@admin.com", "Admin123#", new string[] { "Admin" });
@@ -40,14 +41,12 @@ public class DataInitializer
         AddUserIfNotExists("customer4@customer.com", "Customer123#", new string[] { "Customer" });
         AddUserIfNotExists("customer5@customer.com", "Customer123#", new string[] { "Customer" });
     }
-
     private void SeedRoles()
     {
         AddRoleIfNotExisting("None");
         AddRoleIfNotExisting("Admin");
         AddRoleIfNotExisting("Customer");
     }
-
     private void SeedProducts()
     {
         AddProductIfNotExisting(15, "Blue", "Denim Jacket", "Perfect for casual outings", "Jackets", "Casual", "M", 69.99M, 59.99M, true, false, 4.5M, "denim_jacket_url");
@@ -57,7 +56,6 @@ public class DataInitializer
         AddProductIfNotExisting(43, "Black", "Formal Shoes", "Perfect for business attire", "Shoes", "Formal", "10", 89.99M, 79.99M, false, true, 4.7M, "formal_shoes_url");
         AddProductIfNotExisting(77, "Red", "Sneaky Shoes", "Perfect for robbing attire", "Shoes", "Formal", "16", 89.99M, 79.99M, false, true, 5.0M, "sneaky_robbing_shoes_url");
     }
-
     private void SeedShoppingCarts()
     {
         AddShoppingCartIfNotExisting();
@@ -72,36 +70,23 @@ public class DataInitializer
     }
     private void SeedAddresses()
     {
-
-    }
-    private void AddAddressIfNotExists()
-    {
-
+        var addresses = new List<Address>
+        {
+            new() { StreetName = "CicoBolo Street 69", City = "Las Vegas", ZipCode = "9000 69", Country = "USA" },
+            new() { StreetName = "La calle Berox 88", City = "Miami", ZipCode = "800052", Country = "USA" },
+        };
+        var users = _context.Users.Take(2).ToList();
+        AddAddressIfNotExists(users, addresses);
     }
     private void SeedCards()
     {
         var cardsList = new List<Card>
         {
-            new()
-            {
-               CardNumber = "8888 9999 4565 7787",CardHolderName = "Chris", ExpirationDate = DateTime.Now.AddMonths(12),SecurityCode = "889",CardType = "MasterCard", IssuerBank = "SEB"
-            },
-            new()
-            {
-                CardNumber = "2322 4322 4222 5567",CardHolderName = "Erim", ExpirationDate = DateTime.Now.AddMonths(24),SecurityCode = "823",CardType = "VisaCard",IssuerBank = "Handelsbanken"
-            },
-            new()
-            {
-               CardNumber = "8888 9334 4424 7227",CardHolderName = "Ghazanfar", ExpirationDate = DateTime.Now.AddMonths(36),SecurityCode = "189",CardType = "Maestro",IssuerBank = "Nordea"
-            },
-            new()
-            {
-              CardNumber  = "2812 9999 4565 7787",CardHolderName = "Hadi", ExpirationDate = DateTime.Now.AddMonths(18), SecurityCode = "283",CardType = "VisaCard",IssuerBank = "SEB"
-            },
-            new()
-            {
-              CardNumber  = "1188 3349 4265 3237",CardHolderName = "Jonathan",ExpirationDate = DateTime.Now.AddMonths(20),SecurityCode = "419",CardType = "MasterCard", IssuerBank = "Swedia"
-            }
+            new() { CardNumber = "8888 9999 4565 7787",CardHolderName = "Chris", ExpirationDate = DateTime.Now.AddMonths(12),SecurityCode = "889",CardType = "MasterCard", IssuerBank = "SEB" },
+            new() { CardNumber = "2322 4322 4222 5567",CardHolderName = "Erim", ExpirationDate = DateTime.Now.AddMonths(24),SecurityCode = "823",CardType = "VisaCard",IssuerBank = "Handelsbanken" },
+            new() { CardNumber = "8888 9334 4424 7227",CardHolderName = "Ghazanfar", ExpirationDate = DateTime.Now.AddMonths(36),SecurityCode = "189",CardType = "Maestro",IssuerBank = "Nordea" },
+            new() { CardNumber  = "2812 9999 4565 7787",CardHolderName = "Hadi", ExpirationDate = DateTime.Now.AddMonths(18), SecurityCode = "283",CardType = "VisaCard",IssuerBank = "SEB" },
+            new() { CardNumber  = "1188 3349 4265 3237",CardHolderName = "Jonathan",ExpirationDate = DateTime.Now.AddMonths(20),SecurityCode = "419",CardType = "MasterCard", IssuerBank = "Swedia" }
         };
 
         AddCardIfNotExisting(cardsList);
@@ -129,6 +114,9 @@ public class DataInitializer
             }
         }
     }
+
+
+
     private void AddCardIfNotExisting(List<Card> cardsList)
     {
         var usersList = _context.Users.ToList();
@@ -178,6 +166,23 @@ public class DataInitializer
         {
             _context.Add(review);
             _context.SaveChanges();
+        }
+    }
+    private void AddAddressIfNotExists(List<IdentityUser> users, List<Address> addresses)
+    {
+        foreach (var user in users)
+        {
+            var existingAddress = _context.Addresses.FirstOrDefault(a => a.Id == user.Id);
+            if (existingAddress == null)
+            {
+                var rand = new Random();
+                var address = addresses[rand.Next(addresses.Count)];
+                address.Id = user.Id;
+
+                _context.Addresses.Add(address);
+                _context.SaveChanges();
+                addresses.Remove(address);
+            }
         }
     }
     private void AddFavoriteProductsIfNotExisting()
