@@ -28,6 +28,7 @@ public class DataInitializer
         SeedOrders();
         SeedFavoriteProducts();
         SeedReviews();
+        SeedCards();
     }
 
     private void SeedUsers()
@@ -73,13 +74,37 @@ public class DataInitializer
     {
 
     }
-    private void SeedCards()
-    {
-    
-    }
     private void AddAddressIfNotExists()
     {
 
+    }
+    private void SeedCards()
+    {
+        var cardsList = new List<Card>
+        {
+            new()
+            {
+               CardNumber = "8888 9999 4565 7787",CardHolderName = "Chris", ExpirationDate = DateTime.Now.AddMonths(12),SecurityCode = "889",CardType = "MasterCard", IssuerBank = "SEB"
+            },
+            new()
+            {
+                CardNumber = "2322 4322 4222 5567",CardHolderName = "Erim", ExpirationDate = DateTime.Now.AddMonths(24),SecurityCode = "823",CardType = "VisaCard",IssuerBank = "Handelsbanken"
+            },
+            new()
+            {
+               CardNumber = "8888 9334 4424 7227",CardHolderName = "Ghazanfar", ExpirationDate = DateTime.Now.AddMonths(36),SecurityCode = "189",CardType = "Maestro",IssuerBank = "Nordea"
+            },
+            new()
+            {
+              CardNumber  = "2812 9999 4565 7787",CardHolderName = "Hadi", ExpirationDate = DateTime.Now.AddMonths(18), SecurityCode = "283",CardType = "VisaCard",IssuerBank = "SEB"
+            },
+            new()
+            {
+              CardNumber  = "1188 3349 4265 3237",CardHolderName = "Jonathan",ExpirationDate = DateTime.Now.AddMonths(20),SecurityCode = "419",CardType = "MasterCard", IssuerBank = "Swedia"
+            }
+        };
+
+        AddCardIfNotExisting(cardsList);
     }
     private void SeedReviews()
     {
@@ -101,6 +126,35 @@ public class DataInitializer
                 rand.Next(products.Count);
                 var randomProduct = products[rand.Next(products.Count)];
                 AddReviewsIfNotExisting(user, randomProduct);
+            }
+        }
+    }
+    private void AddCardIfNotExisting(List<Card> cardsList)
+    {
+        var usersList = _context.Users.ToList();
+
+        foreach (var user in usersList)
+        {
+            var hasRoleCustomer = _context.UserRoles
+                .Where(ur => ur.UserId == user.Id)
+                .Join(_context.Roles, ur => ur.RoleId, r => r.Id, (ur, r) => r)
+                .FirstOrDefault(r => r.Name != null && r.Name.ToLower() == "customer")?.Name;
+
+            if (hasRoleCustomer is not null)
+            {
+                var random = new Random();
+                var card = cardsList[random.Next(cardsList.Count)];
+
+                card.Id = user.Id;
+
+                var userAlreadyHasCard = _context.Cards.FirstOrDefault(x => x.Id == user.Id);
+
+                if (userAlreadyHasCard is null)
+                {
+                    _context.Cards.Add(card);
+                    _context.SaveChanges();
+                    cardsList.Remove(card);
+                }
             }
         }
     }
@@ -173,7 +227,6 @@ public class DataInitializer
             }
         }
     }
-
     private void AddOrdersIfNotExisting()
     {
         var userExists = _context.Users.FirstOrDefault(u => u.Email == "customer1@customer.com");
@@ -268,7 +321,6 @@ public class DataInitializer
             }
         }
     }
-
     private void AddProductIfNotExisting(int quantity, string color, string productName, string? description, string? category, string? type, string? size, decimal price, decimal salePrice, bool isOnSale, bool isFeatured, decimal rating, string? imageUrl)
     {
         EntityEntry<Product> addedProduct = null!;
@@ -303,7 +355,6 @@ public class DataInitializer
         _context.SaveChanges();
 
     }
-
     private void AddUserIfNotExists(string userName, string password, string[] roles)
     {
         if (_userManager.FindByEmailAsync(userName).Result != null) return;
@@ -317,7 +368,6 @@ public class DataInitializer
         _userManager.CreateAsync(user, password).Wait();
         _userManager.AddToRolesAsync(user, roles).Wait();
     }
-
     private void AddRoleIfNotExisting(string roleName)
     {
         var role = _context.Roles.FirstOrDefault(r => r.Name == roleName);
