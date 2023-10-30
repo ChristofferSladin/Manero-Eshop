@@ -2,15 +2,10 @@
 using DataAccessLibrary.Contexts;
 using DataAccessLibrary.Entities;
 using DataAccessLibrary.Entities.ProductEntities;
+using DataAccessLibrary.Entities.UserEntities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
-using System.Diagnostics;
-using DataAccessLibrary.Entities.UserEntities;
-using System.Data;
-
-
 namespace DataAccessLibrary.Initializers;
 
 public class DataInitializer
@@ -32,6 +27,7 @@ public class DataInitializer
         SeedShoppingCarts();
         SeedOrders();
         SeedFavoriteProducts();
+        SeedReviews();
     }
 
     private void SeedUsers()
@@ -77,25 +73,58 @@ public class DataInitializer
     {
 
     }
-
-    private void SeedReviews()
-    {
-
-    }
-
     private void SeedCards()
     {
-
+    
     }
-
     private void AddAddressIfNotExists()
     {
 
     }
-
-    private void AddReviewsIfNotExisting()
+    private void SeedReviews()
     {
+        var users = _context.Users.ToList();
+        var products = _context.Products.ToList();
 
+        foreach (var user in users)
+        {
+            //checks for user that has role "customer".
+            var hasRoleCustomer = _context.UserRoles
+                .Where(ur => ur.UserId == user.Id)
+                .Join(_context.Roles, ur => ur.RoleId, r => r.Id, (ur, r) => r)
+                .FirstOrDefault(r => r.Name != null && r.Name.ToLower() == "customer")?.Name;
+
+            if (hasRoleCustomer != null)
+            {
+                //randomizes a product to review
+                var rand = new Random();
+                rand.Next(products.Count);
+                var randomProduct = products[rand.Next(products.Count)];
+                AddReviewsIfNotExisting(user, randomProduct);
+            }
+        }
+    }
+    private void AddReviewsIfNotExisting(IdentityUser user, Product product)
+    {
+        var rand = new Random();
+        var rating = rand.Next(0, 6);
+
+        var review = new Review
+        {
+            Rating = rating,
+            Created = DateTime.Now,
+            Title = "Lorem Ipsum",
+            Content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ullamcorper a lacus vestibulum sed.",
+            ProductId = product.ProductId,
+            Id = user.Id,
+        };
+        var userAlreadyHasReview = _context.Reviews.FirstOrDefault(r => r.Id == user.Id);
+        //checks if user already has review to not create one if one exists.
+        if (userAlreadyHasReview == null)
+        {
+            _context.Add(review);
+            _context.SaveChanges();
+        }
     }
     private void AddFavoriteProductsIfNotExisting()
     {
