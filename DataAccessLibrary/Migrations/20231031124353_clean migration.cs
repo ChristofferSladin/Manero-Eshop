@@ -52,6 +52,21 @@ namespace DataAccessLibrary.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Payment",
+                columns: table => new
+                {
+                    PaymentId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PaymentMethod = table.Column<string>(type: "nvarchar(20)", nullable: false),
+                    TransactionId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OrderId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Payment", x => x.PaymentId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Products",
                 columns: table => new
                 {
@@ -65,7 +80,8 @@ namespace DataAccessLibrary.Migrations
                     Size = table.Column<string>(type: "nvarchar(20)", nullable: true),
                     QuantityInStock = table.Column<int>(type: "int", nullable: false),
                     Color = table.Column<string>(type: "nvarchar(100)", nullable: true),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    PriceExcTax = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    PriceIncTax = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     SalePrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     IsOnSale = table.Column<bool>(type: "bit", nullable: false),
                     IsFeatured = table.Column<bool>(type: "bit", nullable: false),
@@ -75,6 +91,21 @@ namespace DataAccessLibrary.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Products", x => x.ProductId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PromoCode",
+                columns: table => new
+                {
+                    PromoCodeId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PromoCodeName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PromoCodePercentage = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    PromoCodeAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PromoCode", x => x.PromoCodeId);
                 });
 
             migrationBuilder.CreateTable(
@@ -215,7 +246,6 @@ namespace DataAccessLibrary.Migrations
                     CardNumber = table.Column<string>(type: "nvarchar(50)", nullable: false),
                     CardHolderName = table.Column<string>(type: "nvarchar(100)", nullable: false),
                     ExpirationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    SecurityCode = table.Column<string>(type: "nvarchar(50)", nullable: false),
                     CardType = table.Column<string>(type: "nvarchar(50)", nullable: false),
                     IssuerBank = table.Column<string>(type: "nvarchar(100)", nullable: false),
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false)
@@ -244,31 +274,6 @@ namespace DataAccessLibrary.Migrations
                     table.PrimaryKey("PK_Favorite", x => x.FavoriteId);
                     table.ForeignKey(
                         name: "FK_Favorite_AspNetUsers_Id",
-                        column: x => x.Id,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Orders",
-                columns: table => new
-                {
-                    OrderId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderNumber = table.Column<string>(type: "nvarchar(12)", nullable: true),
-                    PromoCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    OrderStatus = table.Column<string>(type: "nvarchar(20)", nullable: false),
-                    PaymentMethod = table.Column<string>(type: "nvarchar(20)", nullable: false),
-                    TotalAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Orders", x => x.OrderId);
-                    table.ForeignKey(
-                        name: "FK_Orders_AspNetUsers_Id",
                         column: x => x.Id,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -325,6 +330,46 @@ namespace DataAccessLibrary.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Orders",
+                columns: table => new
+                {
+                    OrderId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OrderNumber = table.Column<string>(type: "nvarchar(12)", nullable: true),
+                    OrderStatus = table.Column<string>(type: "nvarchar(20)", nullable: false),
+                    TotalPriceExcTax = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TotalPriceIncTax = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    VatTax = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TaxPercentage = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PaymentId = table.Column<int>(type: "int", nullable: false),
+                    PromoCodeId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.OrderId);
+                    table.ForeignKey(
+                        name: "FK_Orders_AspNetUsers_Id",
+                        column: x => x.Id,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Orders_Payment_PaymentId",
+                        column: x => x.PaymentId,
+                        principalTable: "Payment",
+                        principalColumn: "PaymentId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Orders_PromoCode_PromoCodeId",
+                        column: x => x.PromoCodeId,
+                        principalTable: "PromoCode",
+                        principalColumn: "PromoCodeId");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "FavoriteProducts",
                 columns: table => new
                 {
@@ -351,40 +396,13 @@ namespace DataAccessLibrary.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrderProducts",
-                columns: table => new
-                {
-                    OrderProductId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    ItemQuantity = table.Column<int>(type: "int", nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: false),
-                    OrderId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OrderProducts", x => x.OrderProductId);
-                    table.ForeignKey(
-                        name: "FK_OrderProducts_Orders_OrderId",
-                        column: x => x.OrderId,
-                        principalTable: "Orders",
-                        principalColumn: "OrderId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_OrderProducts_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "ProductId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ShoppingCartProducts",
                 columns: table => new
                 {
                     ShoppingCartProductId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TotalPriceIncTax = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TotalPriceExcTax = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ItemQuantity = table.Column<int>(type: "int", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false),
                     ShoppingCartId = table.Column<int>(type: "int", nullable: false)
@@ -403,6 +421,33 @@ namespace DataAccessLibrary.Migrations
                         column: x => x.ShoppingCartId,
                         principalTable: "ShoppingCart",
                         principalColumn: "ShoppingCartId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrderProducts",
+                columns: table => new
+                {
+                    OrderProductId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ItemQuantity = table.Column<int>(type: "int", nullable: false),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    OrderId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderProducts", x => x.OrderProductId);
+                    table.ForeignKey(
+                        name: "FK_OrderProducts_Orders_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Orders",
+                        principalColumn: "OrderId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_OrderProducts_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "ProductId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -486,6 +531,16 @@ namespace DataAccessLibrary.Migrations
                 column: "Id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Orders_PaymentId",
+                table: "Orders",
+                column: "PaymentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_PromoCodeId",
+                table: "Orders",
+                column: "PromoCodeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Reviews_Id",
                 table: "Reviews",
                 column: "Id");
@@ -562,6 +617,12 @@ namespace DataAccessLibrary.Migrations
 
             migrationBuilder.DropTable(
                 name: "ShoppingCart");
+
+            migrationBuilder.DropTable(
+                name: "Payment");
+
+            migrationBuilder.DropTable(
+                name: "PromoCode");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

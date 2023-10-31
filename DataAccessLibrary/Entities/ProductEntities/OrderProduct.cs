@@ -10,9 +10,6 @@ public class OrderProduct
     public int OrderProductId { get; set; }
 
     [Required]
-    public decimal TotalPrice { get; set; }
-
-    [Required]
     public int ItemQuantity { get; set; }
 
 

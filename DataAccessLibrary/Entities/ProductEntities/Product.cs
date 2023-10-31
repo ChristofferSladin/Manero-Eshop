@@ -41,7 +41,10 @@ public class Product
     public string? Color { get; set; }
 
     [Required]
-    public decimal Price { get; set; }
+    public decimal PriceExcTax { get; set; }
+
+    [Required]
+    public decimal PriceIncTax { get; set; }
 
     public decimal SalePrice { get; set; }
 

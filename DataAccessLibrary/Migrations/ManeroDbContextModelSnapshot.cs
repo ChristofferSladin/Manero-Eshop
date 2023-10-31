@@ -39,9 +39,6 @@ namespace DataAccessLibrary.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(18,2)");
-
                     b.HasKey("OrderProductId");
 
                     b.HasIndex("OrderId");
@@ -77,7 +74,10 @@ namespace DataAccessLibrary.Migrations
                     b.Property<bool>("IsOnSale")
                         .HasColumnType("bit");
 
-                    b.Property<decimal>("Price")
+                    b.Property<decimal>("PriceExcTax")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PriceIncTax")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("ProductName")
@@ -211,10 +211,6 @@ namespace DataAccessLibrary.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("SecurityCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)");
-
                     b.HasKey("CardId");
 
                     b.HasIndex("Id");
@@ -272,12 +268,12 @@ namespace DataAccessLibrary.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"));
 
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Id")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("OrderNumber")
                         .HasColumnType("nvarchar(12)");
@@ -286,21 +282,82 @@ namespace DataAccessLibrary.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<string>("PaymentMethod")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(20)");
+                    b.Property<DateTime>("PaymentDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("PromoCode")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("PaymentId")
+                        .HasColumnType("int");
 
-                    b.Property<decimal>("TotalAmount")
+                    b.Property<int?>("PromoCodeId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("TaxPercentage")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalPriceExcTax")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalPriceIncTax")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("VatTax")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("OrderId");
 
                     b.HasIndex("Id");
 
+                    b.HasIndex("PaymentId");
+
+                    b.HasIndex("PromoCodeId");
+
                     b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("DataAccessLibrary.Entities.UserEntities.Payment", b =>
+                {
+                    b.Property<int>("PaymentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentId"));
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PaymentMethod")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("TransactionId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("PaymentId");
+
+                    b.ToTable("Payment");
+                });
+
+            modelBuilder.Entity("DataAccessLibrary.Entities.UserEntities.PromoCode", b =>
+                {
+                    b.Property<int>("PromoCodeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PromoCodeId"));
+
+                    b.Property<decimal>("PromoCodeAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("PromoCodeName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("PromoCodePercentage")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("PromoCodeId");
+
+                    b.ToTable("PromoCode");
                 });
 
             modelBuilder.Entity("DataAccessLibrary.Entities.UserEntities.ShoppingCart", b =>
@@ -340,7 +397,10 @@ namespace DataAccessLibrary.Migrations
                     b.Property<int>("ShoppingCartId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("TotalPrice")
+                    b.Property<decimal>("TotalPriceExcTax")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalPriceIncTax")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("ShoppingCartProductId");
@@ -665,7 +725,21 @@ namespace DataAccessLibrary.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("DataAccessLibrary.Entities.UserEntities.Payment", "Payment")
+                        .WithMany()
+                        .HasForeignKey("PaymentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataAccessLibrary.Entities.UserEntities.PromoCode", "PromoCode")
+                        .WithMany()
+                        .HasForeignKey("PromoCodeId");
+
                     b.Navigation("ApplicationUser");
+
+                    b.Navigation("Payment");
+
+                    b.Navigation("PromoCode");
                 });
 
             modelBuilder.Entity("DataAccessLibrary.Entities.UserEntities.ShoppingCart", b =>

@@ -12,16 +12,7 @@ public enum OrderStatus
     InProcess
 }
 
-public enum PaymentMethod
-{
-    Default,
-    Card,
-    Receipt,
-    PayPal,
-    Klarna,
-    Swish,
-    ApplePay
-}
+
 
 public class Order
 {
@@ -36,21 +27,27 @@ public class Order
         OrderNumber = OrderId.ToString("D12");
     }
 
-    public string? PromoCode { get; set; }
 
     [Required]
     [Column(TypeName = "nvarchar(20)")]
     public OrderStatus OrderStatus { get; set; }
 
     [Required]
-    [Column(TypeName = "nvarchar(20)")]
-    public PaymentMethod PaymentMethod { get; set; }
+    public decimal TotalPriceExcTax { get; set; } 
 
     [Required]
-    public decimal TotalAmount { get; set; }
+    public decimal TotalPriceIncTax { get; set; }
+
+    public decimal VatTax { get; set; }
 
     [Required]
-    public DateTime Created { get; set; }
+    public decimal TaxPercentage { get; set; }
+
+    [Required]
+    public DateTime OrderDate { get; set; }
+
+    public DateTime PaymentDate { get; set; }
+
 
 
     [Required]
@@ -59,7 +56,15 @@ public class Order
     [ForeignKey(nameof(Id))]
     public ApplicationUser ApplicationUser { get; set; } = null!;
 
+    [Required]
+    [ForeignKey(nameof(PaymentId))]
+    public int PaymentId { get; set; }
+    [Required]
+    public Payment Payment { get; set; } = null!;
 
     [Required]
     public virtual ICollection<OrderProduct> OrderProducts { get; set; } = null!;
+
+    public PromoCode? PromoCode { get; set; }
+
 }

@@ -9,7 +9,10 @@ public class ShoppingCartProduct
     public int ShoppingCartProductId { get; set; }
 
     [Required]
-    public decimal TotalPrice { get; set; }
+    public decimal TotalPriceIncTax { get; set; }
+
+    [Required]
+    public decimal TotalPriceExcTax { get; set; }
 
     [Required]
     public int ItemQuantity { get; set; }

@@ -18,10 +18,6 @@ public class Card
 
     [Required]
     public DateTime ExpirationDate { get; set; }
-    
-    [Required]
-    [Column(TypeName = "nvarchar(50)")]
-    public string SecurityCode { get; set; } = null!;
 
     [Required]
     [Column(TypeName = "nvarchar(50)")]
