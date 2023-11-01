@@ -1,22 +1,23 @@
-﻿using ManeroWebApp.Models;
+﻿using System.ComponentModel.DataAnnotations;
+using ManeroWebApp.Models;
 using Microsoft.AspNetCore.Mvc;
+using ServiceLibrary.Models;
 using ServiceLibrary.Services;
-using System.Diagnostics;
 
 namespace ManeroWebApp.Controllers
 {
-    public class HomeController : Controller
+    public class ProductController : Controller
     {
         private readonly IProductService _productService;
 
-        public HomeController(IProductService productService)
+        public ProductController(IProductService productService)
         {
             _productService = productService;
         }
-        public async Task<IActionResult> ProductCardsPartial()
+        public async Task<IActionResult> Products()
         {
             var products = await _productService.GetProductsWithReviewsAsync();
-            var productViewModels = products.Select(product => new ProductViewModel
+            var productList = products.Select(product => new ProductViewModel
             {
                 ProductId = product.ProductId,
                 ProductNumber = product.ProductNumber,
@@ -36,24 +37,7 @@ namespace ManeroWebApp.Controllers
                 ImageUrl = product.ImageUrl
             }).ToList();
 
-            return PartialView("/Views/Product/_ProductCards.cshtml", productViewModels);
-        }
-
-
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(productList);
         }
     }
 }
