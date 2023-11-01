@@ -82,11 +82,11 @@ public class DataInitializer
     {
         var cardsList = new List<Card>
         {
-            new() { CardNumber = "8888 9999 4565 7787",CardHolderName = "Chris", ExpirationDate = DateTime.Now.AddMonths(12),SecurityCode = "889",CardType = "MasterCard", IssuerBank = "SEB" },
-            new() { CardNumber = "2322 4322 4222 5567",CardHolderName = "Erim", ExpirationDate = DateTime.Now.AddMonths(24),SecurityCode = "823",CardType = "VisaCard",IssuerBank = "Handelsbanken" },
-            new() { CardNumber = "8888 9334 4424 7227",CardHolderName = "Ghazanfar", ExpirationDate = DateTime.Now.AddMonths(36),SecurityCode = "189",CardType = "Maestro",IssuerBank = "Nordea" },
-            new() { CardNumber  = "2812 9999 4565 7787",CardHolderName = "Hadi", ExpirationDate = DateTime.Now.AddMonths(18), SecurityCode = "283",CardType = "VisaCard",IssuerBank = "SEB" },
-            new() { CardNumber  = "1188 3349 4265 3237",CardHolderName = "Jonathan",ExpirationDate = DateTime.Now.AddMonths(20),SecurityCode = "419",CardType = "MasterCard", IssuerBank = "Swedia" }
+            new() { CardNumber = "8888 9999 4565 7787",CardHolderName = "Chris", ExpirationDate = DateTime.Now.AddMonths(12),CardType = "MasterCard", IssuerBank = "SEB" },
+            new() { CardNumber = "2322 4322 4222 5567",CardHolderName = "Erim", ExpirationDate = DateTime.Now.AddMonths(24),CardType = "VisaCard",IssuerBank = "Handelsbanken" },
+            new() { CardNumber = "8888 9334 4424 7227",CardHolderName = "Ghazanfar", ExpirationDate = DateTime.Now.AddMonths(36),CardType = "Maestro",IssuerBank = "Nordea" },
+            new() { CardNumber  = "2812 9999 4565 7787",CardHolderName = "Hadi", ExpirationDate = DateTime.Now.AddMonths(18),CardType = "VisaCard",IssuerBank = "SEB" },
+            new() { CardNumber  = "1188 3349 4265 3237",CardHolderName = "Jonathan",ExpirationDate = DateTime.Now.AddMonths(20),CardType = "MasterCard", IssuerBank = "Swedia" }
         };
 
         AddCardIfNotExisting(cardsList);
@@ -240,21 +240,33 @@ public class DataInitializer
             var orderExists = _context.Orders.FirstOrDefault(o => o.Id == userExists.Id);
             if (orderExists == null)
             {
-                var order = new Order
+                var payment = _context.Add(new Payment
+                {
+                    PaymentMethod = PaymentMethod.Swish
+                });
+
+                var totalPriceExcTax = _context.Products.FirstOrDefault(p => p.ProductName.ToLower() == "Cargo Pants".ToLower())!.PriceExcTax * 10 + _context.Products.FirstOrDefault(p => p.ProductName.ToLower() == "Denim Jacket".ToLower())!.PriceExcTax * 2;
+                var totalPriceIncTax = _context.Products.FirstOrDefault(p => p.ProductName.ToLower() == "Cargo Pants".ToLower())!.PriceIncTax * 10 + _context.Products.FirstOrDefault(p => p.ProductName.ToLower() == "Denim Jacket".ToLower())!.PriceIncTax * 2;
+              
+                var order = _context.Add(new Order
                 {
                     OrderStatus = OrderStatus.InProcess,
-                    PaymentMethod = PaymentMethod.Card,
-                    TotalAmount = _context.Products.FirstOrDefault(p => p.ProductName.ToLower() == "Cargo Pants".ToLower())!.Price * 10 + _context.Products.FirstOrDefault(p => p.ProductName.ToLower() == "Denim Jacket".ToLower())!.Price * 2,
-                    Created = DateTime.Now,
+                    Payment = payment.Entity,
+                    TotalPriceExcTax = totalPriceExcTax,
+                    TotalPriceIncTax = totalPriceIncTax,
+                    TaxPercentage = 0.2M,
+                    VatTax = 0.0M,
+                    OrderDate = DateTime.Now,
+                    PaymentDate = DateTime.Now.AddDays(1),
                     Id = userExists.Id,
-                };
-                var createdOrder = _context.Add(order);
+                });
                 _context.SaveChanges();
 
-                if (createdOrder != null!)
+                if (order != null!)
                 {
-                    createdOrder.Entity.GenerateOrderNumber();
-                    _context.Update(createdOrder.Entity);
+                    order.Entity.GenerateOrderNumber();
+                    _context.Update(order.Entity);
+                    _context.SaveChanges();
                 }
             }
 
@@ -267,7 +279,6 @@ public class DataInitializer
                     {
                         ItemQuantity = 2,
                         Product = _context.Products.FirstOrDefault(p => p.ProductName.ToLower() == "Denim Jacket".ToLower())!,
-                        TotalPrice = _context.Products.FirstOrDefault(p => p.ProductName.ToLower() == "Denim Jacket".ToLower())!.Price * 2,
                         OrderId = orderExists.OrderId
                     };
 
@@ -275,7 +286,6 @@ public class DataInitializer
                     {
                         ItemQuantity = 10,
                         Product = _context.Products.FirstOrDefault(p => p.ProductName.ToLower() == "Cargo Pants".ToLower())!,
-                        TotalPrice = _context.Products.FirstOrDefault(p => p.ProductName.ToLower() == "Cargo Pants".ToLower())!.Price * 10,
                         OrderId = orderExists.OrderId
                     };
                     _context.OrderProducts.AddRange(orderProduct1, orderProduct2);
@@ -309,7 +319,8 @@ public class DataInitializer
                     {
                         ItemQuantity = 2,
                         Product = _context.Products.FirstOrDefault(p => p.ProductName.ToLower() == "Denim Jacket".ToLower())!,
-                        TotalPrice = _context.Products.FirstOrDefault(p => p.ProductName.ToLower() == "Denim Jacket".ToLower())!.Price * 2,
+                        TotalPriceIncTax = _context.Products.FirstOrDefault(p => p.ProductName.ToLower() == "Denim Jacket".ToLower())!.PriceIncTax * 2,
+                        TotalPriceExcTax = _context.Products.FirstOrDefault(p => p.ProductName.ToLower() == "Denim Jacket".ToLower())!.PriceExcTax * 2,
                         ShoppingCartId = shoppingCartExists.ShoppingCartId,
                     };
 
@@ -317,7 +328,8 @@ public class DataInitializer
                     {
                         ItemQuantity = 10,
                         Product = _context.Products.FirstOrDefault(p => p.ProductName.ToLower() == "Cargo Pants".ToLower())!,
-                        TotalPrice = _context.Products.FirstOrDefault(p => p.ProductName.ToLower() == "Cargo Pants".ToLower())!.Price * 10,
+                        TotalPriceIncTax = _context.Products.FirstOrDefault(p => p.ProductName.ToLower() == "Cargo Pants".ToLower())!.PriceExcTax * 10,
+                        TotalPriceExcTax = _context.Products.FirstOrDefault(p => p.ProductName.ToLower() == "Cargo Pants".ToLower())!.PriceIncTax * 10,
                         ShoppingCartId = shoppingCartExists.ShoppingCartId,
                     };
                     _context.AddRange(shoppingCartProducts1, shoppingCartProducts2);
@@ -340,7 +352,8 @@ public class DataInitializer
                 Color = color,
                 Type = type,
                 Size = size,
-                Price = price,
+                PriceExcTax = price,
+                PriceIncTax = price * 0.2M,
                 QuantityInStock = quantity,
                 SalePrice = salePrice,
                 IsOnSale = isOnSale,
