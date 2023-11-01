@@ -16,19 +16,21 @@ header {
 h1 {
     margin: 0;
     text-align: center;
-    margin-bottom: 30px;
-    margin-top: 30px;
+    margin-bottom: 20px;
+    margin-top: 20px;
 }
 
 .product-grid {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
     margin-top: 20px;
 }
 
 .product-card {
-    width: 23%;
+    width: 100%;
+    max-width: 300px;
     margin-bottom: 30px;
     border: 1px solid #e5e5e5;
     padding: 15px;
@@ -44,8 +46,6 @@ h1 {
         height: auto;
         object-fit: cover;
     }
-
-
 
 .product-details {
     text-align: center;
@@ -75,7 +75,7 @@ h1 {
         margin-right: 5px;
     }
 
-/*icon prasering*/
+/* Icon plasering */
 .product-card {
     display: flex;
     flex-direction: column;
@@ -108,3 +108,59 @@ h1 {
         background-color: #f9f9f9;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
+
+/* Desktop styles */
+@media (min-width: 768px) {
+    .product-grid {
+        justify-content: space-between;
+    }
+
+    .product-card {
+        width: 23%;
+        max-width: none;
+    }
+
+    h1 {
+        margin-bottom: 30px;
+        margin-top: 30px;
+    }
+
+    .product-image img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
+
+    .product-card {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .product-image {
+        position: relative;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .product-icons {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+        .product-icons i {
+            margin-bottom: 10px;
+        }
+
+        .product-icons i {
+            border: 2px solid #f9f9f9;
+            border-radius: 50%;
+            padding: 10px;
+            background-color: #f9f9f9;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+}

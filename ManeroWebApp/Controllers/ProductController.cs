@@ -4,7 +4,7 @@ namespace ManeroWebApp.Controllers
 {
     public class ProductController : Controller
     {
-        public IActionResult Index()
+        public IActionResult FeaturedProduct()
         {
             return View();
         }
