@@ -1,12 +1,8 @@
 ﻿using DataAccessLibrary.Entities.ProductEntities;
 using DataAccessLibrary.Repositories;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Linq.Expressions;
-using System.Reflection;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace ProductAPI.Controllers
 {
@@ -187,8 +183,9 @@ namespace ProductAPI.Controllers
         /// </response>
         [HttpGet]
         [Route("/products/filter")]
-        public async Task<ActionResult<List<Product>>> GetProductsFilteredAsync(int? page, int? take, string filterByCategory = null!, string orderByField = null!, string orderDirection = null!)
+        public async Task<ActionResult<List<Product>>> GetProductsFilteredAsync(int? page, int? take, string filterByName = null!, string filterByCategory = null!, string orderByField = null!, string orderDirection = null!)
         {
+            if (page <= 0 && take <= 0) { return BadRequest($"Invalid page & take, value \"{page}\" & value \"{take}\" is not allowed."); }
             if (page <= 0) { return BadRequest($"Invalid page, value \"{page}\" is not allowed."); }
             if (take <= 0) { return BadRequest($"Invalid take, value \"{take}\" is not allowed."); }
 
@@ -201,6 +198,13 @@ namespace ProductAPI.Controllers
             if (!string.IsNullOrEmpty(filterByCategory))
             {
                 _filterByCategory = product => product.Category != null && product.Category.ToLower() == filterByCategory.ToLower();
+            }
+
+            Expression<Func<Product, bool>> _filterByName = null!;
+
+            if (!string.IsNullOrEmpty(filterByName))
+            {
+                _filterByName = product => product.ProductName.ToLower() == filterByName.ToLower();
             }
 
             if (!string.IsNullOrWhiteSpace(orderDirection) && orderDirection.ToLower() != "asc" && orderDirection.ToLower() != "desc")
@@ -221,10 +225,12 @@ namespace ProductAPI.Controllers
                 Expression propertyAccess = Expression.Property(param, propertyInfo);
                 _orderByField = Expression.Lambda<Func<Product, dynamic>>(propertyAccess, param);
             }
-             
-            var products = await _productRepository.GetFilteredProductsAsync(_skip, _take, _filterByCategory, _orderByField, orderDirection);
 
-            if (products.Count == 0) { return BadRequest("Invalid page, page does not exist or has no products."); }
+            var products = await _productRepository.GetFilteredProductsAsync(_skip, _take, _filterByName, _filterByCategory, _orderByField, orderDirection);
+
+            if (products.Count == 0 && !string.IsNullOrEmpty(filterByName)) { return NotFound("Invalid product name, the product does not exist."); }
+            if (products.Count == 0 && !string.IsNullOrEmpty(filterByCategory)) { return NotFound("Invalid category name, the category does not exist."); }
+            if (products.Count == 0) { return NotFound("Invalid page, page does not exist or has no products."); }
 
             return Ok(products);
         }
@@ -242,8 +248,9 @@ namespace ProductAPI.Controllers
         /// </response>
         [HttpGet]
         [Route("/products/reviews/filter")]
-        public async Task<ActionResult<List<Product>>> GetProductsFilteredWithReviewsAsync(int? page, int? take, string filterByCategory = null!, string orderByField = null!, string orderDirection = null!)
+        public async Task<ActionResult<List<Product>>> GetProductsFilteredWithReviewsAsync(int? page, int? take, string filterByName = null!, string filterByCategory = null!, string orderByField = null!, string orderDirection = null!)
         {
+            if (page <= 0 && take <= 0) { return BadRequest($"Invalid page & take, value \"{page}\" & value \"{take}\" is not allowed."); }
             if (page <= 0) { return BadRequest($"Invalid page, value \"{page}\" is not allowed."); }
             if (take <= 0) { return BadRequest($"Invalid take, value \"{take}\" is not allowed."); }
 
@@ -256,6 +263,13 @@ namespace ProductAPI.Controllers
             if (!string.IsNullOrEmpty(filterByCategory))
             {
                 _filterByCategory = product => product.Category != null && product.Category.ToLower() == filterByCategory.ToLower();
+            }
+
+            Expression<Func<Product, bool>> _filterByName = null!;
+
+            if (!string.IsNullOrEmpty(filterByName))
+            {
+                _filterByName = product => product.ProductName.ToLower() == filterByName.ToLower();
             }
 
             if (!string.IsNullOrWhiteSpace(orderDirection) && orderDirection.ToLower() != "asc" && orderDirection.ToLower() != "desc")
@@ -277,9 +291,11 @@ namespace ProductAPI.Controllers
                 _orderByField = Expression.Lambda<Func<Product, dynamic>>(propertyAccess, param);
             }
 
-            var products = await _productRepository.GetFilteredProductsWithReviewsAsync(_skip, _take, _filterByCategory, _orderByField, orderDirection);
+            var products = await _productRepository.GetFilteredProductsWithReviewsAsync(_skip, _take, _filterByName, _filterByCategory, _orderByField, orderDirection);
 
-            if (products.Count == 0) { return BadRequest("Invalid page, page does not exist or has no products."); }
+            if (products.Count == 0 && !string.IsNullOrEmpty(filterByName)) { return NotFound("Invalid product name, the product does not exist."); }
+            if (products.Count == 0 && !string.IsNullOrEmpty(filterByCategory)) { return NotFound("Invalid category name, the category does not exist."); }
+            if (products.Count == 0) { return NotFound("Invalid page, page does not exist or has no products."); }
 
             return Ok(products);
         }

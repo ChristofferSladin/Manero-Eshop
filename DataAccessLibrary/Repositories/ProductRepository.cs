@@ -27,13 +27,18 @@ public class ProductRepository
     {
         return await _context.Products.Include(r => r.Reviews).ToListAsync();
     }
-    public async Task<List<Product>> GetFilteredProductsAsync(int skip, int take, Expression<Func<Product, bool>> filterByCategory = null!, Expression<Func<Product, dynamic>> orderByField = null!, string orderDirection = null!)
+    public async Task<List<Product>> GetFilteredProductsAsync(int skip, int take, Expression<Func<Product, bool>> filterByName = null!, Expression<Func<Product, bool>> filterByCategory = null!, Expression<Func<Product, dynamic>> orderByField = null!, string orderDirection = null!)
     {
         var query = _context.Products.AsQueryable();
 
         if (filterByCategory != null!)
         {
             query = query.Where(filterByCategory);
+        }
+
+        if (filterByName != null!)
+        {
+            query = query.Where(filterByName);
         }
 
         if (orderByField != null!)
@@ -53,13 +58,18 @@ public class ProductRepository
 
         return await query.Skip(skip).Take(take).ToListAsync();
     }
-    public async Task<List<Product>> GetFilteredProductsWithReviewsAsync(int skip, int take, Expression<Func<Product, bool>> filterByCategory = null!, Expression<Func<Product, dynamic>> orderByField = null!, string orderDirection = null!)
+    public async Task<List<Product>> GetFilteredProductsWithReviewsAsync(int skip, int take, Expression<Func<Product, bool>> filterByName = null!, Expression<Func<Product, bool>> filterByCategory = null!, Expression<Func<Product, dynamic>> orderByField = null!, string orderDirection = null!)
     {
         var query = _context.Products.Include(r => r.Reviews).AsQueryable();
 
         if (filterByCategory != null!)
         {
             query = query.Where(filterByCategory);
+        }
+
+        if (filterByName != null!)
+        {
+            query = query.Where(filterByName);
         }
 
         if (orderByField != null!)
