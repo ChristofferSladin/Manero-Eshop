@@ -1,14 +1,15 @@
 ﻿using DataAccessLibrary.Entities.ProductEntities;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Net.Http.Json;
 
 namespace ServiceLibrary.ProductServices;
 
 public class ProductService : IProductService
 {
-    public async Task<List<dynamic>> GetProductsAsync()
+    public async Task<List<Product>?> GetProductsAsync()
     {
-        var products = new List<dynamic>();
+        var products = new List<Product>();
         var baseUrl = "https://localhost:7067/products";
         try
         {
@@ -20,13 +21,14 @@ public class ProductService : IProductService
             var responseString = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
-                 products = JsonConvert.DeserializeObject<List<dynamic>>(responseString);
+                products = JsonConvert.DeserializeObject<List<Product>>(responseString);
             }
         }
         catch (Exception e)
         {
             Console.WriteLine(e.InnerException);
         }
+
         return products;
     }
 }

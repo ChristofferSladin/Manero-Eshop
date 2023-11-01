@@ -4,7 +4,7 @@ namespace ServiceLibrary.ProductServices
 {
     public interface IProductService
     {
-        Task<List<dynamic>> GetProductsAsync();
+        Task<List<Product>?> GetProductsAsync();
 
     }
 }

@@ -13,23 +13,23 @@ namespace ManeroWebApp.Controllers
             _productService = productService;
         }
 
-      
+
         public IActionResult FeaturedProduct()
         {
             var productList = new List<ProductViewModel>();
-            var products = _productService.GetProductsAsync();
-
-            foreach(var product in products.Result)
+            var products = _productService.GetProductsAsync().Result;
+            if (products != null)
             {
-                productList.Add(new ProductViewModel
+                foreach (var product in products)
                 {
-                    ProductId = product.ProductId,
-                    ProductName = product.ProductName,
-
-                 });
+                    productList.Add(new ProductViewModel
+                    {
+                        ProductId = product.ProductId,
+                        ProductName = product.ProductName,
+                    });
+                }
             }
             return View(productList);
         }
-
     }
 }
