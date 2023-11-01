@@ -21,7 +21,7 @@ namespace ProductAPI.Controllers
         }
         [HttpPost]
         [Route("/login")]
-        public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
+        public async Task<IActionResult> LoginAsync([FromBody] LoginDto loginDto)
         {
             var user = await _userManager.FindByNameAsync(loginDto.UserName);
 
