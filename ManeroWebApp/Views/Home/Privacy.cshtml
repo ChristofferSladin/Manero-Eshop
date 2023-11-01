@@ -4,3 +4,12 @@
 <h1>@ViewData["Title"]</h1>
 
 <p>Use this page to detail your site's privacy policy.</p>
+
+<div id="productsPartial" style="display: flex; justify-content: center; align-items: center; padding: 5px; margin: 20px; flex-wrap:wrap; gap: 20px;">
+</div>
+
+@section Scripts {
+    <script>
+        $('#productsPartial').load("/Product/ProductCardsPartial");
+    </script>
+}

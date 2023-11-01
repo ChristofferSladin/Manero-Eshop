@@ -14,10 +14,10 @@ namespace ManeroWebApp.Controllers
         {
             _productService = productService;
         }
-        public async Task<IActionResult> Products()
+        public async Task<IActionResult> ProductCardsPartial()
         {
             var products = await _productService.GetProductsWithReviewsAsync();
-            var productList = products.Select(product => new ProductViewModel
+            var productViewModels = products.Select(product => new ProductViewModel
             {
                 ProductId = product.ProductId,
                 ProductNumber = product.ProductNumber,
@@ -37,7 +37,7 @@ namespace ManeroWebApp.Controllers
                 ImageUrl = product.ImageUrl
             }).ToList();
 
-            return View(productList);
+            return PartialView("/Views/Product/_ProductCards.cshtml", productViewModels);
         }
     }
 }
