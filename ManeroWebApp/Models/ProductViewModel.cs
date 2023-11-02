@@ -8,7 +8,6 @@ namespace ManeroWebApp.Models
     public class ProductViewModel
     {
         public int ProductId { get; set; }
-
         public string? ProductNumber { get; private set; }
 
         public string ProductName { get; set; } = null!;
