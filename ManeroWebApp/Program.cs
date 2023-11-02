@@ -2,6 +2,7 @@ using DataAccessLibrary.Contexts;
 using DataAccessLibrary.Initializers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using ServiceLibrary.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +15,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<DataInitializer>();
-
+builder.Services.AddTransient<IProductService, ProductService>();
 var app = builder.Build();
 
 
