@@ -26,33 +26,45 @@ body {
 }
 
 .Navigation-Bar {
-    position: absolute;
+    display: block;
+    position: fixed;
     bottom: 0;
+    min-height: 85px;
     width: 100%;
     background-color: #FFF;
     border-top: 1px solid #DBE3F5;
     padding: 8px 0 0 0;
 }
 
-    .Navigation-Bar .Menu-links {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-    }
+.Menu-links {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}
 
-    .Navigation-Bar .Menu-link {
-        color: #979797;
-        font-size: 24px;
+.Menu-link {
+    font-size: 24px;
+    text-align: center;
+}
+
+    .Menu-link a {
         text-decoration: none;
-        text-align: center;
-        padding-bottom: 25px;
+        color: #979797;
     }
 
-        .Navigation-Bar .Menu-link i {
-            border-radius: 50px;
-            padding: 10px;
-        }
+    .Menu-link i {
+        border-radius: 50px;
+        padding: 10px;
+        vertical-align: middle;
+        display: inline-block;
+    }
 
 .active {
     color: #000;
     background-color: #DBE3F5;
+}
+
+@media (min-width: 768px) {
+    .Navigation-Bar {
+        display: none;
+    }
 }
