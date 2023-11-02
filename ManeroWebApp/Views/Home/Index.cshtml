@@ -19,36 +19,8 @@
 
     </section>
 
-    <section class="bestseller-carousel">
-        <div class="bestseller-carousel-title-container">
-            <label class="bestseller-carousel-title">Best Sellers</label>
-            <button class="bestseller-view-all-btn">View All</button>
-        </div>
-      
-        <div class="carousel">
-            <input type="radio" id="slide1" name="slides" checked>
-            <input type="radio" id="slide2" name="slides">
-            <input type="radio" id="slide3" name="slides">
-
-            <div class="carousel-slides">
-                <div class="carousel-slide">
-                    <img src="path/to/image1.jpg" alt="Slide 1">
-                </div>
-                <div class="carousel-slide">
-                    <img src="path/to/image2.jpg" alt="Slide 2">
-                </div>
-                <div class="carousel-slide">
-                    <img src="path/to/image3.jpg" alt="Slide 3">
-                </div>
-            </div>
-
-            <div class="carousel-controls">
-                <label for="slide1"></label>
-                <label for="slide2"></label>
-                <label for="slide3"></label>
-            </div>
-        </div>
-
+    <section class="bestseller-carousel-section">
+        <partial name="_CarouselPartial" model="new { idSuffix = '1'}" />
     </section>
 
     <section class="discount-offer">
@@ -60,38 +32,8 @@
         </div>
     </section>
 
-    <section class="featured-carousel">
-        <section class="bestseller-carousel">
-            <div class="bestseller-carousel-title-container">
-                <label class="bestseller-carousel-title">Featured Products</label>
-                <button class="bestseller-view-all-btn">View All</button>
-            </div>
-
-            <div class="carousel">
-                <input type="radio" id="slide1" name="slides" checked>
-                <input type="radio" id="slide2" name="slides">
-                <input type="radio" id="slide3" name="slides">
-
-                <div class="carousel-slides">
-                    <div class="carousel-slide">
-                        <img src="path/to/image1.jpg" alt="Slide 1">
-                    </div>
-                    <div class="carousel-slide">
-                        <img src="path/to/image2.jpg" alt="Slide 2">
-                    </div>
-                    <div class="carousel-slide">
-                        <img src="path/to/image3.jpg" alt="Slide 3">
-                    </div>
-                </div>
-
-                <div class="carousel-controls">
-                    <label for="slide1"></label>
-                    <label for="slide2"></label>
-                    <label for="slide3"></label>
-                </div>
-            </div>
-
-        </section>
+    <section class="featured-carousel-section">
+        <partial name="_CarouselPartial" model="new { idSuffix = '2' }" />
     </section>
 </div>
 

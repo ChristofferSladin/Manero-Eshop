@@ -1,0 +1,66 @@
+﻿.carousel-title-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+    .carousel-title-container .carousel-title {
+        display: flex;
+        justify-content: flex-start;
+        font-weight: 500;
+        margin-top: 10px;
+    }
+
+    .carousel-title-container .view-all-btn {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 10px;
+    }
+
+.carousel {
+    margin-top: 10px;
+    text-align: center;
+    overflow: hidden;
+}
+
+.carousel-slides {
+    display: flex;
+    transition: all 0.3s ease;
+}
+
+.carousel-slide {
+    flex: 0 0 100%;
+}
+
+input[type="radio"] {
+    display: none;
+}
+
+.carousel-controls {
+    display: flex;
+    justify-content: center;
+}
+
+    .carousel-controls label {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        background: grey;
+        margin: 5px;
+        cursor: pointer;
+    }
+
+#slide11:checked ~ .carousel-slides,
+#slide12:checked ~ .carousel-slides {
+    transform: translateX(0%);
+}
+
+#slide21:checked ~ .carousel-slides,
+#slide22:checked ~ .carousel-slides {
+    transform: translateX(-100%);
+}
+
+#slide31:checked ~ .carousel-slides,
+#slide32:checked ~ .carousel-slides {
+    transform: translateX(-200%);
+}
+
