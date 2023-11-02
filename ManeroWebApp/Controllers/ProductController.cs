@@ -37,7 +37,7 @@ namespace ManeroWebApp.Controllers
                 ImageUrl = product.ImageUrl
             }).ToList();
 
-            return PartialView("/Views/Product/_ProductCards.cshtml", productViewModels);
+            return PartialView("/Views/Shared/Product/_ProductCards.cshtml", productViewModels);
         }
     }
 }
