@@ -1,0 +1,27 @@
+﻿@{
+    ViewData["Title"] = "Wishlist";
+}
+
+@model List<FavoriteProductViewModel>
+
+<div class="wishlist-container">
+
+    @* wishlist header *@
+    <section class="wishlist-header">
+        header
+    </section>
+
+    @* wishlist products *@
+    <section class="wishlist-products">
+        @foreach (var favoriteCard in Model)
+        {
+            <partial name="../partials/_favoriteproductcard" model="favoriteCard"></partial>
+        }
+    </section>
+
+    @* wishlist footer *@
+    <section class="wishlist-footer">
+        footer
+    </section>
+</div>
+

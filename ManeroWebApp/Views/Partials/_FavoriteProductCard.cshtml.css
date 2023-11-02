@@ -1,0 +1,87 @@
+﻿.favorite-product-card {
+    display: grid;
+    grid-template-columns: 0fr 1fr 0fr;
+    border-bottom: 2px solid #329ea8;
+    padding: 10px 20px 18px 20px;
+}
+
+    /*product image*/
+    .favorite-product-card .product-img {
+    }
+
+
+        .favorite-product-card .product-img img {
+            height: 140px;
+            width: 140px;
+            object-fit: cover;
+        }
+
+        .favorite-product-card .product-img .sale-tag {
+            border: 1px solid green;
+            background-color: green;
+            text-align: center;
+            font-size: 12px;
+            color: white;
+            z-index: 1;
+            position: relative;
+            top: -140px;
+            width: 50px;
+        }
+
+
+    /*product description, price, discount, rating etc*/
+    .favorite-product-card .card-description {
+        padding-left: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+        .favorite-product-card .card-description .name {
+            font-size: 18px;
+            color: grey;
+        }
+
+        .favorite-product-card .card-description .price {
+            font-size: 18px;
+            color: grey;
+        }
+
+        .favorite-product-card .card-description .rating {
+            display: flex;
+            font-size: 14px;
+        }
+
+            .favorite-product-card .card-description .rating .star {
+                font-size: 14px;
+                color: gold;
+                padding: 0;
+                margin: 0;
+                align-self: center;
+            }
+
+    /*heart and add to shopping cart buttons*/
+    .favorite-product-card .card-icons {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 20px;
+    }
+
+        .favorite-product-card .card-icons .heart {
+            color: red;
+            font-size: 30px;
+        }
+
+        .favorite-product-card .card-icons .bag-circle {
+            border: 1px solid black !important;
+            background: red !important;
+            height: 40px !important;
+        }
+
+            .card-icons .bag-circle .shopping-bag {
+                text-decoration: none;
+                color: #000000;
+                font-size: 30px;
+            }

@@ -1,0 +1,44 @@
+﻿@model FavoriteProductViewModel
+
+<div class="favorite-product-card">
+    @* product image *@
+    <div class="product-img">
+        <img src="@Model.ImgUrl" alt="" />
+        @* <img src=~/css/pants.jpg alt="" /> *@
+        @if (Model.IsOnSale is true)
+        {
+            <div class="sale-tag">sale</div>
+        }
+    </div>
+
+    @* product description, price, discount, rating *@
+    <div class="card-description">
+        <h1 class="name">@Model.Name</h1>
+        <h2 class="price">$ @Model.Price</h2>
+        <div class="rating">
+            <div>
+                <i class="star fa-solid fa-star"></i>
+                <i class="star fa-solid fa-star"></i>
+                <i class="star fa-solid fa-star"></i>
+                <i class="star fa-solid fa-star"></i>
+                <i class="star fa-solid fa-star"></i>
+            </div>
+            &nbsp;(@Model.Rating.ToString())
+        </div>
+    </div>
+
+    @* heart and add to shopping cart buttons *@
+    <div class="card-icons">
+        <i class="heart fa-solid fa-heart"></i>
+        <a class="bag-circle" 
+            asp-controller="WishList"
+            asp-action="AddProductToShoppingCart"
+            asp-route-productId="@Model.ProductId" 
+            asp-route-shoppingCartId="@Model.ShoppingCartId" 
+            asp-route-priceWithTax="@Model.PriceWithTax"
+            asp-route-priceWithoutTax="@Model.PriceWithoutTax">
+            <i class="shopping-bag fa-solid fa-bag-shopping"></i>
+        </a>
+    </div>
+</div>
+

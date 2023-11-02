@@ -1,0 +1,23 @@
+﻿.wishlist-container {
+    display: grid;
+    grid-template-areas: "header"
+                        "products"
+                        "footer";
+    padding: 0;
+    margin: 0;
+}
+
+    /*wishlist header*/
+    .wishlist-container .wishlist-header {
+        grid-area: header;
+    }
+
+    /*wishlist products*/
+    .wishlist-container .wishlist-products {
+        grid-area: products;
+    }
+
+    /*wishlist footer*/
+    .wishlist-container .wishlist-footer {
+        grid-area: footer;
+    }

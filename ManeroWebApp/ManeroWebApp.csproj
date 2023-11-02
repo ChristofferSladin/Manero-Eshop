@@ -24,4 +24,10 @@
     <ProjectReference Include="..\DataAccessLibrary\DataAccessLibrary.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Views\WishList\WishList.cshtml.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
