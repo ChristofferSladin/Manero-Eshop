@@ -1,4 +1,5 @@
-﻿using DataAccessLibrary.Entities.ProductEntities;
+﻿
+using ServiceLibrary.Models;
 
 namespace ServiceLibrary.ProductServices
 {

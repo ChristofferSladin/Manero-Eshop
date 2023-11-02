@@ -3,11 +3,43 @@
 @{
 }
 
+<head>
+    <link rel="stylesheet" href="_productCard.css">
+</head>
+
+
+
+
+
+
 @if (Model != null!)
 {
     @foreach (var p in Model)
     {
-        <div style="width: 300px; height: 400px; border: 1px solid black; padding: 15px; margin 5px; background: #f3f3f3; display: flex; flex-direction: column; justify-content: center">
+
+        <div class="product-card">
+            <div class="product-image">
+                <img src="https://img01.ztat.net/article/spp-media-p1/43f5ca71232a48fbb839cd5aaac3bb65/eae6359526ef4fd38b461b377e5b4a1d.jpg?imwidth=300&filter=packshot" alt="Product Image">
+                <div class="product-icons">
+                    <i class="fa-regular fa-heart"></i>
+                    <i class="fa-regular fa-bag-shopping"></i>
+                </div>
+            </div>
+            <div class="product-details">
+                <div class="product-review">
+                    <div class="star">&#9733;</div>
+                    <div class="star">&#9733;</div>
+                    <div class="star">&#9733;</div>
+                    <div class="star">&#9733;</div>
+                    <div class="star">&#9733;</div>
+                    <span class="review-score">@p.Rating</span>
+                </div>
+                <div class="product-name">@p.ProductName</div>
+                <div class="product-price">@p.SalePrice</div>
+            </div>
+        </div>
+
+     @*    <div style="width: 300px; height: 400px; border: 1px solid black; padding: 15px; margin: 5px; background: #f3f3f3; display: flex; flex-direction: column; justify-content: center">
             <div>@p.ProductId</div>
             <div>@p.ProductNumber</div>
             <div>@p.ProductName</div>
@@ -24,6 +56,6 @@
             <div>@p.IsFeatured</div>
             <div>@p.Rating</div>
             <div>@p.ImageUrl</div>
-        </div>
+        </div> *@
     }
 }

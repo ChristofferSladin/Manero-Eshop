@@ -1,6 +1,6 @@
-﻿using DataAccessLibrary.Entities.ProductEntities;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using ServiceLibrary.Models;
 using System.Net.Http.Json;
 
 namespace ServiceLibrary.ProductServices;

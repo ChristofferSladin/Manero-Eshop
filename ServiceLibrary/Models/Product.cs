@@ -1,6 +1,4 @@
-﻿using DataAccessLibrary.Entities.ProductEntities;
-using DataAccessLibrary.Entities.UserEntities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;

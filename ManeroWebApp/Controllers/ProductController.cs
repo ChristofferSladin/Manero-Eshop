@@ -14,15 +14,15 @@ namespace ManeroWebApp.Controllers
         {
             _productService = productService;
         }
+        public IActionResult FeaturedProduct()
+        {
+            return View();
+        }
         public async Task<IActionResult> ProductCardsPartial()
         {
             var products = await _productService.GetProductsWithReviewsAsync();
             var productViewModels = products.Select(product => new ProductViewModel
             {
-                foreach (var product in products)
-                {
-                    productList.Add(new ProductViewModel
-                    {
                 ProductId = product.ProductId,
                 ProductNumber = product.ProductNumber,
                 ProductName = product.ProductName,
