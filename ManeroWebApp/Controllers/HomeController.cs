@@ -1,18 +1,12 @@
 ﻿using ManeroWebApp.Models;
 using Microsoft.AspNetCore.Mvc;
+using ServiceLibrary.Services;
 using System.Diagnostics;
 
 namespace ManeroWebApp.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
-
         public IActionResult Index()
         {
             return View();

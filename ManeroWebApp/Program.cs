@@ -2,7 +2,7 @@ using DataAccessLibrary.Contexts;
 using DataAccessLibrary.Initializers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using ServiceLibrary.ProductServices;
+using ServiceLibrary.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,9 +17,7 @@ builder.Services.AddTransient<IProductService, ProductService>();
 
 
 builder.Services.AddScoped<DataInitializer>();
-
-
-
+builder.Services.AddTransient<IProductService, ProductService>();
 var app = builder.Build();
 
 

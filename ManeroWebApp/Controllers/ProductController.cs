@@ -1,6 +1,8 @@
-﻿using ManeroWebApp.Models;
+﻿using System.ComponentModel.DataAnnotations;
+using ManeroWebApp.Models;
 using Microsoft.AspNetCore.Mvc;
-using ServiceLibrary.ProductServices;
+using ServiceLibrary.Models;
+using ServiceLibrary.Services;
 
 namespace ManeroWebApp.Controllers
 {
@@ -12,24 +14,34 @@ namespace ManeroWebApp.Controllers
         {
             _productService = productService;
         }
-
-
-        public IActionResult FeaturedProduct()
+        public async Task<IActionResult> ProductCardsPartial()
         {
-            var productList = new List<ProductViewModel>();
-            var products = _productService.GetProductsAsync().Result;
-            if (products != null)
+            var products = await _productService.GetProductsWithReviewsAsync();
+            var productViewModels = products.Select(product => new ProductViewModel
             {
                 foreach (var product in products)
                 {
                     productList.Add(new ProductViewModel
                     {
-                        ProductId = product.ProductId,
-                        ProductName = product.ProductName,
-                    });
-                }
-            }
-            return View(productList);
+                ProductId = product.ProductId,
+                ProductNumber = product.ProductNumber,
+                ProductName = product.ProductName,
+                Description = product.Description,
+                Category = product.Category,
+                Type = product.Type,
+                Size = product.Size,
+                QuantityInStock = product.QuantityInStock,
+                Color = product.Color,
+                PriceExcTax = product.PriceExcTax,
+                PriceIncTax = product.PriceIncTax,
+                SalePrice = product.SalePrice,
+                IsOnSale = product.IsOnSale,
+                IsFeatured = product.IsFeatured,
+                Rating = product.Rating,
+                ImageUrl = product.ImageUrl
+            }).ToList();
+
+            return PartialView("/Views/Shared/Product/_ProductCards.cshtml", productViewModels);
         }
     }
 }
