@@ -7,22 +7,39 @@
     <div class="container">
         <div class="Menu-links">
 
-            <a class="Menu-link" asp-area="" asp-controller="Home" asp-action="Index">
-                <i class="fa-regular fa-house
-                        @(ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")"></i>
-            </a>
-            <a class="Menu-link">
-                <i class="fa-regular fa-magnifying-glass"></i>
-            </a>
-            <a class="Menu-link">
-                <i class="fa-regular fa-cart-shopping"></i>
-            </a>
-            <a class="Menu-link">
-                <i class="fa-regular fa-heart"></i>
-            </a>
-            <a class="Menu-link">
-                <i class="fa-regular fa-user"></i>
-            </a>
+            <div class="Menu-link">
+                <a asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="fa-regular fa-house
+                    @(ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")"></i>
+                </a>
+            </div>
+
+            <div class="Menu-link">
+                <a asp-area="" asp-controller="" asp-action="">
+                    <i class="fa-regular fa-magnifying-glass
+                @(ViewContext.RouteData.Values["action"]?.ToString() == "" ? "active" : "")"></i>
+                </a>
+            </div>
+
+            <div class="Menu-link">
+                <a asp-area="" asp-controller="" asp-action="">
+                    <i class="fa-regular fa-cart-shopping
+                   @(ViewContext.RouteData.Values["action"]?.ToString() == "" ? "active" : "")"></i>
+                </a>
+            </div>
+
+            <div class="Menu-link">
+                <a asp-area="" asp-controller="" asp-action="">
+                    <i class="fa-regular fa-heart
+                   @(ViewContext.RouteData.Values["action"]?.ToString() == "" ? "active" : "")"></i>
+                </a>
+            </div>
+            <div class="Menu-link">
+                <a asp-area="" asp-controller="" asp-action="">
+                    <i class="fa-regular fa-user
+                   @(ViewContext.RouteData.Values["action"]?.ToString() == "" ? "active" : "")"></i>
+                </a>
+            </div>
 
         </div>
     </div>
