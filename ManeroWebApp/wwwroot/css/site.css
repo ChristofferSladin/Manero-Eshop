@@ -1,22 +1,58 @@
+* {
+    box-sizing: border-box;
+}
+
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+}
+
+.Navigation-Bar {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: #FFF;
+    border-top: 1px solid #DBE3F5;
+    padding: 8px 0 0 0;
+}
+
+    .Navigation-Bar .Menu-links {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    }
+
+    .Navigation-Bar .Menu-link {
+        color: #979797;
+        font-size: 24px;
+        text-decoration: none;
+        text-align: center;
+        padding-bottom: 25px;
+    }
+
+        .Navigation-Bar .Menu-link i {
+            border-radius: 50px;
+            padding: 10px;
+        }
+
+.active {
+    color: #000;
+    background-color: #DBE3F5;
 }
