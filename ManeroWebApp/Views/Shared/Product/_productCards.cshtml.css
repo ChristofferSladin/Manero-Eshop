@@ -45,6 +45,15 @@
         margin-right: 5px;
     }
 
+/*stars*/
+.product-review {
+    display: flex;
+    align-items: center;
+}
+
+#starsColor {
+    color: gold;
+}
 /* Icon plasering */
 .product-card {
     display: flex;
@@ -81,7 +90,7 @@
 
 /* Desktop styles */
 @media (min-width: 768px) {
-   
+
 
     .product-card {
         width: 23%;
