@@ -3,6 +3,7 @@ using DataAccessLibrary.Entities.ProductEntities;
 using DataAccessLibrary.Entities.UserEntities;
 using ManeroWebApp.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
 namespace ManeroWebApp.Controllers
@@ -48,18 +49,21 @@ namespace ManeroWebApp.Controllers
         }
         public async Task<IActionResult> AddProductToShoppingCart(int productId, int shoppingCartId, decimal priceWithTax, decimal priceWithoutTax)
         {
+            var shoppingCardProductEntry = new ShoppingCartProduct
+            {
+                TotalPriceExcTax = priceWithoutTax,
+                TotalPriceIncTax = priceWithTax,
+                Product = await _context.Products.FirstOrDefaultAsync(x => x.ProductId == productId)!,
+                ShoppingCart = await _context.ShoppingCarts.FirstOrDefaultAsync(x => x.ShoppingCartId == shoppingCartId)!,
+                ItemQuantity = 1,
+            };
+
             await _context.ShoppingCartProducts
-                .AddAsync(new ShoppingCartProduct
-                {
-                    TotalPriceExcTax = priceWithoutTax,
-                    TotalPriceIncTax = priceWithTax,
-                    ProductId = productId,
-                    ShoppingCartId = shoppingCartId,
-                    ItemQuantity = 1,
-                });
+                .AddAsync(shoppingCardProductEntry);
+
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("WishList");
+            return RedirectToPage("/Home");
         }
     }
 }

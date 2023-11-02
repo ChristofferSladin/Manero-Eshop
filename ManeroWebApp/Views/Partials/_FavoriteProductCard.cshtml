@@ -17,11 +17,21 @@
         <h2 class="price">$ @Model.Price</h2>
         <div class="rating">
             <div>
-                <i class="star fa-solid fa-star"></i>
-                <i class="star fa-solid fa-star"></i>
-                <i class="star fa-solid fa-star"></i>
-                <i class="star fa-solid fa-star"></i>
-                <i class="star fa-solid fa-star"></i>
+                @for (decimal i = 0.0M; i < 5.0M; i++)
+                {
+                    if (i + 0.5M < Model.Rating)
+                    {
+                        <i class="fa-solid fa-star"></i>
+                    }
+                    else if (i < Model.Rating)
+                    {
+                        <i class="fa-regular fa-star-half-stroke"></i>
+                    }
+                    else
+                    {
+                        <i class="fa-regular fa-star"></i>
+                    }
+                }
             </div>
             &nbsp;(@Model.Rating.ToString())
         </div>
