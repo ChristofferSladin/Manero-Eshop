@@ -1,0 +1,135 @@
+﻿@model ProductViewModel
+@{
+    var userLoggedInAndLiked = false;
+    var userIsPrivateCustomer = false;
+    var currencySymbol = "$";
+}
+
+@if (Model != null!)
+{
+    <div class="product-container">
+        <div class="image-carusel-container">
+            <div class="image-container">
+                <img class="product-image" src="https://images.unsplash.com/photo-1560343090-f0409e92791a?auto=format&ampfit=crop&ampq=80&ampw=2564&ampixlib=rb-4.0.3&ampixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" />
+            </div>
+            <div class="image-selector">
+                <div class="elipse"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
+        <div class="product-info-container">
+            <div class="title-bar">
+                <div class="product-title">
+                    @Model.ProductName
+                </div>
+                @if (userLoggedInAndLiked)
+                {
+                    <div class="heart-icon">
+                        <i class="fa-solid fa-heart"></i>
+                    </div>
+                }
+                else
+                {
+                    <button class="heart-button">
+                        <i class="fa-regular fa-heart"></i>
+                    </button>
+                }
+            </div>
+            <div class="rating-container">
+                @for (decimal i = 0.0M; i < 5.0M; i++)
+                {
+                    if (i + 0.5M < Model.Rating)
+                    {
+                        <div class="rating-star">
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                    }
+                    else if (i < Model.Rating)
+                    {
+                        <div class="rating-star">
+                            <i class="fa-regular fa-star-half-stroke"></i>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="rating-star">
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                    }
+                }
+                @if (Model.Reviews != null)
+                {
+                    <div class="rating">(@Model.Reviews.Count)</div>
+                }
+            </div>
+            <div class="price-add-container">
+                @if (userIsPrivateCustomer)
+                {
+                    <div class="price-box">@currencySymbol@Model.PriceIncTax</div>
+                }
+                else
+                {
+                    <div class="price-box">@currencySymbol@Model.PriceExcTax</div>
+                }
+                <div class="add-product-box">
+                    <button id="decrement" onclick="productCounter.decrementCounter()">
+                        <i class="fa-solid fa-minus"></i>
+                    </button>
+                    <div id="displayCounter" class="item-amount"></div>
+                    <button id="increment" onclick="productCounter.incrementCounter()">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="size-select-container">
+                <div class="size-title">Size</div>
+                <div id="productSize" class="sizes-box"></div>
+            </div>
+            <div class="color-select-container">
+                <div class="color-title">Color</div>
+                <div id="productColor" class="colors-box"></div>
+            </div>
+            <div class="product-desc-container">
+                <div class="desc-title">Description</div>
+                <div class="desc">@Model.Description</div>
+            </div>
+            <button class="cart-button">+ Add to cart</button>
+        </div>
+    </div>
+}
+
+<script>
+    var productCounter = {
+        count: 0,
+        incrementCounter: function () {
+            return this.count = this.count + 1;
+        },
+        decrementCounter: function () {
+            if (this.count > 0) {
+                return this.count = this.count - 1;
+            } else {
+                return this.count = 0;
+            }
+        },
+    };
+
+    var displayCout = document.getElementById('displayCounter');
+    displayCout.innerHTML = 0;
+    document.getElementById('increment').onclick = function () {
+        displayCout.innerHTML = productCounter.incrementCounter();
+    }
+    document.getElementById('decrement').onclick = function () {
+        displayCout.innerHTML = productCounter.decrementCounter();
+    }
+</script>
+<script>
+    $(document).ready(function () {
+        $('#productSize').load("/Product/ProductSizesPartial");
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $('#productColor').load("/Product/ProductColorsPartial");
+    });
+</script>

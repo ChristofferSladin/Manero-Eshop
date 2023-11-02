@@ -1,0 +1,11 @@
+﻿@model List<ColorViewModel>
+@{
+}
+
+@if (Model != null!)
+{
+    @foreach (var s in Model)
+    {
+        <button style="background: @s.Color;" class="color-item"></button>
+    }
+}

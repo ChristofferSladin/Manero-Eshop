@@ -9,9 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceLibrary", "ServiceLi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccessLibrary", "DataAccessLibrary\DataAccessLibrary.csproj", "{595308B3-D67F-4D07-8B7F-70AA5D8EB4B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductAPI", "ProductAPI\ProductAPI.csproj", "{429F4580-2170-4147-A49E-1ADDA23ABEAE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductAPI", "ProductAPI\ProductAPI.csproj", "{429F4580-2170-4147-A49E-1ADDA23ABEAE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductAPI.Tests", "ProductAPI.Tests\ProductAPI.Tests.csproj", "{7FD8EFE7-5363-4103-B027-411500480954}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductAPI.Tests", "ProductAPI.Tests\ProductAPI.Tests.csproj", "{7FD8EFE7-5363-4103-B027-411500480954}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

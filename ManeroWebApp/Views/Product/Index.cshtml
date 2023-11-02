@@ -1,0 +1,17 @@
+﻿@{
+}
+
+<div>
+    <div id="productCard"></div>
+</div>
+
+
+@section Scripts
+    {
+    <script>
+        $(document).ready(function () {
+            $('#productCard').load("/Product/ProductCardPartial");
+        });
+    </script>
+ 
+}

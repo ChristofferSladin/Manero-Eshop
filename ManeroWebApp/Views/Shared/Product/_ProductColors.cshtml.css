@@ -1,0 +1,27 @@
+﻿button {
+    position: relative;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding: 0;
+    margin: 0;
+    border: none;
+    outline: none;
+    background: none;
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    resize: none;
+}
+
+.color-item {
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    margin: 5px;
+    opacity: 0.8;
+    transition: all 0.15s ease-in-out;
+}
+    .color-item:hover {
+        outline: 5px solid #dbe3f5;
+    }
