@@ -39,5 +39,46 @@ namespace ManeroWebApp.Controllers
 
             return PartialView("/Views/Shared/Product/_ProductCards.cshtml", productViewModels);
         }
+
+        public async Task<IActionResult> CarouselProductCardsPartial()
+        {
+            var products = await _productService.GetProductsWithReviewsAsync();
+            var productViewModels = products.Select(product => new ProductViewModel
+            {
+                ProductName = product.ProductName,
+                Description = product.Description,
+                Category = product.Category,
+                Type = product.Type,
+                Color = product.Color,
+                SalePrice = product.SalePrice,
+                IsOnSale = product.IsOnSale,
+                IsFeatured = product.IsFeatured,
+                Rating = product.Rating,
+                ImageUrl = product.ImageUrl
+            }).ToList();
+
+            return PartialView("/Views/Shared/Product/_CarouselProductCards.cshtml", productViewModels);
+        }
+
+        public async Task<IActionResult> CountOfProduct()
+        {
+            var products = await _productService.GetProductsWithReviewsAsync();
+            var productViewModels = products.Select(product => new ProductViewModel
+            {
+                ProductName = product.ProductName,
+                Description = product.Description,
+                Category = product.Category,
+                Type = product.Type,
+                Color = product.Color,
+                SalePrice = product.SalePrice,
+                IsOnSale = product.IsOnSale,
+                IsFeatured = product.IsFeatured,
+                Rating = product.Rating,
+                ImageUrl = product.ImageUrl
+            }).ToList();
+
+            return View(productViewModels.Count);
+        }
+
     }
 }

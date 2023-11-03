@@ -1,0 +1,38 @@
+﻿
+.product-card {
+    width: 290px;
+    margin: 0 5px;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border: none;
+}
+
+.product-image {
+    width: 100%;
+    background-image: url('/img/showcase-img.png');
+    background-size: cover;
+    position: relative;
+    object-fit: fill;
+    min-height: 250px;
+}
+
+.buttons-container {
+    gap: 5px;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+.product-info {
+    display: flex;
+    flex-direction: column;
+    color: black;
+}
+
+.flex-container {
+    display: flex;
+}

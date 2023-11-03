@@ -17,6 +17,7 @@
     }
 
 .carousel {
+    position: relative;
     margin-top: 10px;
     text-align: center;
     overflow: hidden;
@@ -31,36 +32,23 @@
     flex: 0 0 100%;
 }
 
-input[type="radio"] {
-    display: none;
-}
-
-.carousel-controls {
+.productPartial{
     display: flex;
-    justify-content: center;
 }
 
-    .carousel-controls label {
-        display: inline-block;
-        width: 10px;
-        height: 10px;
-        background: grey;
-        margin: 5px;
-        cursor: pointer;
-    }
-
-#slide11:checked ~ .carousel-slides,
-#slide12:checked ~ .carousel-slides {
-    transform: translateX(0%);
+.carousel-control-prev {
+    position: absolute;
+    top: 50%;
+    height: 50px;
+    color: black;
+    font-size: 18px;
+    font-weight: 600;
 }
-
-#slide21:checked ~ .carousel-slides,
-#slide22:checked ~ .carousel-slides {
-    transform: translateX(-100%);
+.carousel-control-next {
+    position: absolute;
+    top: 50%;
+    height: 50px;
+    color: black;
+    font-size: 18px;
+    font-weight: 600;
 }
-
-#slide31:checked ~ .carousel-slides,
-#slide32:checked ~ .carousel-slides {
-    transform: translateX(-200%);
-}
-
