@@ -2,24 +2,20 @@
     ViewData["Title"] = "Featured Products Page";
 }
 @model List<ProductViewModel>
-
 <!DOCTYPE html>
 <html>
 <head>
     <link rel="stylesheet" href="FeaturedProduct.css">
 </head>
-
 <body>
-
     <header>
         <div class="headLine">
             <div>
-                <a asp-page="" class="btn-back">
+                <a href="/Home/Index" class="btn-back">
                     <i class="fa-solid fa-chevron-left" style="color:black;"></i>
                 </a>
             </div>
             <h1>Featured Products</h1>
-
             <div>
                 <a asp-page="" class="btn-cart">
                     <i class="fa-solid fa-bag-shopping" style="color:black;"></i>
@@ -27,16 +23,13 @@
             </div>
         </div>
     </header>
-
     <div class="product-grid">
         <div class="product-grid" id="featuredProduct">
         </div>
     </div>
 </body>
 </html>
-
 <link rel="stylesheet" href="https://kit.fontawesome.com/41c8b474e2.css" crossorigin="anonymous">
-
 @section Scripts {
     <script>
         $('#featuredProduct').load("/Product/ProductCardsPartial");
