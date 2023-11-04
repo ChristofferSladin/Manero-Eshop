@@ -11,7 +11,7 @@ namespace ManeroWebApp.Models
         public string? Name {  get; set; }
         public decimal PriceWithTax { get; set; }
         public decimal PriceWithoutTax { get; set; }
-        public decimal? Price { get; set; }
+        public decimal? SalePrice { get; set; }
         public decimal? Rating { get; set; }
         public bool? IsOnSale { get; set; }
     }

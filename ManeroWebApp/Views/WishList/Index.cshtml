@@ -1,8 +1,8 @@
-﻿@{
-    ViewData["Title"] = "Wishlist";
-}
+﻿@{ Layout = "_Layout";}
+@{ ViewData["Title"] = "Wishlist"; }
+@model IEnumerable<FavoriteProductViewModel>
 
-@model List<FavoriteProductViewModel>
+<partial name="_ToastrNotification" />
 
 <div class="wishlist-container">
 

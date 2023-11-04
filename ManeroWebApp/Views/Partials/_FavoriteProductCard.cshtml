@@ -3,8 +3,11 @@
 <div class="favorite-product-card">
     @* product image *@
     <div class="product-img">
-        <img src="@Model.ImgUrl" alt="" />
-        @* <img src=~/css/pants.jpg alt="" /> *@
+        @* <img src="@Model.ImgUrl" alt="" /> *@
+
+        @* for testing *@
+        <img class="img" src="~/Resources/Images/shirt.jpg" alt="" /> 
+
         @if (Model.IsOnSale is true)
         {
             <div class="sale-tag">sale</div>
@@ -14,22 +17,25 @@
     @* product description, price, discount, rating *@
     <div class="card-description">
         <h1 class="name">@Model.Name</h1>
-        <h2 class="price">$ @Model.Price</h2>
+        <div class="price-tag">
+            <span class="price">$@Model.PriceWithoutTax</span>
+            <span class="sales-price">$@Model.SalePrice</span>
+        </div>
         <div class="rating">
             <div>
                 @for (decimal i = 0.0M; i < 5.0M; i++)
                 {
                     if (i + 0.5M < Model.Rating)
                     {
-                        <i class="fa-solid fa-star"></i>
+                        <i class="star fa-solid fa-star"></i>
                     }
                     else if (i < Model.Rating)
                     {
-                        <i class="fa-regular fa-star-half-stroke"></i>
+                        <i class="star fa-regular fa-star-half-stroke"></i>
                     }
                     else
                     {
-                        <i class="fa-regular fa-star"></i>
+                        <i class="star fa-regular fa-star"></i>
                     }
                 }
             </div>
@@ -44,10 +50,10 @@
             asp-controller="WishList"
             asp-action="AddProductToShoppingCart"
             asp-route-productId="@Model.ProductId" 
-            asp-route-shoppingCartId="@Model.ShoppingCartId" 
-            asp-route-priceWithTax="@Model.PriceWithTax"
-            asp-route-priceWithoutTax="@Model.PriceWithoutTax">
+            asp-route-shoppingCartId="@Model.ShoppingCartId">
+
             <i class="shopping-bag fa-solid fa-bag-shopping"></i>
+
         </a>
     </div>
 </div>

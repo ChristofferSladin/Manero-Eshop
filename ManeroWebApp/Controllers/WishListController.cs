@@ -1,28 +1,30 @@
 ﻿using DataAccessLibrary.Contexts;
+using DataAccessLibrary.Entities;
 using DataAccessLibrary.Entities.ProductEntities;
 using DataAccessLibrary.Entities.UserEntities;
 using ManeroWebApp.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
+using System.Security.Principal;
 
 namespace ManeroWebApp.Controllers
 {
     public class WishListController : Controller
     {
         private readonly ManeroDbContext _context;
-        private readonly HttpClient _httpClient;
         public WishListController(ManeroDbContext context)
         {
             _context = context;
-            _httpClient = new HttpClient();
         }
-        public IActionResult WishList(string forUserId = "6c0d8713-a32a-4209-a79b-6744ca401197") //user id hard coded for testing
+        public IActionResult Index(string forUserId = "1e776705-a04e-4f48-9563-d548cf5db096") //user id hard coded for testing
         {
             var wishList = _context.Favorite.Include(fp => fp.FavoriteProducts)!
                 .ThenInclude(p => p.Product)
                 .FirstOrDefault(f => f.Id == forUserId);
-
+            
             if (wishList is not null)
             {
                 var favProductList = wishList.FavoriteProducts!
@@ -32,7 +34,7 @@ namespace ManeroWebApp.Controllers
                         ProductId = x.Product.ProductId,
                         ImgUrl = x.Product.ImageUrl,
                         Name = x.Product.ProductName,
-                        Price = x.Product.SalePrice,
+                        SalePrice = x.Product.SalePrice,
                         PriceWithTax = x.Product.PriceIncTax,
                         PriceWithoutTax = x.Product.PriceExcTax,
                         Rating = x.Product.Rating,
@@ -47,23 +49,37 @@ namespace ManeroWebApp.Controllers
 
             return View();
         }
-        public async Task<IActionResult> AddProductToShoppingCart(int productId, int shoppingCartId, decimal priceWithTax, decimal priceWithoutTax)
+        public async Task<IActionResult> AddProductToShoppingCart(int productId, int shoppingCartId)
         {
-            var shoppingCardProductEntry = new ShoppingCartProduct
+            try 
             {
-                TotalPriceExcTax = priceWithoutTax,
-                TotalPriceIncTax = priceWithTax,
-                Product = await _context.Products.FirstOrDefaultAsync(x => x.ProductId == productId)!,
-                ShoppingCart = await _context.ShoppingCarts.FirstOrDefaultAsync(x => x.ShoppingCartId == shoppingCartId)!,
-                ItemQuantity = 1,
-            };
+                var product = await _context.Products
+                    .FirstOrDefaultAsync(x => x.ProductId == productId);
+                
+                var shoppingCart = await _context.ShoppingCarts
+                    .FirstOrDefaultAsync(x => x.ShoppingCartId == shoppingCartId);
 
-            await _context.ShoppingCartProducts
-                .AddAsync(shoppingCardProductEntry);
+                if (product != null && shoppingCart != null)
+                {
+                    var toAdd = new ShoppingCartProduct
+                    {
+                        Product = product,
+                        ShoppingCart = shoppingCart,
+                        ProductId = productId,
+                        ShoppingCartId = shoppingCartId,
+                        ItemQuantity = 1,
+                    };
 
-            await _context.SaveChangesAsync();
+                    await _context.ShoppingCartProducts.AddAsync(toAdd);
+                    await _context.SaveChangesAsync();
 
-            return RedirectToPage("/Home");
+                    TempData["success"] = $"\"{product.ProductName}\" added to shopping cart.";
+                }
+            
+            } catch(Exception e) { Debug.WriteLine(e.Message); }
+
+            TempData["error"] = $"Something went wrong.";
+            return RedirectToAction("Index", "WishList");
         }
     }
 }
