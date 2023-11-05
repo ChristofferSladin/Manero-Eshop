@@ -353,7 +353,7 @@ public class DataInitializer
                 Type = type,
                 Size = size,
                 PriceExcTax = price,
-                PriceIncTax = price * 0.2M,
+                PriceIncTax = price * 1.2M,
                 QuantityInStock = quantity,
                 SalePrice = salePrice,
                 IsOnSale = isOnSale,

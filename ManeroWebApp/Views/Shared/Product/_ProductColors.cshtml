@@ -1,13 +1,32 @@
 ﻿@model List<ColorViewModel>
 @{
-    var productNumber = ViewData["ProductNumber"] as string;
+    var productId = ViewData["ProductId"] as int?;
 }
 
 @if (Model != null!)
 {
     @foreach (var s in Model)
     {
-        var isActive = s.ProductNumber == productNumber;
-        <button style="background: @s.Color;" class="color-item @(isActive ? "active" : string.Empty)"></button>
+        var isActive = s.ProductId == productId;
+        <button style="background: @s.Color;" class="color-item @(isActive ? "active" : string.Empty)" data-productid="@s.ProductId"></button>
     }
 }
+
+<script>
+    $(document).ready(function () {
+        $(".color-item").click(function () {
+            var productId = $(this).data("productid");
+            $.ajax({
+                url: '@Url.Action("ProductCardPartial", "Product")',
+                data: { productId: productId },
+                method: 'GET',
+                success: function (result) {
+                    $('#productCard').html(result);
+                },
+                error: function (error) {
+                    console.error(error);
+                }
+            });
+        });
+    });
+</script>
