@@ -34,3 +34,11 @@
 .active {
     background: #dbe3f5;
 }
+
+@media (min-width: 1200px) {
+    .size-item {
+        width: 60px;
+        height: 60px;
+        font-size: 1.2rem;
+    }
+}

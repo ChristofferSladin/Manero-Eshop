@@ -23,18 +23,7 @@
                 <div class="product-title">
                     @Model.ProductName
                 </div>
-                @if (userLoggedInAndLiked)
-                {
-                    <div class="heart-icon">
-                        <i class="fa-solid fa-heart"></i>
-                    </div>
-                }
-                else
-                {
-                    <button class="heart-button">
-                        <i class="fa-regular fa-heart"></i>
-                    </button>
-                }
+                <div class="heart-icon-mobile"></div>
             </div>
             <div id="productRating" class="rating-box"></div>
             <div class="price-add-container">
@@ -46,15 +35,7 @@
                 {
                     <div class="price-box">@currencySymbol@Model.PriceExcTax</div>
                 }
-                <div class="add-product-box">
-                    <button id="decrement" onclick="productCounter.decrementCounter()">
-                        <i class="fa-solid fa-minus"></i>
-                    </button>
-                    <div id="displayCounter" class="item-amount"></div>
-                    <button id="increment" onclick="productCounter.incrementCounter()">
-                        <i class="fa-solid fa-plus"></i>
-                    </button>
-                </div>
+                <div class="add-product-box-mobile"></div>
             </div>
             <div class="size-select-container">
                 <div class="size-title">Size</div>
@@ -69,12 +50,71 @@
                 <div class="desc">@Model.Description</div>
             </div>
         </div>
+        <div id="items-wrapper" class="items-wrapper">
+        </div>
         <div class="button-container">
-            <button class="cart-button">+ Add to cart</button>
+            <div class="button-wrapper">
+                <button class="cart-button">+ Add to cart</button>
+            </div>
         </div>
     </div>
 }
 
+
+<div class="heart-icon-wrapper">
+    @if (userLoggedInAndLiked)
+    {
+        <button class="heart-button">
+            <i class="fa-solid fa-heart"></i>
+        </button>
+    }
+    else
+    {
+        <button class="heart-button">
+            <i class="fa-regular fa-heart"></i>
+        </button>
+    }
+</div>
+
+
+<div class="add-product-box">
+    <button id="decrement" onclick="productCounter.decrementCounter()">
+        <i class="fa-solid fa-minus"></i>
+    </button>
+    <div id="displayCounter" class="item-amount"></div>
+    <button id="increment" onclick="productCounter.incrementCounter()">
+        <i class="fa-solid fa-plus"></i>
+    </button>
+</div>
+
+
+<script>
+    function moveInteractionItems() {
+        const heartIcon = document.querySelector('.heart-icon-wrapper');
+        const addProductBox = document.querySelector('.add-product-box');
+
+        const newLocation = document.getElementById('items-wrapper');
+
+        const oldHeartIconLocation = document.querySelector('.heart-icon-mobile');
+        const oldAddProductBoxLocation = document.querySelector('.add-product-box-mobile');
+
+        if (window.innerWidth > 900) {
+            newLocation.appendChild(heartIcon);
+            newLocation.appendChild(addProductBox);
+        } else {
+            if (!oldHeartIconLocation.contains(heartIcon)) {
+                oldHeartIconLocation.appendChild(heartIcon);
+            }
+            if (!oldAddProductBoxLocation.contains(addProductBox)) {
+                oldAddProductBoxLocation.appendChild(addProductBox);
+            }
+        }
+    }
+    moveInteractionItems();
+    window.addEventListener('load', moveInteractionItems);
+    window.addEventListener('resize', moveInteractionItems);
+    window.addEventListener('orientationchange', moveInteractionItems);
+</script>
 <script>
     var productCounter = {
         count: 0,

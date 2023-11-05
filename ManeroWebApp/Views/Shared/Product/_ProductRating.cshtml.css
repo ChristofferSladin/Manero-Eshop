@@ -11,3 +11,9 @@
 .rating {
     padding-left: 3px;
 }
+
+@media (min-width: 1200px) {
+    .rating-container {
+        font-size: 1.2rem;
+    }
+}

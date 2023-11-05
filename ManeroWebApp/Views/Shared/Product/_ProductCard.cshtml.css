@@ -163,10 +163,9 @@
     color: #626262;
 }
 
-.button-container {
+.button-wrapper {
     margin: 10px;
 }
-
 .cart-button {
     height: 50px;
     width: 100%;
@@ -185,16 +184,17 @@
     .product-container {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: repeat(2, 1fr);
-        grid-column-gap: 50px;
+        grid-template-rows: repeat(5, 1fr);
+        grid-column-gap: 70px;
         grid-row-gap: 0px;
-        margin-top: 50px;
+        margin-top: 20px;
         padding: 0 20px;
     }
-
+    .product-image {
+        aspect-ratio: unset;
+    }
     .image-carusel-container {
-        grid-area: 1 / 1 / 2 / 2;
-
+        grid-area: 1 / 1 / 5 / 2;
     }
 
     .image-selector {
@@ -202,30 +202,95 @@
     }
 
     .product-info-container {
-        grid-area: 1 / 2 / 2 / 3;
+        grid-area: 1 / 2 / 4 / 3;
         padding: 0;
     }
 
+    .items-wrapper {
+        grid-area: 4 / 2 / 5 / 3;
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        padding: 0 20px 0 0;
+        margin-bottom: 40px;
+    }
+
+    .heart-button {
+        font-size: 1.3rem;
+    }
+
+    .add-product-box {
+        font-size: 1.1rem;
+    }
+
+    .item-amount {
+        font-size: 1.3rem;
+    }
+
     .button-container {
-        grid-area: 2 / 1 / 3 / 3;
+        grid-area: 5 / 1 / 6 / 3;
+        border-top: 2px solid #DBE3F5;
+        padding-top: 30px;
     }
 }
+
 @media (min-width: 1200px) {
     .product-container {
         max-width: 1180px;
     }
 
+    .product-title {
+        font-size: 2rem;
+    }
+
+    .price-box {
+        padding: 20px 0;
+        font-size: 2rem;
+    }
+
+    .desc-title {
+        font-size: 1.6rem;
+    }
+
+    .heart-button {
+        font-size: 1.6rem;
+    }
+
+    .add-product-box {
+        font-size: 1.2rem;
+    }
+
+    .item-amount {
+        font-size: 1.8rem;
+    }
+    .cart-button {
+        height: 65px;
+        font-size: 1.6rem;
+    }
+    .rating-box {
+        min-height: 40px;
+    }
 }
+
 @media (min-width: 1400px) {
     .product-container {
         max-width: 1380px;
     }
+    .product-image {
+        aspect-ratio: 1 / 1;
+    }
+    .cart-button {
+        height: 70px;
+        font-size: 1.4rem;
+    }
 }
+
 @media (min-width: 1600px) {
     .product-container {
         max-width: 1580px;
     }
 }
+
 @media (min-width: 1800px) {
     .product-container {
         max-width: 1780px;
