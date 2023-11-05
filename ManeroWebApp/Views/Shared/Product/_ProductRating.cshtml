@@ -1,0 +1,28 @@
+﻿@model RatingViewModel
+@{
+}
+
+<div class="rating-container">
+    @for (decimal i = 0.0M; i < 5.0M; i++)
+    {
+        if (i + 0.5M < Model.Rating)
+        {
+            <div class="rating-star">
+                <i class="fa-solid fa-star"></i>
+            </div>
+        }
+        else if (i < Model.Rating)
+        {
+            <div class="rating-star">
+                <i class="fa-regular fa-star-half-stroke"></i>
+            </div>
+        }
+        else
+        {
+            <div class="rating-star">
+                <i class="fa-regular fa-star"></i>
+            </div>
+        }
+    }
+    <div class="rating">(@Model.ReviewCount)</div>
+</div>

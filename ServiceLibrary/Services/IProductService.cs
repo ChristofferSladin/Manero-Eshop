@@ -6,8 +6,10 @@ namespace ServiceLibrary.Services
     {
         Task<List<Product>> GetProductsWithReviewsAsync();
         Task<Product> GetProductWithReviewsAsync(int productId);
-
         Task<List<Product>> GetFilteredProductsAsync(int? page, int? take, string? category, string? orderBy,
+            string? orderDirection, string? filterByName);
+
+        Task<List<Product>> GetFilteredProductsWithReviewsAsync(int? page, int? take, string? category, string? orderBy,
             string? orderDirection, string? filterByName);
     }
 }

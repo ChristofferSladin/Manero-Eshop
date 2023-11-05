@@ -1,4 +1,5 @@
-﻿@{
+﻿@model int
+@{
 }
 
 <div>
@@ -10,8 +11,21 @@
     {
     <script>
         $(document).ready(function () {
-            $('#productCard').load("/Product/ProductCardPartial");
+            loadProductCardPartial();
         });
+        function loadProductCardPartial() {
+            $.ajax({
+                url: '@Url.Action("ProductCardPartial", "Product")',
+                data: { productId: @Model },
+                method: 'GET',
+                success: function (result) {
+                    $('#productCard').html(result);
+                },
+                error: function (error) {
+                    console.error(error);
+                }
+            });
+        }
     </script>
  
 }

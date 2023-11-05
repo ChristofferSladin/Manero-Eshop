@@ -36,33 +36,7 @@
                     </button>
                 }
             </div>
-            <div class="rating-container">
-                @for (decimal i = 0.0M; i < 5.0M; i++)
-                {
-                    if (i + 0.5M < Model.Rating)
-                    {
-                        <div class="rating-star">
-                            <i class="fa-solid fa-star"></i>
-                        </div>
-                    }
-                    else if (i < Model.Rating)
-                    {
-                        <div class="rating-star">
-                            <i class="fa-regular fa-star-half-stroke"></i>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="rating-star">
-                            <i class="fa-regular fa-star"></i>
-                        </div>
-                    }
-                }
-                @if (Model.Reviews != null)
-                {
-                    <div class="rating">(@Model.Reviews.Count)</div>
-                }
-            </div>
+            <div id="productRating"></div>
             <div class="price-add-container">
                 @if (userIsPrivateCustomer)
                 {
@@ -124,12 +98,59 @@
     }
 </script>
 <script>
+    var productName = '@Html.Raw(Model?.ProductName.Replace("'", "\'").Replace("\"", "\\\""))';
     $(document).ready(function () {
-        $('#productSize').load("/Product/ProductSizesPartial");
+        loadProductSizesPartial();
     });
+    function loadProductSizesPartial() {
+        $.ajax({
+            url: '@Url.Action("ProductSizesPartial", "Product")',
+            data: { productName: productName },
+            method: 'GET',
+            success: function (result) {
+                $('#productSize').html(result);
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+    }
 </script>
 <script>
+    var productName = '@Html.Raw(Model?.ProductName.Replace("'", "\'").Replace("\"", "\\\""))';
     $(document).ready(function () {
-        $('#productColor').load("/Product/ProductColorsPartial");
+        loadProductColorsPartial();
     });
+    function loadProductColorsPartial() {
+        $.ajax({
+            url: '@Url.Action("ProductColorsPartial", "Product")',
+            data: { productName: productName },
+            method: 'GET',
+            success: function (result) {
+                $('#productColor').html(result);
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+    }
+</script>
+<script>
+    var productName = '@Html.Raw(Model?.ProductName.Replace("'", "\'").Replace("\"", "\\\""))';
+    $(document).ready(function () {
+        loadProductRatingPartial();
+    });
+    function loadProductRatingPartial() {
+        $.ajax({
+            url: '@Url.Action("ProductRatingPartial", "Product")',
+            data: { productName: productName },
+            method: 'GET',
+            success: function (result) {
+                $('#productRating').html(result);
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+    }
 </script>

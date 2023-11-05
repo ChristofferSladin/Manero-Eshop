@@ -79,20 +79,6 @@
     font-weight: 700;
 }
 
-.rating-container {
-    display: flex;
-    font-size: 0.8rem;
-    padding: 5px 0;
-}
-
-.rating-star {
-    color: #FFBE00;
-}
-
-.rating {
-    padding-left: 3px;
-}
-
 .price-add-container {
     display: flex;
     justify-content: space-between;
