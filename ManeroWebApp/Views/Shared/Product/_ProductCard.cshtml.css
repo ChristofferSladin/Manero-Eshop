@@ -16,13 +16,10 @@
 
 .product-container {
     color: #111111;
-    max-width: 600px;
 }
 
 .image-container {
     width: 100%;
-    height: 100%;
-   
 }
 
 .product-image {
@@ -41,12 +38,14 @@
     justify-content: center;
     gap: 10px;
 }
-.elipse{
+
+.elipse {
     width: 22px;
     height: 8px;
     border-radius: 10px;
     border: 3px solid #111;
 }
+
 .dot {
     width: 8px;
     height: 8px;
@@ -85,6 +84,10 @@
     align-items: center;
 }
 
+.rating-box {
+    min-height: 30px;
+}
+
 .price-box {
     font-weight: 700;
     font-size: 1.4rem;
@@ -119,6 +122,7 @@
     align-items: center;
     gap: 8px;
     flex-wrap: wrap;
+    min-height: 50px;
 }
 
 .color-select-container {
@@ -133,6 +137,7 @@
     display: flex;
     align-items: center;
     flex-wrap: wrap;
+    min-height: 50px;
 }
 
 .color-title {
@@ -158,6 +163,10 @@
     color: #626262;
 }
 
+.button-container {
+    margin: 10px;
+}
+
 .cart-button {
     height: 50px;
     width: 100%;
@@ -167,6 +176,58 @@
     border-radius: 50px;
     transition: all 0.15s ease-in-out;
 }
+
     .cart-button:hover {
         background: #626262;
     }
+
+@media (min-width: 900px) {
+    .product-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        grid-column-gap: 50px;
+        grid-row-gap: 0px;
+        margin-top: 50px;
+        padding: 0 20px;
+    }
+
+    .image-carusel-container {
+        grid-area: 1 / 1 / 2 / 2;
+
+    }
+
+    .image-selector {
+        border: none;
+    }
+
+    .product-info-container {
+        grid-area: 1 / 2 / 2 / 3;
+        padding: 0;
+    }
+
+    .button-container {
+        grid-area: 2 / 1 / 3 / 3;
+    }
+}
+@media (min-width: 1200px) {
+    .product-container {
+        max-width: 1180px;
+    }
+
+}
+@media (min-width: 1400px) {
+    .product-container {
+        max-width: 1380px;
+    }
+}
+@media (min-width: 1600px) {
+    .product-container {
+        max-width: 1580px;
+    }
+}
+@media (min-width: 1800px) {
+    .product-container {
+        max-width: 1780px;
+    }
+}
