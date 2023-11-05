@@ -99,6 +99,7 @@
 </script>
 <script>
     var productName = '@Html.Raw(Model?.ProductName.Replace("'", "\'").Replace("\"", "\\\""))';
+    var productNumber = '@Html.Raw(Model?.ProductNumber?.Replace("'", "\'").Replace("\"", "\\\""))';
     $(document).ready(function () {
         loadProductSizesPartial();
     });
@@ -107,7 +108,7 @@
             url: '@Url.Action("ProductSizesPartial", "Product")',
             data: {
                 productName: productName,
-                productId: @Model!.ProductId
+                productNumber: productNumber
             },
             method: 'GET',
             success: function (result) {
@@ -121,6 +122,7 @@
 </script>
 <script>
     var productName = '@Html.Raw(Model?.ProductName.Replace("'", "\'").Replace("\"", "\\\""))';
+    var productNumber = '@Html.Raw(Model?.ProductNumber?.Replace("'", "\'").Replace("\"", "\\\""))';
     var size = '@Html.Raw(Model?.Size?.Replace("'", "\'").Replace("\"", "\\\""))';
     $(document).ready(function () {
         loadProductColorsPartial();
@@ -130,12 +132,14 @@
             url: '@Url.Action("ProductColorsPartial", "Product")',
             data: {
                 productName: productName,
-                productId: @Model!.ProductId,
+                productNumber: productNumber,
                 size: size
             },
             method: 'GET',
             success: function (result) {
                 $('#productColor').html(result);
+                var newURL = '/product?productNumber=' + productNumber;
+                history.pushState({}, '', newURL);
             },
             error: function (error) {
                 console.error(error);

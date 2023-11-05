@@ -13,9 +13,9 @@ namespace ManeroWebApp.Controllers
             _productService = productService;
         }
 
-        public IActionResult Index(int productId)
+        public IActionResult Index(string productNumber)
         {
-            return View(productId);
+            return View((object)productNumber);
         }
         public async Task<IActionResult> ProductCardsPartial()
         {
@@ -42,9 +42,9 @@ namespace ManeroWebApp.Controllers
 
             return PartialView("/Views/Shared/Product/_ProductCards.cshtml", productViewModels);
         }
-        public async Task<IActionResult> ProductCardPartial(int productId)
+        public async Task<IActionResult> ProductCardPartial(string productNumber)
         {
-            var product = await _productService.GetProductWithReviewsAsync(productId);
+            var product = await _productService.GetProductAsync(productNumber);
             var productViewModel = new ProductViewModel
             {
                 ProductId = product.ProductId,
@@ -63,16 +63,6 @@ namespace ManeroWebApp.Controllers
                 IsFeatured = product.IsFeatured,
                 Rating = product.Rating,
                 ImageUrl = product.ImageUrl,
-                Reviews = (product.Reviews ?? null!).Select(r => new ReviewViewModel
-                {
-                    ReviewId = r.ReviewId,
-                    Rating = r.Rating,
-                    Created =r.Created,
-                    Content = r.Content,
-                    Title = r.Title,
-                    ProductId = r.ProductId,
-                    Id = r.Id
-                }).ToList()
             };
 
             return PartialView("/Views/Shared/Product/_ProductCard.cshtml", productViewModel);
@@ -93,6 +83,7 @@ namespace ManeroWebApp.Controllers
                     }
                 }
             }
+
             rating /= reviewCount;
 
             var ratingViewModel = new RatingViewModel
@@ -100,15 +91,16 @@ namespace ManeroWebApp.Controllers
                 Rating = rating,
                 ReviewCount = reviewCount,
             };
+
             return PartialView("/Views/Shared/Product/_ProductRating.cshtml", ratingViewModel);
         }
-        public async Task<IActionResult> ProductSizesPartial(string productName, int productId)
+        public async Task<IActionResult> ProductSizesPartial(string productName, string productNumber)
         {
             var product = await _productService.GetFilteredProductsAsync(null, null, null, "size", "asc", productName);
             var sizeViewModel = product.Select(p => new SizeViewModel
             {
                 ProductName = p.ProductName,
-                ProductId = p.ProductId,
+                ProductNumber = p.ProductNumber!,
                 Size = p.Size,
             }).ToList();
 
@@ -117,25 +109,25 @@ namespace ManeroWebApp.Controllers
                 .OrderBy(s => sizes.Contains(s.Size) ? "0" : "1")
                 .ThenBy(s => Array.IndexOf(sizes, s.Size))
                 .ThenBy(s => s.Size).GroupBy(c => c.Size)
-                .Select(group => group.FirstOrDefault(c => c.ProductId == productId) ?? group.First())
+                .Select(group => group.FirstOrDefault(c => c.ProductNumber == productNumber) ?? group.First())
                 .ToList();
 
-            ViewData["productId"] = productId;
+            ViewData["productNumber"] = productNumber;
 
             return PartialView("/Views/Shared/Product/_ProductSizes.cshtml", sizeViewModel);
         }
-        public async Task<IActionResult> ProductColorsPartial(string productName, int productId, string size)
+        public async Task<IActionResult> ProductColorsPartial(string productName, string productNumber, string size)
         {
             var product = await _productService.GetFilteredProductsAsync(null, null, null, "size", "asc", productName);
             var colorViewModel = product.Where(p => p.Size == size).Select(p => new ColorViewModel
             {
                 ProductName = p.ProductName,
-                ProductId = p.ProductId,
+                ProductNumber = p.ProductNumber!,
                 Color = p.Color,
 
             }).ToList();
 
-            ViewData["ProductId"] = productId;
+            ViewData["productNumber"] = productNumber;
 
             return PartialView("/Views/Shared/Product/_ProductColors.cshtml", colorViewModel);
         }

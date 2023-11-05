@@ -3,7 +3,7 @@
     public class ColorViewModel
     {
         public string ProductName { get; set; } = null!;
-        public int ProductId { get; set; }
+        public string ProductNumber { get; set; } = null!;
         public string? Color { get; set; }
 
     }

@@ -1,24 +1,24 @@
 ﻿@model List<SizeViewModel>
 @{
-    var productId = ViewData["ProductId"] as int?;
+    var productNumber = ViewData["ProductNumber"] as string;
 }
 
 @if (Model != null!)
 {
     @foreach (var s in Model)
     {
-        var isActive = s.ProductId == productId;
-        <button id="@s.Size" class="size-item @(isActive ? "active" : string.Empty)" data-productid="@s.ProductId">@s.Size</button>
+        var isActive = s.ProductNumber == productNumber;
+        <button id="@s.Size" class="size-item @(isActive ? "active" : string.Empty)" data-productnumber="@s.ProductNumber">@s.Size</button>
     }
 }
 
 <script>
     $(document).ready(function () {
         $(".size-item").click(function () {
-            var productId = $(this).data("productid");
+            var productNumber = $(this).data("productnumber");
             $.ajax({
                 url: '@Url.Action("ProductCardPartial", "Product")',
-                data: { productId: productId },
+                data: { productNumber: productNumber },
                 method: 'GET',
                 success: function (result) {
                     $('#productCard').html(result);

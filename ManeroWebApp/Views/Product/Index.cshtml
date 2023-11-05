@@ -1,7 +1,6 @@
-﻿@model int
+﻿@model string
 @{
 }
-
 <div>
     <div id="productCard"></div>
 </div>
@@ -16,7 +15,7 @@
         function loadProductCardPartial() {
             $.ajax({
                 url: '@Url.Action("ProductCardPartial", "Product")',
-                data: { productId: @Model },
+                data: { productNumber: '@Model' },
                 method: 'GET',
                 success: function (result) {
                     $('#productCard').html(result);

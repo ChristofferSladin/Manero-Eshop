@@ -34,13 +34,13 @@ public class ProductService : IProductService
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
         return products;
     }
-    public async Task<Product> GetProductWithReviewsAsync(int productId)
+    public async Task<Product> GetProductAsync(string productId)
     {
         var product = new Product();
-        var pId = $"?id={productId}";
+        var pId = $"?productNumber={productId}";
         try
         {
-            var baseUrl = $"https://localhost:7067/product/reviews/{pId}";
+            var baseUrl = $"https://localhost:7067/product{pId}";
             using var client = new HttpClient();
             var request = new HttpRequestMessage();
             request.RequestUri = new Uri(baseUrl);
