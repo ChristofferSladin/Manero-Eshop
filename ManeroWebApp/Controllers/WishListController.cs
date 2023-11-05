@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using ServiceLibrary.Services;
 using System.Diagnostics;
 using System.Security.Principal;
 
@@ -15,68 +16,39 @@ namespace ManeroWebApp.Controllers
     public class WishListController : Controller
     {
         private readonly ManeroDbContext _context;
-        public WishListController(ManeroDbContext context)
+        private readonly IProductService _productService;
+        private readonly IUserService _userService;
+        public WishListController(ManeroDbContext context, IProductService productService, IUserService userService)
         {
             _context = context;
+            _productService = productService;
+            _userService = userService;
         }
-        public IActionResult Index(string forUserId = "1e776705-a04e-4f48-9563-d548cf5db096") //user id hard coded for testing
+        public async Task<IActionResult> Index(string forUserId = "1e776705-a04e-4f48-9563-d548cf5db096") //user id hard coded for testing
         {
-            var wishList = _context.Favorite.Include(fp => fp.FavoriteProducts)!
-                .ThenInclude(p => p.Product)
-                .FirstOrDefault(f => f.Id == forUserId);
-            
-            if (wishList is not null)
+            try
             {
-                var favProductList = wishList.FavoriteProducts!
-                    .Select(x => new FavoriteProductViewModel
-                    {
-                        UserId = forUserId,
-                        ProductId = x.Product.ProductId,
-                        ImgUrl = x.Product.ImageUrl,
-                        Name = x.Product.ProductName,
-                        SalePrice = x.Product.SalePrice,
-                        PriceWithTax = x.Product.PriceIncTax,
-                        PriceWithoutTax = x.Product.PriceExcTax,
-                        Rating = x.Product.Rating,
-                        IsOnSale = x.Product.IsOnSale,
-                        ShoppingCartId = _context.ShoppingCarts
-                        .FirstOrDefault(x => x.Id == forUserId)!.ShoppingCartId,
-                    }).ToList();
+                var favProductsByUser = await _userService.GetAllFavoriteProductsForUserAsync(forUserId);
 
-                if (favProductList is not null)
-                    return View(favProductList);
+                if (favProductsByUser is not null)
+                    return View(favProductsByUser.Select(favProduct => (FavoriteProductViewModel)favProduct));
             }
+            catch (Exception e) { Debug.WriteLine(e.Message); }
 
             return View();
         }
         public async Task<IActionResult> AddProductToShoppingCart(int productId, int shoppingCartId)
         {
-            try 
+            try
             {
-                var product = await _context.Products
-                    .FirstOrDefaultAsync(x => x.ProductId == productId);
-                
-                var shoppingCart = await _context.ShoppingCarts
-                    .FirstOrDefaultAsync(x => x.ShoppingCartId == shoppingCartId);
-
-                if (product != null && shoppingCart != null)
+                var result = await _userService.CreateShoppingCartProductEntry(productId, shoppingCartId);
+                if(result is not null)
                 {
-                    var toAdd = new ShoppingCartProduct
-                    {
-                        Product = product,
-                        ShoppingCart = shoppingCart,
-                        ProductId = productId,
-                        ShoppingCartId = shoppingCartId,
-                        ItemQuantity = 1,
-                    };
-
-                    await _context.ShoppingCartProducts.AddAsync(toAdd);
-                    await _context.SaveChangesAsync();
-
-                    TempData["success"] = $"\"{product.ProductName}\" added to shopping cart.";
+                    TempData["success"] = $"Product added to the shopping cart.";
+                    return RedirectToAction("Index", "WishList");
                 }
-            
-            } catch(Exception e) { Debug.WriteLine(e.Message); }
+            }
+            catch (Exception e) { Debug.WriteLine(e.Message); }
 
             TempData["error"] = $"Something went wrong.";
             return RedirectToAction("Index", "WishList");
