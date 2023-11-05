@@ -1,11 +1,13 @@
 ﻿@model List<SizeViewModel>
 @{
+    var productNumber = ViewData["ProductNumber"] as string;
 }
 
 @if (Model != null!)
 {
     @foreach (var s in Model)
     {
-        <button class="size-item">@s.Size</button>
+        var isActive = s.ProductNumber == productNumber;
+        <button id="@s.Size" class="size-item @(isActive ? "active" : string.Empty)">@s.Size</button>
     }
 }

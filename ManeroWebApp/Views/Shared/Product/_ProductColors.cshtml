@@ -1,11 +1,13 @@
 ﻿@model List<ColorViewModel>
 @{
+    var productNumber = ViewData["ProductNumber"] as string;
 }
 
 @if (Model != null!)
 {
     @foreach (var s in Model)
     {
-        <button style="background: @s.Color;" class="color-item"></button>
+        var isActive = s.ProductNumber == productNumber;
+        <button style="background: @s.Color;" class="color-item @(isActive ? "active" : string.Empty)"></button>
     }
 }

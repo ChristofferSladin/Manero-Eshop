@@ -102,33 +102,43 @@ namespace ManeroWebApp.Controllers
             };
             return PartialView("/Views/Shared/Product/_ProductRating.cshtml", ratingViewModel);
         }
-        public async Task<IActionResult> ProductSizesPartial(string productName)
+        public async Task<IActionResult> ProductSizesPartial(string productName, string productNumber)
         {
             var product = await _productService.GetFilteredProductsAsync(null, null, null, "size", "asc", productName);
             var sizeViewModel = product.Select(p => new SizeViewModel
             {
                 ProductName = p.ProductName,
+                ProductNumber = p.ProductNumber,
                 Size = p.Size,
-
             }).ToList();
+
             var sizes = new[] { "XXS", "XS", "S", "M", "L", "X", "XL", "XXL", "XXXL", "XXXXL" };
             sizeViewModel = sizeViewModel
                 .OrderBy(s => sizes.Contains(s.Size) ? "0" : "1")
                 .ThenBy(s => Array.IndexOf(sizes, s.Size))
                 .ThenBy(s => s.Size).ToList();
 
+            ViewData["ProductNumber"] = productNumber;
+
             return PartialView("/Views/Shared/Product/_ProductSizes.cshtml", sizeViewModel);
         }
-        public async Task<IActionResult> ProductColorsPartial(string productName)
+        public async Task<IActionResult> ProductColorsPartial(string productName, string productNumber)
         {
             var product = await _productService.GetFilteredProductsAsync(null, null, null, "color", "asc", productName);
             var colorViewModel = product.Select(p => new ColorViewModel
             {
                 ProductName = p.ProductName,
+                ProductNumber = p.ProductNumber,
                 Color = p.Color,
 
             }).ToList();
-            colorViewModel = colorViewModel.DistinctBy(c => c.Color).ToList();
+
+            ViewData["ProductNumber"] = productNumber;
+
+            colorViewModel = colorViewModel
+                .GroupBy(c => c.Color)
+                .Select(group => group.FirstOrDefault(c => c.ProductNumber == productNumber) ?? group.First())
+                .ToList();
 
             return PartialView("/Views/Shared/Product/_ProductColors.cshtml", colorViewModel);
         }

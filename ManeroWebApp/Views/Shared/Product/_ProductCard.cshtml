@@ -10,7 +10,7 @@
     <div class="product-container">
         <div class="image-carusel-container">
             <div class="image-container">
-                <img class="product-image" src="https://images.unsplash.com/photo-1560343090-f0409e92791a?auto=format&ampfit=crop&ampq=80&ampw=2564&ampixlib=rb-4.0.3&ampixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" />
+                <img class="product-image" src="@Model.ImageUrl" alt="product image of @Model.ProductName @Model.Color" />
             </div>
             <div class="image-selector">
                 <div class="elipse"></div>
@@ -99,13 +99,17 @@
 </script>
 <script>
     var productName = '@Html.Raw(Model?.ProductName.Replace("'", "\'").Replace("\"", "\\\""))';
+    var productNumber = '@Html.Raw(Model?.ProductNumber?.Replace("'", "\'").Replace("\"", "\\\""))';
     $(document).ready(function () {
         loadProductSizesPartial();
     });
     function loadProductSizesPartial() {
         $.ajax({
             url: '@Url.Action("ProductSizesPartial", "Product")',
-            data: { productName: productName },
+            data: {
+                productName: productName,
+                productNumber: productNumber
+            },
             method: 'GET',
             success: function (result) {
                 $('#productSize').html(result);
@@ -118,13 +122,17 @@
 </script>
 <script>
     var productName = '@Html.Raw(Model?.ProductName.Replace("'", "\'").Replace("\"", "\\\""))';
+    var productNumber = '@Html.Raw(Model?.ProductNumber?.Replace("'", "\'").Replace("\"", "\\\""))';
     $(document).ready(function () {
         loadProductColorsPartial();
     });
     function loadProductColorsPartial() {
         $.ajax({
             url: '@Url.Action("ProductColorsPartial", "Product")',
-            data: { productName: productName },
+            data: {
+                productName: productName,
+                productNumber: productNumber
+            },
             method: 'GET',
             success: function (result) {
                 $('#productColor').html(result);

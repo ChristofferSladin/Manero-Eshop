@@ -30,3 +30,7 @@
     .size-item:hover {
         background: #dbe3f5;
     }
+
+.active {
+    background: #dbe3f5;
+}
