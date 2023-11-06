@@ -15,8 +15,13 @@
             <div class="product-image">
                 <img src="https://img01.ztat.net/article/spp-media-p1/43f5ca71232a48fbb839cd5aaac3bb65/eae6359526ef4fd38b461b377e5b4a1d.jpg?imwidth=300&filter=packshot" alt="Product Image">
                 <div class="product-icons">
-                    <i class="fa-regular fa-heart"></i>
-                    <i class="fa-regular fa-bag-shopping"></i>
+
+                    <a asp-page="" class="btn-cart">
+                        <i class="fa-regular fa-heart" style="color:black;"></i>
+                    </a>
+                    <a asp-page="" class="btn-cart">
+                        <i class="fa-regular fa-bag-shopping" style="color:black;"></i>
+                    </a>
                 </div>
             </div>
             <div class="product-details">
@@ -37,11 +42,11 @@
                             <i id="starsColor" class="fa-regular fa-star"></i>
                         }
                     }
-                    <span class="review-score">@p.Rating</span>
+                    <span class="review-score">(@p.Rating)</span>
                 </div>
 
                 <div class="product-name">@p.ProductName</div>
-                <div class="product-price">@p.SalePrice</div>
+                <div class="product-price">$@p.SalePrice</div>
             </div>
         </div>
 
