@@ -9,19 +9,27 @@ namespace ManeroWebApp.Controllers
     public class ProductController : Controller
     {
         private readonly IProductService _productService;
+        private readonly IUserService _userService;
 
-        public ProductController(IProductService productService)
+        public ProductController(IProductService productService, IUserService userService)
         {
             _productService = productService;
+            _userService = userService;
         }
         public IActionResult FeaturedProduct()
         {
             return View();
         }
-        public IActionResult AddProductToWishList(ProductViewModel product)
+        public async Task<IActionResult> AddProductToWishList(int productId)
         {
-            product.ProductNumber = Guid.NewGuid().ToString();
-            return View();
+            var result = await _userService.AddProductToWishList(productId, "daf64035-b7fb-4bd1-b863-e19cab55699f");
+            if(result!=null)
+            {
+                TempData["success"] = $"Product added to wish list.";
+                return RedirectToAction("FeaturedProduct", "Product");
+            }
+            TempData["error"] = $"Somthing went wrong.";
+            return RedirectToAction("FeaturedProduct", "Product");
         }
         public async Task<IActionResult> ProductCardsPartial()
         {
