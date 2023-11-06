@@ -1,4 +1,5 @@
 ﻿using Azure.Core;
+using DataAccessLibrary.Entities.ProductEntities;
 using DataAccessLibrary.Repositories;
 using Newtonsoft.Json;
 using ServiceLibrary.Models;
@@ -66,6 +67,28 @@ public class UserService : IUserService
 
                 if (shoppingCartProduct is not null)
                     return shoppingCartProduct;
+            }
+        }
+        catch (Exception e) { Debug.WriteLine(e.Message); }
+
+        return null!;
+    }
+    public async Task<DataAccessLibrary.Entities.UserEntities.FavoriteProduct> AddProductToWishList(int productId, string userId)
+    {
+        try
+        {
+            var request = new HttpRequestMessage(HttpMethod.Post,
+                $"https://localhost:7047/createFavoriteProduct?productId={productId}&userId={userId}");
+            var response = await _httpClient.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = response.Content.ReadAsStringAsync().Result.ToString();
+                var favoriteProduct = JsonConvert
+                    .DeserializeObject<DataAccessLibrary.Entities.UserEntities.FavoriteProduct>(content);
+
+                if (favoriteProduct is not null)
+                    return favoriteProduct;
             }
         }
         catch (Exception e) { Debug.WriteLine(e.Message); }

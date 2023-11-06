@@ -19,6 +19,7 @@ namespace UserAPI.Controllers
     public class UserController : ControllerBase
     {
         private readonly FavoriteRepository _favoriteRepository;
+        private readonly FavoriteProductRepository _favoriteProductRepository;
         private readonly ShoppingCartRepository _shoppingCartRepository;
         private readonly ShoppingCartProductRepository _shoppingCartProductRepository;
         private readonly ProductRepository _productRepository;
@@ -27,12 +28,14 @@ namespace UserAPI.Controllers
             FavoriteRepository favoriteRepository,
             ShoppingCartRepository shoppingCartRepository,
             ShoppingCartProductRepository shoppingCartProductRepository,
-            ProductRepository productRepository)
+            ProductRepository productRepository,
+            FavoriteProductRepository favoriteProductRepository)
         {
             _favoriteRepository = favoriteRepository;
             _shoppingCartRepository = shoppingCartRepository;
             _shoppingCartProductRepository = shoppingCartProductRepository;
             _productRepository = productRepository;
+            _favoriteProductRepository = favoriteProductRepository;
         }
 
         /// <summary>
@@ -78,7 +81,7 @@ namespace UserAPI.Controllers
         /// Shopping cart product Dto
         /// </returns>
         /// <remarks>
-        /// Example end point: GET /shoppingCartProduct
+        /// Example end point: POST /shoppingCartProduct
         /// </remarks>
         /// <response code="200">
         /// Successfully added entry in the Shopping Cart product table in the database
@@ -102,6 +105,39 @@ namespace UserAPI.Controllers
                 };
                 var result = (ShoppingCartProductDto)await _shoppingCartProductRepository.AddAsync(entry);
                 return Ok(result);
+            }
+            catch (Exception e) { Debug.WriteLine(e.Message); }
+
+            return Problem();
+        }
+        /// <summary>
+        /// Create entry in the  FavoriteProduct  table in the database
+        /// </summary>
+        /// <returns>
+        /// FavoriteProduct entry
+        /// </returns>
+        /// <remarks>
+        /// Example end point: POST /createFavoriteProduct
+        /// </remarks>
+        /// <response code="200">
+        /// Successfully added entry in the FavoriteProduct table in the database
+        /// </response>
+        [HttpPost]
+        [Route("/createFavoriteProduct")]
+        public async Task<ActionResult> AddProductToWishList(int productId, string userId)
+        {
+            try
+            {
+                var favorite = await _favoriteRepository.GetAsync(x => x.Id == userId);
+                var product = await _productRepository.GetProductAsync(x => x.ProductId == productId);
+
+                var entry = new FavoriteProduct
+                {
+                    Product = product,
+                    Favorite = favorite,
+                };
+                
+                return Ok((FavoriteDto)await _favoriteProductRepository.AddAsync(entry));
             }
             catch (Exception e) { Debug.WriteLine(e.Message); }
 

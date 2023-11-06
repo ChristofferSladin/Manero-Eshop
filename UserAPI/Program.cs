@@ -13,6 +13,7 @@ builder.Services.AddDbContext<ManeroDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("ManeroDb")));
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<FavoriteRepository>();
+builder.Services.AddScoped<FavoriteProductRepository>();
 builder.Services.AddScoped<ShoppingCartRepository>();
 builder.Services.AddScoped<ShoppingCartProductRepository>();
 builder.Services.AddScoped<ProductRepository>();
