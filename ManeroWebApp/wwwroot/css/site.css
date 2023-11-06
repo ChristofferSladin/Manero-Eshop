@@ -45,27 +45,26 @@ body {
 .Menu-link {
     font-size: 24px;
     text-align: center;
+    text-decoration: none;
+    color: #979797;
+    background-color: #fff;
 }
-
-    .Menu-link a {
-        text-decoration: none;
-        color: #979797;
-    }
 
     .Menu-link i {
         border-radius: 50px;
+        color: #979797;
         padding: 10px;
         vertical-align: middle;
         display: inline-block;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .Menu-link:hover i {
+        color: #000;
+        background-color: #DBE3F5;
     }
 
 .active {
-    color: #000;
     background-color: #DBE3F5;
-}
-
-@media (min-width: 768px) {
-    .Navigation-Bar {
-        display: none;
-    }
+    color: #000 !important;
 }
