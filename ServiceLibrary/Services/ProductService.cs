@@ -34,10 +34,10 @@ public class ProductService : IProductService
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
         return products;
     }
-    public async Task<Product> GetProductAsync(string productId)
+    public async Task<Product> GetProductAsync(string productNumber)
     {
         var product = new Product();
-        var pId = $"?productNumber={productId}";
+        var pId = $"?productNumber={productNumber}";
         try
         {
             var baseUrl = $"https://localhost:7067/product{pId}";
