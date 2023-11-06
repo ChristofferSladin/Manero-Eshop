@@ -1,26 +1,26 @@
-﻿@model List<ProductViewModel>
+﻿@using ServiceLibrary.Models;
+@model Product
 
 @{
 }
 
 @if (Model != null!)
 {
-    @foreach (var p in Model)
-    {
-        <div class="product-card">
-            <div class="product-image">
-                <div class="buttons-container">
-                    <button class="add-to-favorite-btn">Fav</button>
-                    <button class="add-to-cart-btn">Cart</button>
-                </div>
-            </div>
-            <div class="product-info">
-                <div>@p.ProductName</div>
-                <div>@p.Description</div>
-                <div>@p.SalePrice</div>
-                <div>@p.Rating</div>
-                <div>@p.ProductNumber</div>
+
+    <div class="product-card">
+        <div class="product-image">
+            <div class="buttons-container">
+                <button class="add-to-favorite-btn">Fav</button>
+                <button class="add-to-cart-btn">Cart</button>
             </div>
         </div>
-    }
+        <div class="product-info">
+            <div>@Model.ProductName</div>
+            <div>@Model.Description</div>
+            <div>@Model.SalePrice</div>
+            <div>@Model.Rating</div>
+            <div>@Model.ProductNumber</div>
+        </div>
+    </div>
+
 }

@@ -28,11 +28,15 @@
     transition: all 0.3s ease;
 }
 
+    .carousel-slides .d-flex {
+        transition: transform 0.5s ease; 
+    }
+
 .carousel-slide {
     flex: 0 0 100%;
 }
 
-.productPartial{
+.productPartial {
     display: flex;
 }
 
@@ -44,6 +48,7 @@
     font-size: 18px;
     font-weight: 600;
 }
+
 .carousel-control-next {
     position: absolute;
     top: 50%;

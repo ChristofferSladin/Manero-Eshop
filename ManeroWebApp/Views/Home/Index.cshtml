@@ -1,7 +1,6 @@
-﻿@{
+﻿@model ManeroWebApp.Models.HomeIndexViewModel
+@{
     ViewData["Title"] = "Home Page";
-    var bestSellerCarousel = new CarouselViewModel { IdSuffix = "1", Title = "Best Sellers" };
-    var featuredProductsCarousel = new CarouselViewModel { IdSuffix = "2", Title = "Featured Products" };
 }
 
 <div class="homePage">
@@ -22,7 +21,7 @@
     </section>
 
     <section class="bestseller-carousel-section">
-        @await Html.PartialAsync("_CarouselPartial", bestSellerCarousel)
+        @await Html.PartialAsync("/Views/Shared/_CarouselPartial.cshtml", Model.OnSaleProducts as CarouselViewModel)
     </section>
 
     <section class="discount-offer">
@@ -35,85 +34,67 @@
     </section>
 
     <section class="featured-carousel-section">
-        @await Html.PartialAsync("_CarouselPartial", featuredProductsCarousel)
+        @await Html.PartialAsync("/Views/Shared/_CarouselPartial.cshtml", Model.FeaturedProducts as CarouselViewModel)
     </section>
 
 
 </div>
 
-@section Scripts{
+
+@section Scripts {
     <script>
-        $(document).ready(function () {
-            // Function to update the carousel's current slide
-            function updateCarousel(carouselSlides, currentIndex, totalItemWidth) {
-                carouselSlides.style.transform = `translateX(-${currentIndex * totalItemWidth}px)`;
+        // Function to initialize the carousel
+        function initCarousel(carouselId) {
+            const carousel = document.querySelector(`[data-carousel-id="${carouselId}"]`);
+            const slidesContainer = carousel.querySelector('.carousel-slides .d-flex');
+            const slides = slidesContainer.children;
+            const prevButton = carousel.querySelector('.carousel-control-prev');
+            const nextButton = carousel.querySelector('.carousel-control-next');
+            let currentSlide = 0;
+
+            // Set initial button states
+            prevButton.disabled = currentSlide === 0;
+            nextButton.disabled = currentSlide === slides.length - 1;
+
+            // Function to update the carousel position with smooth transition
+            function updateCarousel() {
+                const slideWidth = slides[0].getBoundingClientRect().width;
+                const slideMargin = parseInt(getComputedStyle(slides[0]).marginLeft) + parseInt(getComputedStyle(slides[0]).marginRight);
+                const fullSlideWidth = slideWidth + slideMargin;
+                const carouselWidth = carousel.getBoundingClientRect().width;
+                const offset = (carouselWidth - slideWidth) / 2;
+                const transformValue = -(currentSlide * fullSlideWidth) + offset;
+
+                slidesContainer.style.transition = 'transform 0.5s ease';
+                slidesContainer.style.transform = `translateX(${transformValue}px)`;
+
+                // Update button states after transition
+                prevButton.disabled = currentSlide === 0;
+                nextButton.disabled = currentSlide >= slides.length - 1;
             }
 
-            // Setup function
-            function setupCarousel(carouselId) {
-                // Ensure carouselId is not undefined before proceeding
-                if (typeof carouselId === 'undefined') {
-                    console.error('carouselId is undefined. Cannot set up the carousel.');
-                    return;
+            // Event listeners for the buttons
+            prevButton.addEventListener('click', () => {
+                if (currentSlide > 0) {
+                    currentSlide -= 1;
+                    updateCarousel();
                 }
-
-                const carousel = document.querySelector(`[data-carousel-id='${carouselId}']`);
-                // Make sure we found the carousel element
-                if (!carousel) {
-                    console.error(`No carousel found with the ID: ${carouselId}`);
-                    return;
-                }
-
-                console.log('Setting up carousel:', carouselId);
-                const carouselSlides = carousel.querySelector('.carousel-slides');
-                let currentIndex = 0;
-
-                // Calculate total item width including margin
-                const itemStyle = window.getComputedStyle(carousel.querySelector('.product-card'));
-                const itemWidth = parseFloat(itemStyle.width);
-                const itemMargin = parseFloat(itemStyle.marginLeft) + parseFloat(itemStyle.marginRight);
-                const totalItemWidth = itemWidth + itemMargin;
-
-                // Select the buttons using the data attribute and add click events
-                const prevButton = carousel.querySelector(`.carousel-control-prev`);
-                const nextButton = carousel.querySelector(`.carousel-control-next`);
-
-                prevButton.addEventListener('click', function () {
-                    console.log('Prev clicked:', carouselId);
-                    if (currentIndex > 0) {
-                        currentIndex -= 1;
-                        updateCarousel(carouselSlides, currentIndex, totalItemWidth);
-                    }
-                });
-
-                nextButton.addEventListener('click', function () {
-                    console.log('Next clicked:', carouselId);
-                    // Obtain the number of items dynamically
-                    const numberOfItems = carouselSlides.querySelectorAll('.product-card').length;
-                    if (currentIndex < numberOfItems - 1) {
-                        currentIndex += 1;
-                        updateCarousel(carouselSlides, currentIndex, totalItemWidth);
-                    }
-                });
-            }
-
-            // Load and setup each carousel
-            $('.carousel').each(function () {
-                const carouselId = $(this).data('carousel-id');
-                console.log('Found carousel with ID:', carouselId);
-
-                const productPartial = $(this).find('.productPartial');
-                productPartial.load(`/Product/CarouselProductCardsPartial?carouselId=${carouselId}`, function (response, status, xhr) {
-                    if (status == "error") {
-                        console.log("Error loading carousel items:", xhr.status, xhr.statusText);
-                    } else {
-                        console.log(`Carousel items loaded for ID: ${carouselId}`);
-                        // After loading the content, setup the carousel
-                        setupCarousel(carouselId);
-                    }
-                });
             });
+
+            nextButton.addEventListener('click', () => {
+                if (currentSlide < slides.length - 1) {
+                    currentSlide += 1;
+                    updateCarousel();
+                }
+            });
+
+            // Call updateCarousel initially to set the correct position
+            updateCarousel();
+        }
+
+        // Initialize all carousels on the page
+        document.querySelectorAll('.carousel').forEach(carousel => {
+            initCarousel(carousel.getAttribute('data-carousel-id'));
         });
     </script>
-
 }
