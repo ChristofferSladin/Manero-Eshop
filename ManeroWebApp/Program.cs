@@ -17,9 +17,11 @@ builder.Services.AddTransient<IProductService, ProductService>();
 
 
 builder.Services.AddScoped<DataInitializer>();
+builder.Services.AddScoped<HttpClient>();
 builder.Services.AddTransient<IProductService, ProductService>();
-var app = builder.Build();
+builder.Services.AddTransient<IUserService, UserService>();
 
+var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {

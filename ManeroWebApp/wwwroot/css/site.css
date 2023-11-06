@@ -1,22 +1,70 @@
+* {
+    box-sizing: border-box;
+}
+
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+}
+
+.Navigation-Bar {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    min-height: 85px;
+    width: 100%;
+    background-color: #FFF;
+    border-top: 1px solid #DBE3F5;
+    padding: 8px 0 0 0;
+    z-index: 100;
+}
+
+.Menu-links {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}
+
+.Menu-link {
+    font-size: 24px;
+    text-align: center;
+    text-decoration: none;
+    color: #979797;
+    background-color: #fff;
+}
+
+    .Menu-link i {
+        border-radius: 50px;
+        color: #979797;
+        padding: 10px;
+        vertical-align: middle;
+        display: inline-block;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .Menu-link:hover i {
+        color: #000;
+        background-color: #DBE3F5;
+    }
+
+.active {
+    background-color: #DBE3F5;
+    color: #000 !important;
 }

@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using DataAccessLibrary.Entities.ProductEntities;
 
 namespace ServiceLibrary.Models;
 
@@ -27,4 +25,26 @@ public class Product
     public decimal Rating { get; set; }
     public string? ImageUrl { get; set; }
     public List<Review>? Reviews { get; set; }
+    public static implicit operator Product(DataAccessLibrary.Entities.ProductEntities.Product productEntity)
+    {
+        return new Product
+        {
+            ProductId = productEntity.ProductId,
+            ProductNumber = productEntity.ProductNumber,
+            ProductName = productEntity.ProductName,
+            Description = productEntity.Description,
+            Category = productEntity.Category,
+            Type = productEntity.Type,
+            Size = productEntity.Size,
+            QuantityInStock = productEntity.QuantityInStock,
+            Color = productEntity.Color,
+            PriceExcTax = productEntity.PriceExcTax,
+            PriceIncTax = productEntity.PriceIncTax,
+            SalePrice = productEntity.SalePrice,
+            IsOnSale = productEntity.IsOnSale,
+            IsFeatured = productEntity.IsFeatured,
+            Rating = productEntity.Rating,
+            ImageUrl = productEntity.ImageUrl,
+        };
+    }
 }

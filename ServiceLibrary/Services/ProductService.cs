@@ -3,6 +3,8 @@ using System.Drawing;
 using ServiceLibrary.Models;
 using System.Net.Http;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using System.Text.Json.Nodes;
 
 namespace ServiceLibrary.Services;
 
@@ -32,4 +34,23 @@ public class ProductService : IProductService
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
         return products;
     }
+    public async Task<DataAccessLibrary.Entities.ProductEntities.Product> GetProductByIdAsync(int productId)
+    {
+        try
+        {
+            using var httpClient = new HttpClient();
+            var response = await httpClient.GetAsync($"https://localhost:7067/product?id={productId}");
+            if (response.IsSuccessStatusCode)
+            {
+                var content = response.Content.ReadAsStringAsync().Result.ToString();
+                var product = JsonConvert.DeserializeObject<DataAccessLibrary.Entities.ProductEntities.Product>(content);
+
+                if (product is not null)
+                    return product;
+            }
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return null!;
+    }
 }
+
