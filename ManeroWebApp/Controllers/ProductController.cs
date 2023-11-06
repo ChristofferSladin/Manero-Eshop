@@ -18,6 +18,11 @@ namespace ManeroWebApp.Controllers
         {
             return View();
         }
+        public IActionResult AddProductToWishList(ProductViewModel product)
+        {
+            product.ProductNumber = Guid.NewGuid().ToString();
+            return View();
+        }
         public async Task<IActionResult> ProductCardsPartial()
         {
             var products = await _productService.GetProductsWithReviewsAsync();
