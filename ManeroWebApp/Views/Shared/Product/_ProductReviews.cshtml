@@ -1,0 +1,9 @@
+﻿@model List<ReviewViewModel>
+@{
+}
+<div style="display: flex; flex-wrap: wrap;">
+    @foreach (var r in Model)
+    {
+        <div>@r.Title @r.Rating @r.Created @r.Content @r.Id</div>
+    }
+</div>

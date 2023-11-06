@@ -58,6 +58,7 @@
             </div>
         </div>
     </div>
+    <div class="review-container" id="productReviews"></div>
 }
 
 
@@ -137,6 +138,27 @@
     }
     document.getElementById('decrement').onclick = function () {
         displayCout.innerHTML = productCounter.decrementCounter();
+    }
+</script>
+<script>
+    var productName = '@Html.Raw(Model?.ProductName.Replace("'", "\'").Replace("\"", "\\\""))';
+    $(document).ready(function () {
+        loadProductReviewsPartial();
+    });
+    function loadProductReviewsPartial() {
+        $.ajax({
+            url: '@Url.Action("ProductReviewsPartial", "Product")',
+            data: {
+                productName: productName,
+            },
+            method: 'GET',
+            success: function (result) {
+                $('#productReviews').html(result);
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
     }
 </script>
 <script>

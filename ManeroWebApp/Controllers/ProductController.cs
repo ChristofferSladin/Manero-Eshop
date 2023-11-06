@@ -1,6 +1,7 @@
 ﻿using ManeroWebApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using ServiceLibrary.Services;
+using System.Drawing;
 
 namespace ManeroWebApp.Controllers
 {
@@ -96,8 +97,8 @@ namespace ManeroWebApp.Controllers
         }
         public async Task<IActionResult> ProductSizesPartial(string productName, string productNumber)
         {
-            var product = await _productService.GetFilteredProductsAsync(null, null, null, "size", "asc", productName);
-            var sizeViewModel = product.Select(p => new SizeViewModel
+            var products = await _productService.GetFilteredProductsAsync(null, null, null, "size", "asc", productName);
+            var sizeViewModel = products.Select(p => new SizeViewModel
             {
                 ProductName = p.ProductName,
                 ProductNumber = p.ProductNumber!,
@@ -118,8 +119,8 @@ namespace ManeroWebApp.Controllers
         }
         public async Task<IActionResult> ProductColorsPartial(string productName, string productNumber, string size)
         {
-            var product = await _productService.GetFilteredProductsAsync(null, null, null, "size", "asc", productName);
-            var colorViewModel = product.Where(p => p.Size == size).Select(p => new ColorViewModel
+            var products = await _productService.GetFilteredProductsAsync(null, null, null, "size", "asc", productName);
+            var colorViewModel = products.Where(p => p.Size == size).Select(p => new ColorViewModel
             {
                 ProductName = p.ProductName,
                 ProductNumber = p.ProductNumber!,
@@ -130,6 +131,24 @@ namespace ManeroWebApp.Controllers
             ViewData["productNumber"] = productNumber;
 
             return PartialView("/Views/Shared/Product/_ProductColors.cshtml", colorViewModel);
+        }
+        public async Task<IActionResult> ProductReviewsPartial(string productName)
+        {
+            var products = await _productService.GetFilteredProductsWithReviewsAsync(null, null, null, null, null, productName);
+            var reviewsViewModel = products
+                .Where(p => p.Reviews != null)
+                .SelectMany(p => p.Reviews!, (_, review) => new ReviewViewModel
+                {
+                    ReviewId = review.ReviewId,
+                    Rating = review.Rating,
+                    Created = review.Created,
+                    Content = review.Content,
+                    Title = review.Title,
+                    ProductId = review.ProductId,
+                    Id = review.Id,
+                }).ToList();
+
+            return PartialView("/Views/Shared/Product/_ProductReviews.cshtml", reviewsViewModel);
         }
     }
 }
