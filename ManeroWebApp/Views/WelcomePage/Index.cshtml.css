@@ -1,0 +1,111 @@
+﻿/*MANERO WELCOME CIRCLE*/
+.carousel-container {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    height: 100vh;
+    width: 100%;
+    background-color: transparent;
+    overflow:hidden;
+}
+
+
+.carousel {
+    border: 5px solid;
+    border-color: #ffffff;
+    position: relative;
+    max-width: 100vmin;
+    height: 100vmin;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.slides {
+    display: flex;
+    width: 300%;
+    transition: margin-left 0.5s;
+    align-items: center;
+    margin-top: 8%;
+}
+
+.slide {
+    position: relative;
+    flex: 1;
+    text-align: center;
+    box-sizing: border-box;
+    background-color: #ffffff;
+    margin: 3vmin;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    height: 75vmin;
+    padding: 7%;
+}
+
+.slide h2{
+    font-size:28px;
+    margin-top: -10px;
+    margin-bottom: 20px;
+}
+
+.slide p{
+    font-size: 16px;
+}
+
+input[name="carousel-radio"] {
+    display: none;
+}
+
+.carousel-nav {
+    text-align: center;
+}
+
+.nav-dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin: 0 5px;
+    background-color: #ccc;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+#slide1:checked ~ .slides {
+    margin-left: 0%;
+}
+
+#slide2:checked ~ .slides {
+    margin-left: -100%;
+}
+
+#slide3:checked ~ .slides {
+    margin-left: -200%;
+}
+
+#slide1:checked ~ .carousel-nav .nav-dot:nth-child(1),
+#slide2:checked ~ .carousel-nav .nav-dot:nth-child(2),
+#slide3:checked ~ .carousel-nav .nav-dot:nth-child(3) {
+    background-color: #666;
+}
+
+.get-started {
+    display: inline-block;
+    padding: 10px 50px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s;
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+    .get-started:hover {
+        background-color: #333;
+    }
