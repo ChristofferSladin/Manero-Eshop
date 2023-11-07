@@ -48,7 +48,10 @@
     </div>
 </footer>
 
-<partial name="_NavBarPartial"/>
+    @if (ViewData["HideFooter"] as bool? != true)
+    {
+        <partial name="_NavBarPartial"/>
+    }
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
