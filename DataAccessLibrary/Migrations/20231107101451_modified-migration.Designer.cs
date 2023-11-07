@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLibrary.Migrations
 {
     [DbContext(typeof(ManeroDbContext))]
-    [Migration("20231031124353_clean migration")]
-    partial class cleanmigration
+    [Migration("20231107101451_modified-migration")]
+    partial class modifiedmigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -96,7 +96,7 @@ namespace DataAccessLibrary.Migrations
                     b.Property<decimal>("Rating")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("SalePrice")
+                    b.Property<decimal>("SalePricePercentage")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Size")
@@ -413,6 +413,35 @@ namespace DataAccessLibrary.Migrations
                     b.HasIndex("ShoppingCartId");
 
                     b.ToTable("ShoppingCartProducts");
+                });
+
+            modelBuilder.Entity("DataAccessLibrary.Entities.UserEntities.UserProfile", b =>
+                {
+                    b.Property<int>("UserProfileId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserProfileId"));
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Id")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProfileImage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserProfileId");
+
+                    b.HasIndex("Id")
+                        .IsUnique();
+
+                    b.ToTable("UserProfiles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -775,6 +804,17 @@ namespace DataAccessLibrary.Migrations
                     b.Navigation("ShoppingCart");
                 });
 
+            modelBuilder.Entity("DataAccessLibrary.Entities.UserEntities.UserProfile", b =>
+                {
+                    b.HasOne("DataAccessLibrary.Entities.ApplicationUser", "ApplicationUser")
+                        .WithOne("UserProfile")
+                        .HasForeignKey("DataAccessLibrary.Entities.UserEntities.UserProfile", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -865,6 +905,8 @@ namespace DataAccessLibrary.Migrations
                     b.Navigation("Reviews");
 
                     b.Navigation("ShoppingCart");
+
+                    b.Navigation("UserProfile");
                 });
 #pragma warning restore 612, 618
         }

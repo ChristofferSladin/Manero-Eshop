@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DataAccessLibrary.Migrations
 {
     /// <inheritdoc />
-    public partial class cleanmigration : Migration
+    public partial class modifiedmigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -82,7 +82,7 @@ namespace DataAccessLibrary.Migrations
                     Color = table.Column<string>(type: "nvarchar(100)", nullable: true),
                     PriceExcTax = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     PriceIncTax = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    SalePrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    SalePricePercentage = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     IsOnSale = table.Column<bool>(type: "bit", nullable: false),
                     IsFeatured = table.Column<bool>(type: "bit", nullable: false),
                     Rating = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
@@ -293,6 +293,28 @@ namespace DataAccessLibrary.Migrations
                     table.PrimaryKey("PK_ShoppingCart", x => x.ShoppingCartId);
                     table.ForeignKey(
                         name: "FK_ShoppingCart_AspNetUsers_Id",
+                        column: x => x.Id,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserProfiles",
+                columns: table => new
+                {
+                    UserProfileId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProfileImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserProfiles", x => x.UserProfileId);
+                    table.ForeignKey(
+                        name: "FK_UserProfiles_AspNetUsers_Id",
                         column: x => x.Id,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -565,6 +587,12 @@ namespace DataAccessLibrary.Migrations
                 name: "IX_ShoppingCartProducts_ShoppingCartId",
                 table: "ShoppingCartProducts",
                 column: "ShoppingCartId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserProfiles_Id",
+                table: "UserProfiles",
+                column: "Id",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -602,6 +630,9 @@ namespace DataAccessLibrary.Migrations
 
             migrationBuilder.DropTable(
                 name: "ShoppingCartProducts");
+
+            migrationBuilder.DropTable(
+                name: "UserProfiles");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
