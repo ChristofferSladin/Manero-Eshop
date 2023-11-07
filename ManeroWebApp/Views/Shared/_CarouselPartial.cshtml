@@ -10,14 +10,12 @@
 
 <div class="carousel" data-carousel-id="@Model.IdSuffix">
     <div class="carousel-slides">
-        <div class="productPartial">
-            <div class="d-flex">
-                @foreach (var product in Model.Products)
-                {
-                    @await Html.PartialAsync("/Views/Shared/Product/_CarouselProductCards.cshtml", product)
-                }
+        @foreach (var product in Model.Products)
+        {
+            <div class="productPartial">
+                @await Html.PartialAsync("/Views/Shared/Product/_CarouselProductCards.cshtml", product)
             </div>
-        </div>
+        }
     </div>
 
     <button class="carousel-control-prev" data-carousel-id="@Model.IdSuffix">Prev</button>

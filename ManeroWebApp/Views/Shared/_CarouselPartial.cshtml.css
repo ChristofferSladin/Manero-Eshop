@@ -35,11 +35,6 @@
     transition: all 0.3s ease;
 }
 
-    .carousel-slides .d-flex {
-        gap: 30px;
-        transition: transform 0.2s ease;
-    }
-
 .carousel-slide {
     flex: 0 0 100%;
 }
@@ -47,7 +42,7 @@
 .productPartial {
     display: flex;
     margin: 0;
-    padding: 0;
+    padding: 0 20px;
 }
 
 .carousel-control-prev {
