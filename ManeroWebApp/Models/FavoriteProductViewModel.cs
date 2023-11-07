@@ -32,5 +32,18 @@ namespace ManeroWebApp.Models
                 ShoppingCartId = favoriteProduct.ShoppingCartId,
             };
         }
+        public static implicit operator FavoriteProductViewModel(Product product)
+        {
+            return new FavoriteProductViewModel
+            {
+                ProductId = product.ProductId,
+                ImgUrl = product.ImageUrl,
+                Name = product.ProductName,
+                PriceWithoutTax = product.PriceExcTax,
+                PriceWithTax = product.PriceIncTax,
+                IsOnSale = product.IsOnSale,
+                Rating = product.Rating,
+            };
+        }
     }
 }
