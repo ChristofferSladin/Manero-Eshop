@@ -146,7 +146,7 @@ namespace ManeroWebApp.Controllers
                     Title = review.Title,
                     ProductId = review.ProductId,
                     Id = review.Id,
-                }).ToList();
+                }).OrderByDescending(d=>d.Created).Take(5).ToList();
 
             return PartialView("/Views/Shared/Product/_ProductReviews.cshtml", reviewsViewModel);
         }
