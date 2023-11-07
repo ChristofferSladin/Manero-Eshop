@@ -1,0 +1,50 @@
+﻿* {
+    box-sizing: border-box;
+}
+
+.Navigation-Bar {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    min-height: 85px;
+    width: 100%;
+    padding: 8px 0 0 0;
+    background-color: #FFF;
+    border-top: 1px solid #DBE3F5;
+    z-index: 100;
+    margin-top: 10px;
+}
+
+.Menu-links {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}
+
+::deep .Menu-link {
+    font-size: 24px;
+    text-align: center;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    color: #979797;
+    background-color: #fff;
+}
+
+.Menu-link i {
+    border-radius: 50px;
+    color: #979797;
+    padding: 10px;
+    vertical-align: middle;
+    display: inline-block;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.Menu-link:hover i {
+    color: #000;
+    background-color: #DBE3F5;
+}
+
+.active {
+    background-color: #DBE3F5;
+    color: #000 !important;
+}
