@@ -17,7 +17,7 @@ namespace ProductAPI.Dtos
         public string? Color { get; set; }
         public decimal PriceExcTax { get; set; }
         public decimal PriceIncTax { get; set; }
-        public decimal SalePrice { get; set; }
+        public decimal SalePricePercentage { get; set; }
         public bool IsOnSale { get; set; }
         public bool IsFeatured { get; set; }
         public decimal Rating { get; set; }

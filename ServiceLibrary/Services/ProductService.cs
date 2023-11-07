@@ -143,7 +143,6 @@ public class ProductService : IProductService
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
         return products;
     }
-    public async Task<DataAccessLibrary.Entities.ProductEntities.Product> GetProductByIdAsync(int productId)
     public async Task<Product> GetProductByIdAsync(int productId)
     {
         try

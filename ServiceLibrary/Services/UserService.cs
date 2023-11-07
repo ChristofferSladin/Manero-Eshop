@@ -2,8 +2,10 @@
 using DataAccessLibrary.Entities.ProductEntities;
 using DataAccessLibrary.Repositories;
 using Newtonsoft.Json;
-using ServiceLibrary.Models;
+using Newtonsoft.Json.Linq;
 using System.Diagnostics;
+using DataAccessLibrary.Entities.UserEntities;
+using FavoriteProduct = ServiceLibrary.Models.FavoriteProduct;
 
 namespace ServiceLibrary.Services;
 
@@ -94,5 +96,27 @@ public class UserService : IUserService
         catch (Exception e) { Debug.WriteLine(e.Message); }
 
         return null!;
+    }
+
+    public async Task<Models.UserProfile> GetUserProfileAsync(string id)
+    {
+        var userProfile = new Models.UserProfile();
+        var uId = $"?id={id}";
+        try
+        {
+            var baseUrl = $"https://localhost:7047/user/profile{uId}";
+            using var client = new HttpClient();
+            var request = new HttpRequestMessage();
+            request.RequestUri = new Uri(baseUrl);
+            request.Method = HttpMethod.Get;
+            var response = await client.SendAsync(request);
+            if (response.IsSuccessStatusCode)
+            {
+                var responseString = await response.Content.ReadAsStringAsync();
+                userProfile = JsonConvert.DeserializeObject<Models.UserProfile>(responseString);
+            }
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return userProfile;
     }
 }

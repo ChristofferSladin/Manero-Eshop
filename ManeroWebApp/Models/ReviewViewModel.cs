@@ -9,5 +9,8 @@
         public string Title { get; set; } = null!;
         public int ProductId { get; set; }
         public string Id { get; set; } = null!;
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public string? ProfileImage { get; set; }
     }
 }

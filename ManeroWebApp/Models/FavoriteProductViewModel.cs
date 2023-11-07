@@ -26,7 +26,7 @@ namespace ManeroWebApp.Models
                 Name = favoriteProduct.Name,
                 PriceWithoutTax = favoriteProduct.PriceWithoutTax,
                 PriceWithTax = favoriteProduct.PriceWithTax,
-                SalePrice = favoriteProduct.SalePrice,
+                SalePrice = favoriteProduct.SalePricePercentage,
                 Rating = favoriteProduct.Rating,
                 IsOnSale = favoriteProduct.IsOnSale,
                 ShoppingCartId = favoriteProduct.ShoppingCartId,

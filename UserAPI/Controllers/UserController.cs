@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using System.Linq.Expressions;
 using UserAPI.DTO;
 
 namespace UserAPI.Controllers
@@ -19,19 +20,16 @@ namespace UserAPI.Controllers
         private readonly ShoppingCartRepository _shoppingCartRepository;
         private readonly ShoppingCartProductRepository _shoppingCartProductRepository;
         private readonly ProductRepository _productRepository;
+        private readonly UserRepository _userRepository;
 
-        public UserController(
-            FavoriteRepository favoriteRepository,
-            ShoppingCartRepository shoppingCartRepository,
-            ShoppingCartProductRepository shoppingCartProductRepository,
-            ProductRepository productRepository,
-            FavoriteProductRepository favoriteProductRepository)
+        public UserController(FavoriteRepository favoriteRepository, ShoppingCartRepository shoppingCartRepository, ShoppingCartProductRepository shoppingCartProductRepository, ProductRepository productRepository, FavoriteProductRepository favoriteProductRepository, UserRepository userRepository)
         {
             _favoriteRepository = favoriteRepository;
             _shoppingCartRepository = shoppingCartRepository;
             _shoppingCartProductRepository = shoppingCartProductRepository;
             _productRepository = productRepository;
             _favoriteProductRepository = favoriteProductRepository;
+            _userRepository = userRepository;
         }
 
         /// <summary>
@@ -143,6 +141,40 @@ namespace UserAPI.Controllers
             catch (Exception e) { Debug.WriteLine(e.Message); }
 
             return Problem();
+        }
+
+        /// <summary>
+        /// Retrieve user profile by id
+        /// </summary>
+        /// <returns>
+        /// UserProfile
+        /// </returns>
+        /// <remarks>
+        /// Example end point: GET /user/profile?id={id}
+        /// This returns users firstName, lastName and profilePicture
+        /// </remarks>
+        /// <response code="200">
+        /// Successfully returned a user profile
+        /// </response>
+        [HttpGet]
+        [Route("/user/profile")]
+        public async Task<ActionResult<UserProfile>> GetProductAsync(string id)
+        {
+            Expression<Func<UserProfile, bool>> expression = user => user.Id == id;
+            var user = await _userRepository.GetUserByIdAsync(expression);
+
+            if (user == null!)
+            {
+                return BadRequest("user not found");
+            }
+
+            var userProfile = new UserProfile
+            {
+                ProfileImage = user.ProfileImage,
+                FirstName = user.FirstName,
+                LastName = user.LastName
+            };
+            return Ok(userProfile);
         }
     }
 }

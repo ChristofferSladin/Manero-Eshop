@@ -8,10 +8,12 @@ namespace ManeroWebApp.Controllers
     public class ProductController : Controller
     {
         private readonly IProductService _productService;
+        private readonly IUserService _userService;
 
-        public ProductController(IProductService productService)
+        public ProductController(IProductService productService, IUserService userService)
         {
             _productService = productService;
+            _userService = userService;
         }
 
         public IActionResult Index(string productNumber)
@@ -137,17 +139,27 @@ namespace ManeroWebApp.Controllers
             var products = await _productService.GetFilteredProductsWithReviewsAsync(null, null, null, null, null, productName);
             var reviewsViewModel = products
                 .Where(p => p.Reviews != null)
-                .SelectMany(p => p.Reviews!, (_, review) => new ReviewViewModel
+                .SelectMany(p => p.Reviews!, (_, review) => new
                 {
-                    ReviewId = review.ReviewId,
-                    Rating = review.Rating,
-                    Created = review.Created,
-                    Content = review.Content,
-                    Title = review.Title,
-                    ProductId = review.ProductId,
-                    Id = review.Id,
-                }).OrderByDescending(d=>d.Created).Take(5).ToList();
-
+                    Review = review,
+                    UserProfile = _userService.GetUserProfileAsync(review.Id).Result
+                })
+                .OrderByDescending(r => r.Review.Created)
+                .Take(5)
+                .Select(combined => new ReviewViewModel
+                {
+                    ReviewId = combined.Review.ReviewId,
+                    Rating = combined.Review.Rating,
+                    Created = combined.Review.Created,
+                    Content = combined.Review.Content,
+                    Title = combined.Review.Title,
+                    ProductId = combined.Review.ProductId,
+                    Id = combined.Review.Id,
+                    FirstName = combined.UserProfile.FirstName,
+                    LastName = combined.UserProfile.LastName,
+                    ProfileImage = combined.UserProfile.ProfileImage,
+                })
+                .ToList();
             return PartialView("/Views/Shared/Product/_ProductReviews.cshtml", reviewsViewModel);
         }
     }
