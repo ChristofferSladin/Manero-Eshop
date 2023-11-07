@@ -1,19 +1,25 @@
 ﻿.carousel-title-container {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    margin: 15px;
 }
 
     .carousel-title-container .carousel-title {
         display: flex;
         justify-content: flex-start;
         font-weight: 500;
-        margin-top: 10px;
+        font-size: 20px;
     }
 
     .carousel-title-container .view-all-btn {
+        border: none;
+        background-color: transparent;
+        text-align: center;
+        padding: 0;
+        margin: 0;
         display: flex;
         justify-content: flex-end;
-        margin-top: 10px;
     }
 
 .carousel {
@@ -21,6 +27,7 @@
     margin-top: 10px;
     text-align: center;
     overflow: hidden;
+    padding-bottom: 50px;
 }
 
 .carousel-slides {
@@ -29,7 +36,7 @@
 }
 
     .carousel-slides .d-flex {
-        transition: transform 0.5s ease; 
+        transition: transform 0.2s ease;
     }
 
 .carousel-slide {
@@ -38,22 +45,30 @@
 
 .productPartial {
     display: flex;
+    margin: 0;
+    padding: 0;
 }
 
 .carousel-control-prev {
     position: absolute;
-    top: 50%;
-    height: 50px;
+    top: 88%;
+    height: 40px;
+    width: 75px;
     color: black;
     font-size: 18px;
     font-weight: 600;
+    background-color: #515b61;
+    border-radius: 45px;
 }
 
 .carousel-control-next {
     position: absolute;
-    top: 50%;
-    height: 50px;
+    top: 88%;
+    height: 40px;
+    width: 75px;
     color: black;
     font-size: 18px;
     font-weight: 600;
+    background-color: #515b61;
+    border-radius: 45px;
 }
