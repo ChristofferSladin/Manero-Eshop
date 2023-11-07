@@ -14,7 +14,6 @@
             <div class="d-flex">
                 @foreach (var product in Model.Products)
                 {
-                    <!-- Render each product card by passing the product to the product card partial -->
                     @await Html.PartialAsync("/Views/Shared/Product/_CarouselProductCards.cshtml", product)
                 }
             </div>
