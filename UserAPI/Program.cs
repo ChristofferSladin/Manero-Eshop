@@ -1,6 +1,7 @@
 using DataAccessLibrary.Contexts;
 using DataAccessLibrary.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -9,24 +10,16 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<ManeroDbContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("ManeroDb")));
-builder.Services.AddScoped<UserRepository>();
-builder.Services.AddScoped<FavoriteRepository>();
-builder.Services.AddScoped<FavoriteProductRepository>();
-builder.Services.AddScoped<ShoppingCartRepository>();
-builder.Services.AddScoped<ShoppingCartProductRepository>();
-builder.Services.AddScoped<ProductRepository>();
-
-builder.Services.AddControllers().AddNewtonsoftJson();
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen(sw =>
 {
     sw.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
     {
         Version = "v1.0",
         Title = "Manero User API",
-        Description = @"API for retrieving data from ManeroDataBase",        
+        Description = @"API for retrieving data from or entering data into ManeroDataBase",
     });
 
     sw.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -39,7 +32,7 @@ builder.Services.AddSwaggerGen(sw =>
         Type = SecuritySchemeType.ApiKey,
         Scheme = "Bearer"
     });
-        
+
     sw.AddSecurityRequirement(new OpenApiSecurityRequirement()
       {
         {
@@ -64,6 +57,13 @@ builder.Services.AddSwaggerGen(sw =>
     sw.IncludeXmlComments(xmlPath);
 });
 
+builder.Services.AddDbContext<ManeroDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ManeroDb")));
+
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddEntityFrameworkStores<ManeroDbContext>()
+    .AddDefaultTokenProviders();
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -73,9 +73,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
+
             ValidIssuer = builder.Configuration["Jwt:KeyIssuer"],
             ValidAudience = builder.Configuration["Jwt:KeyAudience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:LoginKey"]))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:LoginKey"]!))
         };
     });
 
@@ -86,6 +87,12 @@ builder.Services.AddCors(o => o.AddPolicy("AllowAll", builder =>
         .AllowAnyHeader();
 }));
 
+builder.Services.AddTransient<UserRepository>();
+builder.Services.AddTransient<FavoriteRepository>();
+builder.Services.AddTransient<FavoriteProductRepository>();
+builder.Services.AddTransient<ShoppingCartRepository>();
+builder.Services.AddTransient<ShoppingCartProductRepository>();
+builder.Services.AddTransient<ProductRepository>();
 
 var app = builder.Build();
 

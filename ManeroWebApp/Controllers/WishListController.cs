@@ -15,12 +15,10 @@ namespace ManeroWebApp.Controllers
 {
     public class WishListController : Controller
     {
-        private readonly ManeroDbContext _context;
         private readonly IProductService _productService;
         private readonly IUserService _userService;
-        public WishListController(ManeroDbContext context, IProductService productService, IUserService userService)
+        public WishListController(IProductService productService, IUserService userService)
         {
-            _context = context;
             _productService = productService;
             _userService = userService;
         }
@@ -42,7 +40,7 @@ namespace ManeroWebApp.Controllers
             try
             {
                 var result = await _userService.CreateShoppingCartProductEntry(productId, shoppingCartId);
-                if(result is not null)
+                if (result is not null)
                 {
                     TempData["success"] = $"Product added to the shopping cart.";
                     return RedirectToAction("Index", "WishList");
