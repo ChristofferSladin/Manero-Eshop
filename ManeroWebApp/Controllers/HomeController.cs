@@ -23,8 +23,8 @@ namespace ManeroWebApp.Controllers
 
             var products = await _productService.GetProductsWithReviewsAsync();
 
-            featuredProducts = products.Where(p => p.IsFeatured == true).ToList();
-            onSaleProducts = products.Where(p => p.IsOnSale == true).ToList();
+            featuredProducts = products.Where(p => p.IsFeatured == true).DistinctBy(p => p.ProductName).ToList();
+            onSaleProducts = products.Where(p => p.IsOnSale == true).DistinctBy(p => p.ProductName).ToList();
 
             var viewModel = new HomeIndexViewModel
             {

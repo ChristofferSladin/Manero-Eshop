@@ -23,14 +23,11 @@
     }
 }
 
-
-
 @if (Model != null!)
 {
-
     <div class="product-card">
-        <div class="product-image">
-            <div class=""></div>
+        <div class="pos">
+            <img class="product-image" src="@Model.ImageUrl" alt="prod-img"/>
             <div class="buttons-container">
                 <button class="add-to-favorite-btn">
                     <i class="fa-light fa-heart" aria-hidden="true"></i>
@@ -46,7 +43,7 @@
 
             @if (Model.IsOnSale)
             {
-                salePrice = Model.PriceIncTax * Model.SalePrice;
+                salePrice = Model.PriceIncTax * Model.SalePricePercentage;
                 <div class="product-price">
                     <div class="org-price">
                         @Model.PriceIncTax
@@ -67,5 +64,4 @@
 
         </div>
     </div>
-
 }

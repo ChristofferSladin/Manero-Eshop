@@ -1,7 +1,6 @@
 ﻿
 .product-card {
     width: 290px;
-    margin-left: 1px;
     background: #f9f9f9;
     border-radius: 8px;
     overflow: hidden;
@@ -9,13 +8,15 @@
     border: none;
 }
 
+.pos {
+    position: relative;
+}
+
 .product-image {
     width: 100%;
-    background-image: url('/img/showcase-img.png');
-    background-size: cover;
-    position: relative;
-    object-fit: fill;
-    min-height: 250px;
+    object-fit: cover;
+    object-position: center;
+    aspect-ratio: 1 / 1.2;
 }
 
 .buttons-container {

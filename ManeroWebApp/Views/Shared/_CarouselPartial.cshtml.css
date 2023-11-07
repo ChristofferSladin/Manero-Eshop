@@ -36,6 +36,7 @@
 }
 
     .carousel-slides .d-flex {
+        gap: 30px;
         transition: transform 0.2s ease;
     }
 
