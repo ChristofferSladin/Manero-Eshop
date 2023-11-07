@@ -23,7 +23,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ProductAPI\ProductAPI.csproj" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ManeroWebApp\ManeroWebApp.csproj" />
   </ItemGroup>
 
 </Project>

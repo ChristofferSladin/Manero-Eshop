@@ -18,5 +18,6 @@
         public bool IsFeatured { get; set; }
         public decimal Rating { get; set; }
         public string? ImageUrl { get; set; }
+        public List<ReviewViewModel>? Reviews { get; set;}
     }
 }

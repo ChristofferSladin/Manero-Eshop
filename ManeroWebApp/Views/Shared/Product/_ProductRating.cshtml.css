@@ -1,0 +1,19 @@
+﻿.rating-container {
+    display: flex;
+    font-size: 0.8rem;
+    padding: 5px 0;
+}
+
+.rating-star {
+    color: #FFBE00;
+}
+
+.rating {
+    padding-left: 3px;
+}
+
+@media (min-width: 1200px) {
+    .rating-container {
+        font-size: 1.2rem;
+    }
+}

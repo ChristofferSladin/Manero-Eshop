@@ -1,0 +1,53 @@
+﻿@model List<ReviewViewModel>
+@{
+    var userImage = "";
+}
+@foreach (var r in Model)
+{
+    <div class="review-wrapper">
+        <div class="review-box">
+            <div class="user-image-container">
+                @if (!string.IsNullOrEmpty(userImage))
+                {
+                    <img class="user-image" src="@userImage" alt="user profile image" />
+                }
+                else
+                {
+                    <div class="user-image-placeholder"></div>
+                }
+            </div>
+            <div class="user-review-container">
+                <div class="review-header">
+                    <div class="user-info">
+                        <div class="user-name">Test Name</div>
+                        <div class="review-post-date">@r.Created.Date.ToString(" dd MMMM yyyy")</div>
+                    </div>
+                    <div class="review-rating-stars">
+                        @for (decimal i = 0.0M; i < 5.0M; i++)
+                        {
+                            if (i + 0.5M < r.Rating)
+                            {
+                                <div class="rating-star">
+                                    <i class="fa-solid fa-star"></i>
+                                </div>
+                            }
+                            else if (i < r.Rating)
+                            {
+                                <div class="rating-star">
+                                    <i class="fa-regular fa-star-half-stroke"></i>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="rating-star">
+                                    <i class="fa-regular fa-star"></i>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="user-review-content">@r.Content</div>
+            </div>
+        </div>
+    </div>
+}

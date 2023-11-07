@@ -1,0 +1,27 @@
+﻿@model string
+@{
+}
+
+<div class="product-card-wrapper" id="productCard"></div>
+
+@section Scripts
+    {
+    <script>
+        $(document).ready(function () {
+            loadProductCardPartial();
+        });
+        function loadProductCardPartial() {
+            $.ajax({
+                url: '@Url.Action("ProductCardPartial", "Product")',
+                data: { productNumber: '@Model' },
+                method: 'GET',
+                success: function (result) {
+                    $('#productCard').html(result);
+                },
+                error: function (error) {
+                    console.error(error);
+                }
+            });
+        }
+    </script>
+}
