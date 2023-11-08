@@ -1,15 +1,7 @@
-﻿using DataAccessLibrary.Contexts;
-using DataAccessLibrary.Entities;
-using DataAccessLibrary.Entities.ProductEntities;
-using DataAccessLibrary.Entities.UserEntities;
-using ManeroWebApp.Models;
-using Microsoft.AspNetCore.Identity;
+﻿using ManeroWebApp.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using ServiceLibrary.Services;
 using System.Diagnostics;
-using System.Security.Principal;
 
 namespace ManeroWebApp.Controllers
 {

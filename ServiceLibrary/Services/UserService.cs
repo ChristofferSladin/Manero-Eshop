@@ -1,11 +1,6 @@
-﻿using Azure.Core;
-using DataAccessLibrary.Entities.ProductEntities;
-using DataAccessLibrary.Repositories;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
 using System.Diagnostics;
-using DataAccessLibrary.Entities.UserEntities;
-using FavoriteProduct = ServiceLibrary.Models.FavoriteProduct;
+using ServiceLibrary.Models;
 
 namespace ServiceLibrary.Services;
 
@@ -35,7 +30,7 @@ public class UserService : IUserService
 
         return null!;
     }
-    public async Task<DataAccessLibrary.Entities.UserEntities.ShoppingCart> GetShoppingCartByUser(string userId)
+    public async Task<ShoppingCart> GetShoppingCartByUser(string userId)
     {
         try
         {
@@ -43,7 +38,7 @@ public class UserService : IUserService
             if (response.IsSuccessStatusCode)
             {
                 var content = response.Content.ReadAsStringAsync().Result.ToString();
-                var shoppingCart = JsonConvert.DeserializeObject<DataAccessLibrary.Entities.UserEntities.ShoppingCart>(content);
+                var shoppingCart = JsonConvert.DeserializeObject<ShoppingCart>(content);
 
                 if (shoppingCart is not null)
                     return shoppingCart;
@@ -53,7 +48,7 @@ public class UserService : IUserService
 
         return null!;
     }
-    public async Task<DataAccessLibrary.Entities.UserEntities.ShoppingCartProduct> CreateShoppingCartProductEntry(int productId, int shoppingCartId)
+    public async Task<ShoppingCartProduct> CreateShoppingCartProductEntry(int productId, int shoppingCartId)
     {
         try
         {
@@ -65,7 +60,7 @@ public class UserService : IUserService
             {
                 var content = response.Content.ReadAsStringAsync().Result.ToString();
                 var shoppingCartProduct = JsonConvert
-                    .DeserializeObject<DataAccessLibrary.Entities.UserEntities.ShoppingCartProduct>(content);
+                    .DeserializeObject<ShoppingCartProduct>(content);
 
                 if (shoppingCartProduct is not null)
                     return shoppingCartProduct;
@@ -75,7 +70,7 @@ public class UserService : IUserService
 
         return null!;
     }
-    public async Task<DataAccessLibrary.Entities.UserEntities.FavoriteProduct> AddProductToWishList(int productId, string userId)
+    public async Task<FavoriteProduct> AddProductToWishList(int productId, string userId)
     {
         try
         {
@@ -87,7 +82,7 @@ public class UserService : IUserService
             {
                 var content = response.Content.ReadAsStringAsync().Result.ToString();
                 var favoriteProduct = JsonConvert
-                    .DeserializeObject<DataAccessLibrary.Entities.UserEntities.FavoriteProduct>(content);
+                    .DeserializeObject<FavoriteProduct>(content);
 
                 if (favoriteProduct is not null)
                     return favoriteProduct;
@@ -98,9 +93,9 @@ public class UserService : IUserService
         return null!;
     }
 
-    public async Task<Models.UserProfile> GetUserProfileAsync(string id)
+    public async Task<UserProfile> GetUserProfileAsync(string id)
     {
-        var userProfile = new Models.UserProfile();
+        var userProfile = new UserProfile();
         var uId = $"?id={id}";
         try
         {
@@ -113,7 +108,7 @@ public class UserService : IUserService
             if (response.IsSuccessStatusCode)
             {
                 var responseString = await response.Content.ReadAsStringAsync();
-                userProfile = JsonConvert.DeserializeObject<Models.UserProfile>(responseString);
+                userProfile = JsonConvert.DeserializeObject<UserProfile>(responseString);
             }
         }
         catch (Exception ex) { Debug.WriteLine(ex.Message); }

@@ -25,6 +25,7 @@ builder.Services.AddScoped<FavoriteProductRepository>();
 builder.Services.AddScoped<ShoppingCartRepository>();
 builder.Services.AddScoped<ShoppingCartProductRepository>();
 builder.Services.AddScoped<ProductRepository>();
+builder.Services.AddScoped<UserRepository>();
 
 builder.Services.AddSwaggerGen(sw =>
 {
