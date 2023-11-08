@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using DataAccessLibrary.Entities.ProductEntities;
 
@@ -17,7 +19,7 @@ public class Product
     public string? Color { get; set; }
     public decimal PriceExcTax { get; set; }
     public decimal PriceIncTax { get; set; }
-    public decimal SalePrice { get; set; }
+    public decimal SalePricePercentage { get; set; }
     public bool IsOnSale { get; set; }
     public bool IsFeatured { get; set; }
     public decimal Rating { get; set; }
@@ -38,7 +40,7 @@ public class Product
             Color = productEntity.Color,
             PriceExcTax = productEntity.PriceExcTax,
             PriceIncTax = productEntity.PriceIncTax,
-            SalePrice = productEntity.SalePrice,
+            SalePricePercentage = productEntity.SalePricePercentage,
             IsOnSale = productEntity.IsOnSale,
             IsFeatured = productEntity.IsFeatured,
             Rating = productEntity.Rating,

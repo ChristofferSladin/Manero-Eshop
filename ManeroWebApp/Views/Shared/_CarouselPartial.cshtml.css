@@ -1,0 +1,66 @@
+﻿.carousel-title-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 15px;
+}
+
+    .carousel-title-container .carousel-title {
+        display: flex;
+        justify-content: flex-start;
+        font-weight: 500;
+        font-size: 20px;
+    }
+
+    .carousel-title-container ::deep .view-all-btn {
+        text-decoration: none;
+        color: #111111;
+        text-align: center;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+.carousel {
+    position: relative;
+    margin-top: 10px;
+    text-align: center;
+    overflow: hidden;
+    padding-bottom: 50px;
+}
+
+.carousel-slides {
+    display: flex;
+    transition: all 0.3s ease;
+}
+
+.carousel-slide {
+    flex: 0 0 100%;
+}
+
+.productPartial {
+    display: flex;
+    margin: 0;
+    padding: 0 20px;
+}
+
+.carousel-control-prev, .carousel-control-next {
+    position: absolute;
+    top: calc(50% - 40px);
+    height: 40px;
+    width: 40px;
+    color: black;
+    font-size: 18px;
+    font-weight: 600;
+    background: rgba(81, 91, 97, 0.7);
+    border-radius: 50%;
+}
+
+.carousel-control-prev {
+    margin-left: 20px;
+}
+
+.carousel-control-next {
+    margin-right: 20px;
+}

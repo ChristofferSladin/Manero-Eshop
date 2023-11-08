@@ -1,0 +1,32 @@
+﻿@model List<ColorViewModel>
+@{
+    var productNumber = ViewData["ProductNumber"] as string;
+}
+
+@if (Model != null!)
+{
+    @foreach (var s in Model)
+    {
+        var isActive = s.ProductNumber == productNumber;
+        <button style="background: @s.Color;" class="color-item @(isActive ? "active" : string.Empty)" data-productnumber="@s.ProductNumber"></button>
+    }
+}
+
+<script>
+    $(document).ready(function () {
+        $(".color-item").click(function () {
+            var productNumber = $(this).data("productnumber");
+            $.ajax({
+                url: '@Url.Action("ProductCardPartial", "Product")',
+                data: { productNumber: productNumber },
+                method: 'GET',
+                success: function (result) {
+                    $('#productCard').html(result);
+                },
+                error: function (error) {
+                    console.error(error);
+                }
+            });
+        });
+    });
+</script>

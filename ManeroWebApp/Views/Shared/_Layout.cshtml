@@ -25,6 +25,9 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="FeaturedProducts" asp-action="Index">FeaturedProducts</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                     </ul>
@@ -33,11 +36,10 @@
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+
+    <main role="main">
+        @RenderBody()
+    </main>
 
 <footer class="border-top footer text-muted">
     <div class="container">
@@ -45,14 +47,16 @@
     </div>
 </footer>
 
-<partial name="_NavBarPartial"/>
+    @if (ViewData["HideFooter"] as bool? != true)
+    {
+        <partial name="_NavBarPartial"/>
+    }
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- custom script -->
     <script src="~/js/site.js" asp-append-version="true"></script>
-            
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

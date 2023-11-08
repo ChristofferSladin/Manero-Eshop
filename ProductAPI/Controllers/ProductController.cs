@@ -173,6 +173,56 @@ namespace ProductAPI.Controllers
         }
 
         /// <summary>
+        /// Retrieve ALL Products ON SALE with Reviews from the database (Products and Reviews)
+        /// </summary>
+        /// <returns>
+        /// A full list of ALL Products ON SALE
+        /// </returns>
+        /// <remarks>
+        /// Example end point: GET /Products/Reviews
+        /// </remarks>
+        /// <response code="200">
+        /// Successfully returned a list of ALL Products ON SALE
+        /// </response>
+        [HttpGet]
+        [Route("/products/onsale/reviews")]
+        public async Task<ActionResult<List<Product>>> GetOnSaleProductsWithReviewsAsync()
+        {
+            var products = await _productRepository.GetOnSaleProductsWithReviewsAsync();
+
+            if (!products.Any())
+            {
+                return BadRequest("Products not found");
+            }
+            return Ok(products);
+        }
+
+        /// <summary>
+        /// Retrieve ALL FEATURED Products with Reviews from the database (Products and Reviews)
+        /// </summary>
+        /// <returns>
+        /// A full list of ALL FEATURED Products
+        /// </returns>
+        /// <remarks>
+        /// Example end point: GET /Products/Reviews
+        /// </remarks>
+        /// <response code="200">
+        /// Successfully returned a list of ALL FEATURED Products
+        /// </response>
+        [HttpGet]
+        [Route("/products/featured/reviews")]
+        public async Task<ActionResult<List<Product>>> GetFeaturedProductsWithReviewsAsync()
+        {
+            var products = await _productRepository.GetFeaturedProductsWithReviewsAsync();
+
+            if (!products.Any())
+            {
+                return BadRequest("Products not found");
+            }
+            return Ok(products);
+        }
+
+        /// <summary>
         /// Retrieve FILTERED or ALL Products from the database filtered on chosen criterias below (Products)
         /// </summary>
         /// <returns>
@@ -186,7 +236,7 @@ namespace ProductAPI.Controllers
         /// </response>
         [HttpGet]
         [Route("/products/filter")]
-        public async Task<ActionResult<List<Product>>> GetProductsFilteredAsync(int? page, int? take, string filterByName = null!, string filterByCategory = null!, string orderByField = null!, string orderDirection = null!)
+        public async Task<ActionResult<List<Product>>> GetProductsFilteredAsync(int? page, int? take, string filterByName = null!, string filterByCategory = null!, string? orderByField = null!, string orderDirection = null!)
         {
             if (page <= 0 && take <= 0) { return BadRequest($"Invalid page & take, value \"{page}\" & value \"{take}\" is not allowed."); }
             if (page <= 0) { return BadRequest($"Invalid page, value \"{page}\" is not allowed."); }
@@ -215,18 +265,30 @@ namespace ProductAPI.Controllers
                 return BadRequest("Invalid order direction use: asc, desc, or leave empty.");
             }
 
-            Expression<Func<Product, dynamic>> _orderByField = null!;
+            Expression<Func<Product, object>> _orderByField = null!;
 
-            if (orderByField != null!)
+            if (orderByField != null)
             {
                 var propertyInfo = typeof(Product).GetProperties()
                     .FirstOrDefault(p => string.Equals(p.Name, orderByField, StringComparison.OrdinalIgnoreCase));
 
-                if (propertyInfo == null) return BadRequest("Invalid property the orderByField name you provided does not match any fields in product.");
+                if (propertyInfo == null) return BadRequest("Invalid property, the orderByField name you provided does not match any fields in the product.");
 
                 var param = Expression.Parameter(typeof(Product), "product");
                 Expression propertyAccess = Expression.Property(param, propertyInfo);
-                _orderByField = Expression.Lambda<Func<Product, dynamic>>(propertyAccess, param);
+
+                if (propertyInfo.PropertyType == typeof(decimal))
+                {
+                    _orderByField = Expression.Lambda<Func<Product, object>>(Expression.Convert(propertyAccess, typeof(object)), param);
+                }
+                else if (propertyInfo.PropertyType == typeof(int))
+                {
+                    _orderByField = Expression.Lambda<Func<Product, object>>(Expression.Convert(propertyAccess, typeof(object)), param);
+                }
+                else if (propertyInfo.PropertyType == typeof(string))
+                {
+                    _orderByField = Expression.Lambda<Func<Product, object>>(propertyAccess, param);
+                }
             }
 
             var products = await _productRepository.GetFilteredProductsAsync(_skip, _take, _filterByName, _filterByCategory, _orderByField, orderDirection);
@@ -280,18 +342,30 @@ namespace ProductAPI.Controllers
                 return BadRequest("Invalid order direction use: asc, desc, or leave empty.");
             }
 
-            Expression<Func<Product, dynamic>> _orderByField = null!;
+            Expression<Func<Product, object>> _orderByField = null!;
 
-            if (orderByField != null!)
+            if (orderByField != null)
             {
                 var propertyInfo = typeof(Product).GetProperties()
                     .FirstOrDefault(p => string.Equals(p.Name, orderByField, StringComparison.OrdinalIgnoreCase));
 
-                if (propertyInfo == null) return BadRequest("Invalid property the orderByField name you provided does not match any fields in product.");
+                if (propertyInfo == null) return BadRequest("Invalid property, the orderByField name you provided does not match any fields in the product.");
 
                 var param = Expression.Parameter(typeof(Product), "product");
                 Expression propertyAccess = Expression.Property(param, propertyInfo);
-                _orderByField = Expression.Lambda<Func<Product, dynamic>>(propertyAccess, param);
+
+                if (propertyInfo.PropertyType == typeof(decimal))
+                {
+                    _orderByField = Expression.Lambda<Func<Product, object>>(Expression.Convert(propertyAccess, typeof(object)), param);
+                }
+                else if (propertyInfo.PropertyType == typeof(int))
+                {
+                    _orderByField = Expression.Lambda<Func<Product, object>>(Expression.Convert(propertyAccess, typeof(object)), param);
+                }
+                else if (propertyInfo.PropertyType == typeof(string))
+                {
+                    _orderByField = Expression.Lambda<Func<Product, object>>(propertyAccess, param);
+                }
             }
 
             var products = await _productRepository.GetFilteredProductsWithReviewsAsync(_skip, _take, _filterByName, _filterByCategory, _orderByField, orderDirection);
