@@ -1,5 +1,6 @@
 ﻿using ManeroWebApp.Models;
 using Microsoft.AspNetCore.Mvc;
+using ServiceLibrary.Models;
 using ServiceLibrary.Services;
 using System.Diagnostics;
 
@@ -7,9 +8,40 @@ namespace ManeroWebApp.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+
+        private readonly IProductService _productService;
+
+        public HomeController(IProductService productService)
         {
-            return View();
+            _productService = productService;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var featuredProducts = new List<Product>();
+            var onSaleProducts = new List<Product>();
+
+            var products = await _productService.GetProductsWithReviewsAsync();
+
+            featuredProducts = products.Where(p => p.IsFeatured == true).DistinctBy(p => p.ProductName).ToList();
+            onSaleProducts = products.Where(p => p.IsOnSale == true).DistinctBy(p => p.ProductName).ToList();
+
+            var viewModel = new HomeIndexViewModel
+            {
+                FeaturedProducts = new CarouselViewModel
+                {
+                    IdSuffix = "1",
+                    Title = "Featured Products",
+                    Products = featuredProducts
+                },
+                OnSaleProducts = new CarouselViewModel
+                {
+                    IdSuffix = "2",
+                    Title = "On Sale Products",
+                    Products = onSaleProducts
+                }
+            };
+            return View(viewModel);
         }
 
         public IActionResult Privacy()
