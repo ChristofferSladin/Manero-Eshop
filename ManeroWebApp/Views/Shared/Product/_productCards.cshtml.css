@@ -12,9 +12,11 @@
 }
 
     .product-image img {
-        width: 100%;
         min-height: 175px;
         object-fit: cover;
+        width: 100%;
+        object-position: center;
+        aspect-ratio: 1 / 1.2;
     }
 
 .product-details {
