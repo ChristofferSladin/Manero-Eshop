@@ -87,7 +87,11 @@ namespace ManeroWebApp.Controllers
                 }
             }
 
-            rating /= reviewCount;
+            if (reviewCount != 0)
+            {
+                rating /= reviewCount;
+            }
+
 
             var ratingViewModel = new RatingViewModel
             {
