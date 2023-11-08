@@ -33,7 +33,7 @@ namespace ManeroWebApp.Controllers
                 Color = product.Color,
                 PriceExcTax = product.PriceExcTax,
                 PriceIncTax = product.PriceIncTax,
-                SalePrice = product.SalePricePercentage,
+                SalePricePercentage = product.SalePricePercentage,
                 IsOnSale = product.IsOnSale,
                 IsFeatured = product.IsFeatured,
                 Rating = product.Rating,

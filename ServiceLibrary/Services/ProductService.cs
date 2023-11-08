@@ -36,6 +36,56 @@ public class ProductService : IProductService
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
         return products;
     }
+
+    public async Task<List<Product>> GetOnSaleProductsWithReviewsAsync()
+    {
+        var products = new List<Product>();
+        try
+        {
+            var baseUrl = "https://localhost:7067/products/onsale/reviews";
+            using var client = new HttpClient();
+            var request = new HttpRequestMessage();
+            request.RequestUri = new Uri(baseUrl);
+            request.Method = HttpMethod.Get;
+            var response = await client.SendAsync(request);
+            if (response.IsSuccessStatusCode)
+            {
+                var responseString = await response.Content.ReadAsStringAsync();
+                dynamic jsonArray = JArray.Parse(responseString);
+                foreach (var product in jsonArray)
+                {
+                    products.Add(product.ToObject<Product>());
+                }
+            }
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return products;
+    }
+
+    public async Task<List<Product>> GetFeaturedProductsWithReviewsAsync()
+    {
+        var products = new List<Product>();
+        try
+        {
+            var baseUrl = "https://localhost:7067/products/featured/reviews";
+            using var client = new HttpClient();
+            var request = new HttpRequestMessage();
+            request.RequestUri = new Uri(baseUrl);
+            request.Method = HttpMethod.Get;
+            var response = await client.SendAsync(request);
+            if (response.IsSuccessStatusCode)
+            {
+                var responseString = await response.Content.ReadAsStringAsync();
+                dynamic jsonArray = JArray.Parse(responseString);
+                foreach (var product in jsonArray)
+                {
+                    products.Add(product.ToObject<Product>());
+                }
+            }
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return products;
+    }
     public async Task<Product> GetProductAsync(string productNumber)
     {
         var product = new Product();

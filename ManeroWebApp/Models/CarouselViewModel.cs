@@ -6,8 +6,9 @@ namespace ManeroWebApp.Models
     {
         public string? IdSuffix { get; set; }
         public string? Title { get; set; }
-        public List<Product> Products { get; set; } = null!;
-        public List<Product> ProductsOnSale { get; set; } = null!;
-        public List<Product> FeaturedProducts { get; set; } = null!;
+        public string? EndPoint { get; set; }
+        public List<ProductViewModel> Products { get; set; } = null!;
+        public List<ProductViewModel> ProductsOnSale { get; set; } = null!;
+        public List<ProductViewModel> FeaturedProducts { get; set; } = null!;
     }
 }

@@ -1,4 +1,5 @@
-﻿using ManeroWebApp.Models;
+﻿using DataAccessLibrary.Entities.ProductEntities;
+using ManeroWebApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using ServiceLibrary.Models;
 using ServiceLibrary.Services;
@@ -8,7 +9,6 @@ namespace ManeroWebApp.Controllers
 {
     public class HomeController : Controller
     {
-
         private readonly IProductService _productService;
 
         public HomeController(IProductService productService)
@@ -18,13 +18,8 @@ namespace ManeroWebApp.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var featuredProducts = new List<Product>();
-            var onSaleProducts = new List<Product>();
-
-            var products = await _productService.GetProductsWithReviewsAsync();
-
-            featuredProducts = products.Where(p => p.IsFeatured == true).DistinctBy(p => p.ProductName).ToList();
-            onSaleProducts = products.Where(p => p.IsOnSale == true).DistinctBy(p => p.ProductName).ToList();
+            var onSaleProducts = await _productService.GetOnSaleProductsWithReviewsAsync();
+            var featuredProducts = await _productService.GetFeaturedProductsWithReviewsAsync();
 
             var viewModel = new HomeIndexViewModel
             {
@@ -32,13 +27,39 @@ namespace ManeroWebApp.Controllers
                 {
                     IdSuffix = "1",
                     Title = "Featured Products",
-                    Products = featuredProducts
+                    EndPoint = "FeaturedProducts",
+                    Products = featuredProducts.Select(p => new ProductViewModel
+                    {
+                        ProductNumber = p.ProductNumber,
+                        ProductName = p.ProductName,
+                        Category = p.Category,
+                        PriceExcTax = p.PriceExcTax,
+                        PriceIncTax = p.PriceIncTax,
+                        SalePricePercentage = p.SalePricePercentage,
+                        IsOnSale = p.IsOnSale,
+                        IsFeatured = p.IsFeatured,
+                        Rating = p.Rating,
+                        ImageUrl = p.ImageUrl,
+                    }).DistinctBy(p => p.ProductName).ToList()
                 },
                 OnSaleProducts = new CarouselViewModel
                 {
                     IdSuffix = "2",
                     Title = "On Sale Products",
-                    Products = onSaleProducts
+                    EndPoint = "",
+                    Products = onSaleProducts.Select(p => new ProductViewModel
+                    {
+                        ProductNumber = p.ProductNumber,
+                        ProductName = p.ProductName,
+                        Category = p.Category,
+                        PriceExcTax = p.PriceExcTax,
+                        PriceIncTax = p.PriceIncTax,
+                        SalePricePercentage = p.SalePricePercentage,
+                        IsOnSale = p.IsOnSale,
+                        IsFeatured = p.IsFeatured,
+                        Rating = p.Rating,
+                        ImageUrl = p.ImageUrl,
+                    }).DistinctBy(p => p.ProductName).ToList()
                 }
             };
             return View(viewModel);
@@ -48,7 +69,6 @@ namespace ManeroWebApp.Controllers
         {
             return View();
         }
-      
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

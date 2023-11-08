@@ -172,6 +172,56 @@ namespace ProductAPI.Controllers
         }
 
         /// <summary>
+        /// Retrieve ALL Products ON SALE with Reviews from the database (Products and Reviews)
+        /// </summary>
+        /// <returns>
+        /// A full list of ALL Products ON SALE
+        /// </returns>
+        /// <remarks>
+        /// Example end point: GET /Products/Reviews
+        /// </remarks>
+        /// <response code="200">
+        /// Successfully returned a list of ALL Products ON SALE
+        /// </response>
+        [HttpGet]
+        [Route("/products/onsale/reviews")]
+        public async Task<ActionResult<List<Product>>> GetOnSaleProductsWithReviewsAsync()
+        {
+            var products = await _productRepository.GetOnSaleProductsWithReviewsAsync();
+
+            if (!products.Any())
+            {
+                return BadRequest("Products not found");
+            }
+            return Ok(products);
+        }
+
+        /// <summary>
+        /// Retrieve ALL FEATURED Products with Reviews from the database (Products and Reviews)
+        /// </summary>
+        /// <returns>
+        /// A full list of ALL FEATURED Products
+        /// </returns>
+        /// <remarks>
+        /// Example end point: GET /Products/Reviews
+        /// </remarks>
+        /// <response code="200">
+        /// Successfully returned a list of ALL FEATURED Products
+        /// </response>
+        [HttpGet]
+        [Route("/products/featured/reviews")]
+        public async Task<ActionResult<List<Product>>> GetFeaturedProductsWithReviewsAsync()
+        {
+            var products = await _productRepository.GetFeaturedProductsWithReviewsAsync();
+
+            if (!products.Any())
+            {
+                return BadRequest("Products not found");
+            }
+            return Ok(products);
+        }
+
+        /// <summary>
         /// Retrieve FILTERED or ALL Products from the database filtered on chosen criterias below (Products)
         /// </summary>
         /// <returns>
