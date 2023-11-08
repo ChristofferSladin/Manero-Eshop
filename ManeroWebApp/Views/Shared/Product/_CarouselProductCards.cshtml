@@ -15,9 +15,9 @@
         int emptyStars = maxStars - fullStars - halfStar;
 
         var starHtml = new StringBuilder();
-        starHtml.Append(new string('i', fullStars).Replace("i", "<i class='fa fa-star'></i>"));
-        starHtml.Append(new string('i', halfStar).Replace("i", "<i class='fa fa-star-half-alt'></i>"));
-        starHtml.Append(new string('i', emptyStars).Replace("i", "<i class='fa fa-star-o'></i>"));
+        starHtml.Append(new string('i', fullStars).Replace("i", "<i class='fa-solid fa-star'></i>"));
+        starHtml.Append(new string('i', halfStar).Replace("i", "<i class='fa-regular fa-star-half-stroke'></i>"));
+        starHtml.Append(new string('i', emptyStars).Replace("i", "<i class='fa-regular fa-star'></i>"));
 
         return new HtmlString(starHtml.ToString());
     }
@@ -27,7 +27,7 @@
 {
     <div class="product-card">
         <div class="pos">
-            <img class="product-image" src="@Model.ImageUrl" alt="prod-img"/>
+            <img class="product-image" src="@Model.ImageUrl" alt="prod-img" />
             <div class="buttons-container">
                 <button class="add-to-favorite-btn">
                     <i class="fa-light fa-heart" aria-hidden="true"></i>
@@ -46,10 +46,10 @@
                 salePrice = Model.PriceIncTax * Model.SalePricePercentage;
                 <div class="product-price">
                     <div class="org-price">
-                        @Model.PriceIncTax
+                        $@Model.PriceIncTax
                     </div>
                     <div class="sale-price">
-                        @salePrice
+                        $@salePrice
                     </div>
                 </div>
             }

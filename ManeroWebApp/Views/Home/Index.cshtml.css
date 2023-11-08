@@ -2,18 +2,22 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
-    min-height: 450px;
+    min-height: 600px;
 }
 
-.grid-item {
-    margin: 10px;
+.grid-item img {
+    width: 100%; 
+    height: auto; 
+    object-fit: cover; 
 }
 
 .showcase-img {
     background-image: url('/img/showcase-img.png');
-    background-size: cover;
-    object-fit: fill;
-    position: relative;
+    background-size: cover; 
+    background-position: bottom; 
+    background-repeat: no-repeat; 
+    width: 100%; 
+    height: 100%; 
 }
 
 .showcase-text {
@@ -24,14 +28,13 @@
     color: white;
 }
 
-
 .discount-offer-img {
     background-image: url('/img/sale-section.png');
     background-size: cover;
     object-fit: fill;
     position: relative;
-    width: 100%; /* scale down to 50% of its original size */
-    height: 110px; /* maintains the aspect ratio */
+    width: 100%;
+    min-height: 160px;
     margin-top: 10px;
     margin-bottom: 10px;
 }
@@ -39,7 +42,7 @@
     .discount-offer-img .discount-offer-title {
         position: absolute;
         top: 10px;
-        left: 10px;
+        left: 20%;
         color: #515b61;
     }
 
@@ -48,16 +51,10 @@
             font-weight: 700;
         }
 
-
-    .discount-offer-img .discount-offer-btn {
-        
-    }
-
-
     .discount-offer-img .discount-offer-btn {
         position: absolute;
-        top: 50px;
-        left: 20px;
+        bottom: 10%;
+        left: 20%;
         padding: 1em 2em;
         font-size: 10px;
         text-transform: uppercase;
@@ -84,3 +81,52 @@
         .discount-offer-img .discount-offer-btn:active {
             transform: translateY(-1px);
         }
+
+@media only screen and (min-width: 768px) {
+    .showcase-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .showcase-text {
+        font-size: 28px;
+    }
+
+    .discount-offer-img {
+        width: 80%;
+        margin: 0 auto;
+    }
+
+        .discount-offer-img .discount-offer-btn {
+            font-size: 12px;
+            padding: 1.2em 2.4em;
+        }
+}
+
+@media only screen and (min-width: 992px) {
+    .showcase-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .showcase-text {
+        font-size: 55px;
+    }
+
+    .discount-offer-img {
+        width: 60%;
+    }
+
+        .discount-offer-img .discount-offer-title,
+        .discount-offer-img .discount-offer-btn {
+            left: 10%;
+        }
+}
+
+@media only screen and (min-width: 1200px) {
+    .showcase-text {
+        font-size: 62px;
+    }
+
+    .discount-offer-img {
+        width: 40%;
+    }
+}

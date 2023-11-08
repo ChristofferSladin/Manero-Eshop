@@ -45,26 +45,22 @@
     padding: 0 20px;
 }
 
-.carousel-control-prev {
+.carousel-control-prev, .carousel-control-next {
     position: absolute;
-    top: 88%;
+    top: calc(50% - 40px);
     height: 40px;
-    width: 75px;
+    width: 40px;
     color: black;
     font-size: 18px;
     font-weight: 600;
-    background-color: #515b61;
-    border-radius: 45px;
+    background: rgba(81, 91, 97, 0.7);
+    border-radius: 50%;
+}
+
+.carousel-control-prev {
+    margin-left: 20px;
 }
 
 .carousel-control-next {
-    position: absolute;
-    top: 88%;
-    height: 40px;
-    width: 75px;
-    color: black;
-    font-size: 18px;
-    font-weight: 600;
-    background-color: #515b61;
-    border-radius: 45px;
+    margin-right: 20px;
 }
