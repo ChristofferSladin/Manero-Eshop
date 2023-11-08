@@ -1,0 +1,35 @@
+﻿@{
+    ViewData["Title"] = "Featured Products Page";
+    ViewData["HideFooter"] = true;
+}
+
+@model List<ProductViewModel>
+<div class="headLine">
+    <div>
+        <a href="/Home/Index" class="btn-back">
+            <i class="fa-solid fa-chevron-left" style="color:black;"></i>
+        </a>
+    </div>
+    <h1>Featured Products</h1>
+    <div>
+        <a asp-page="" class="btn-cart">
+            <i class="fa-solid fa-bag-shopping" style="color:black;"></i>
+        </a>
+    </div>
+</div>
+
+<div id="barMenuPartial">
+</div>
+
+<partial name="_ToastrNotification" />
+
+<div class="product-grid" id="featuredProduct">
+</div>
+@section Scripts {
+    <script>
+        $('#featuredProduct').load("/FeaturedProducts/ProductCardsPartial");
+    </script>
+    <script>
+        $('#barMenuPartial').load("/FeaturedProducts/BarMenuPartial");
+    </script>
+}                           
