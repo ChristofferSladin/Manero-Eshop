@@ -27,7 +27,7 @@ namespace ManeroWebApp.Models
 
         public decimal PriceIncTax { get; set; }
 
-        public decimal SalePrice { get; set; }
+        public decimal SalePricePercentage { get; set; }
 
         public bool IsOnSale { get; set; }
 

@@ -27,6 +27,14 @@ public class ProductRepository
     {
         return await _context.Products.Include(r => r.Reviews).ToListAsync();
     }
+    public async Task<List<Product>> GetOnSaleProductsWithReviewsAsync()
+    {
+        return await _context.Products.Where(p => p.IsOnSale).Include(r => r.Reviews).ToListAsync();
+    }
+    public async Task<List<Product>> GetFeaturedProductsWithReviewsAsync()
+    {
+        return await _context.Products.Where(p => p.IsFeatured).Include(r => r.Reviews).ToListAsync();
+    }
     public async Task<List<Product>> GetFilteredProductsAsync(int skip, int take, Expression<Func<Product, bool>> filterByName = null!, Expression<Func<Product, bool>> filterByCategory = null!, Expression<Func<Product, dynamic>> orderByField = null!, string orderDirection = null!)
     {
         var query = _context.Products.AsQueryable();
