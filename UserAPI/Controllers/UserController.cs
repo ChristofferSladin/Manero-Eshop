@@ -10,7 +10,7 @@ using UserAPI.DTO;
 
 namespace UserAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     [EnableCors("AllowAll")]
     public class UserController : ControllerBase
@@ -46,6 +46,7 @@ namespace UserAPI.Controllers
         /// </response>
         [HttpGet]
         [Route("/favoriteProducts")]
+        [Authorize (Roles = "Customer")]
         public async Task<ActionResult<IEnumerable<FavoriteProductDto>>> GetFavoriteProductsByUser(string userId)
         {
             try

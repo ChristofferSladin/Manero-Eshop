@@ -1,4 +1,5 @@
 ﻿using DataAccessLibrary.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -18,13 +19,16 @@ namespace UserAPI.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public LoginController(
             IConfiguration configuration,
-            UserManager<IdentityUser> userManager)
+            UserManager<IdentityUser> userManager,
+            RoleManager<IdentityRole> roleManager)
         {
             _configuration = configuration;
             _userManager = userManager;
+            _roleManager = roleManager;
         }
         [HttpPost]
         [Route("/login")]
@@ -39,7 +43,7 @@ namespace UserAPI.Controllers
                 var passwordVerification = await _userManager.CheckPasswordAsync(existingUser, userLoginDto.Password!);
                 if (passwordVerification)
                 {
-                    var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:LoginKey"]!));
+                    var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:LoginKey"]!));
                     var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
                     var userRoles = await _userManager.GetRolesAsync(existingUser);
@@ -57,14 +61,15 @@ namespace UserAPI.Controllers
                         claimsList[newSize - 1] = new Claim(ClaimTypes.Role, role);
                     }
 
-                    var token = new JwtSecurityToken(
-                    _configuration["Jwt:KeyIssuer"],
-                    _configuration["Jwt:KeyAudience"],
+                    var securityToken = new JwtSecurityToken(
+                    issuer: _configuration["JWT:Issuer"],
+                    audience: _configuration["JWT:Audience"],
                     claimsList,
                     expires: DateTime.UtcNow.AddMinutes(15),
                     signingCredentials: credentials);
 
-                    return Ok(new JwtSecurityTokenHandler().WriteToken(token));
+                    var token = new JwtSecurityTokenHandler().WriteToken(securityToken);
+                    return Ok(token);
                 }
             }
             return Problem();
