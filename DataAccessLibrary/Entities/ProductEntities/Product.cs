@@ -62,4 +62,7 @@ public class Product
     public virtual ICollection<ShoppingCartProduct>? ShoppingCartProducts { get; set; }
     public virtual ICollection<FavoriteProduct>? FavoriteProducts { get; set; }
     public virtual ICollection<Review>? Reviews { get; set; }
+    
+    [Column(TypeName = "nvarchar(50)")]
+    public string? Gender { get; set; }
 }

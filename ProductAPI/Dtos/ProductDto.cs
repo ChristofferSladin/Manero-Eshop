@@ -27,5 +27,6 @@ namespace ProductAPI.Dtos
         //public virtual ICollection<ShoppingCartProduct>? ShoppingCartProducts { get; set; }
         //public virtual ICollection<FavoriteProduct>? FavoriteProducts { get; set; }
         public virtual ICollection<ReviewDto>? Reviews { get; set; }
+        public string? Gender { get; set; }
     }
 }

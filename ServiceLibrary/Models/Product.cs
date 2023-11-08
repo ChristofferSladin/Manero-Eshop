@@ -43,6 +43,8 @@ public class Product
             IsFeatured = productEntity.IsFeatured,
             Rating = productEntity.Rating,
             ImageUrl = productEntity.ImageUrl,
+            Gender = productEntity.Gender,
         };
     }
+    public string? Gender { get; set; }
 }

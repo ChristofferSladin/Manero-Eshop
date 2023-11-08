@@ -12,5 +12,6 @@ namespace ServiceLibrary.Services
         Task<List<Product>> GetFilteredProductsWithReviewsAsync(int? page, int? take, string? category, string? orderBy,
             string? orderDirection, string? filterByName);
         Task<DataAccessLibrary.Entities.ProductEntities.Product> GetProductByIdAsync(int id);
+        Task<List<Product>> GetFilteredProductsWithGenderAsync(int? page, int? take, string? gender, string? orderBy, string? orderDirection, string? filterByName);
     }
 }

@@ -1,0 +1,82 @@
+﻿.category-page {
+    align-content: center;
+}
+
+.category-main {
+    justify-content: center;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+}
+
+    .category-main .gender-categories {
+        overflow: hidden;
+        display: flex;
+        gap: 50px;
+        overflow: auto;
+        white-space: nowrap;
+        padding: 30px;
+        justify-content: center;
+    }
+
+        .category-main .gender-categories button {
+            padding: 0;
+            margin: 0;
+            border: none;
+            background: none;
+            font-family: inherit;
+            font-size: inherit;
+            color: inherit;
+        }
+
+        .category-main .gender-categories .item {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 20px;
+            width: auto;
+            height: auto;
+            padding: 3px 12px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: all 0.15s ease-in-out;
+        }
+
+            .category-main .gender-categories .item:hover {
+                background: #dbe3f5;
+            }
+
+        .category-main .gender-categories .active {
+            background: #dbe3f5;
+        }
+
+@media (min-width: 1200px) {
+    .category-main .gender-categories a {
+        width: 60px;
+        height: 60px;
+        font-size: 1.2rem;
+    }
+}
+
+.category-main .product-types {
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr;
+
+}
+
+.category-main .product-types .category{
+    border: 1px solid black;
+}
+
+.category-small {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+    .category-small .category-item {
+
+    }
+
+.category-big {
+    display: grid;
+    grid-template-columns: 1fr;
+}
