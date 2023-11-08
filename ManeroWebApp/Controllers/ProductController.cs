@@ -92,7 +92,6 @@ namespace ManeroWebApp.Controllers
                 rating /= reviewCount;
             }
 
-
             var ratingViewModel = new RatingViewModel
             {
                 Rating = rating,
@@ -162,9 +161,18 @@ namespace ManeroWebApp.Controllers
                     FirstName = combined.UserProfile.FirstName,
                     LastName = combined.UserProfile.LastName,
                     ProfileImage = combined.UserProfile.ProfileImage,
-                })
-                .ToList();
+                }).ToList();
+
             return PartialView("/Views/Shared/Product/_ProductReviews.cshtml", reviewsViewModel);
+        }
+        public async Task<IActionResult> ProductReviewsCountPartial(string productName)
+        {
+            var products = await _productService.GetFilteredProductsWithReviewsAsync(null, null, null, null, null, productName);
+            var reviewsViewModel = new ReviewViewModel
+            {
+                ReviewCount = products.Where(p => p.Reviews != null).SelectMany(p => p.Reviews!).Count()
+            };
+            return PartialView("/Views/Shared/Product/_ProductReviewsCount.cshtml", reviewsViewModel);
         }
     }
 }

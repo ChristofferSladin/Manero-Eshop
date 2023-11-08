@@ -192,11 +192,20 @@
     margin-bottom: 20px;
     margin: 0 15px;
 }
-
+.review-text-title-wrapper{
+    display: flex;
+    gap: 5px;
+}
 .review-text-title {
     display: flex;
     justify-content: center;
     font-size: 1.7rem;
+    font-weight: 700;
+}
+.review-count-title {
+    display: flex;
+    align-items: center;
+    font-size: 1.4rem;
     font-weight: 700;
 }
 
