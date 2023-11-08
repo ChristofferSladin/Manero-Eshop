@@ -6,6 +6,8 @@ namespace ServiceLibrary.Services
     {
         Task<List<Product>> GetProductsWithReviewsAsync();
         Task<Product> GetProductByIdAsync(int id);
+        Task<List<Product>> GetOnSaleProductsWithReviewsAsync();
+        Task<List<Product>> GetFeaturedProductsWithReviewsAsync();
         Task<Product> GetProductAsync(string productNumber);
         Task<List<Product>> GetFilteredProductsAsync(int? page, int? take, string? category, string? orderBy,
             string? orderDirection, string? filterByName);
