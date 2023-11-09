@@ -7,17 +7,16 @@
     @foreach (var p in Model)
     {
         <div class="product-card">
-            <div class="product-image">
-                <img src="@p.ImageUrl" alt="Product Image">
-                <div class="product-icons">
+            <img class="product-image" src="@p.ImageUrl" alt="Product Image">
+            <a class="product-link" asp-area="" asp-controller="Product" asp-action="Index" asp-route-productNumber="@p.ProductNumber"></a>
+            <div class="product-icons">
 
-                    <a  class="btn-cart"  >
-                        <i class="fa-regular fa-heart" style="color:black;"></i>
-                    </a>
-                    <a class="btn-cart">
-                        <i class="fa-regular fa-bag-shopping" style="color:black;"></i>
-                    </a>
-                </div>
+                <a class="btn-cart">
+                    <i class="fa-regular fa-heart" style="color:black;"></i>
+                </a>
+                <a class="btn-cart">
+                    <i class="fa-regular fa-bag-shopping" style="color:black;"></i>
+                </a>
             </div>
             <div class="product-details">
                 <div class="product-review">
@@ -41,7 +40,7 @@
                 </div>
 
                 <div class="product-name">@p.ProductName</div>
-                <div class="product-price">$@p.SalePricePercentage</div>
+                <div class="product-price">$@p.PriceIncTax</div>
             </div>
         </div>
     }
