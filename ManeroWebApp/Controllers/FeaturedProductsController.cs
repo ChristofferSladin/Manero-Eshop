@@ -17,11 +17,11 @@ namespace ManeroWebApp.Controllers
         {
             return View();
         }
-        public async Task<IActionResult> ProductCardsPartial(string filterByProperty = "productName", string orderDirection = "asc")
+        public async Task<IActionResult> ProductCardsPartial(string filterByProperty = "productName", string orderDirection = "desc")
         {
             //var products = await _productService.GetProductsWithReviewsAsync();
-            var product = await _productService.GetFilteredProductsAsync(null, null, null, filterByProperty, orderDirection, null);
-            var productViewModels = product.Select(product => new ProductViewModel
+            var products = await _productService.GetFilteredProductsAsync(null, null, null, filterByProperty, orderDirection, null);
+            var productViewModels = products.Select(product => new ProductViewModel
             {
                 ProductId = product.ProductId,
                 ProductNumber = product.ProductNumber,
