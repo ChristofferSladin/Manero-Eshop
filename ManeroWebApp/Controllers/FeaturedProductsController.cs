@@ -17,9 +17,20 @@ namespace ManeroWebApp.Controllers
         {
             return View();
         }
-        public async Task<IActionResult> ProductCardsPartial()
+
+
+        public async Task<IActionResult> ProductCardsPartial(string sort)
         {
-            var products = await _productService.GetProductsWithReviewsAsync();
+
+            var orderBy = "";
+            var orderDirection = "";
+            if (!string.IsNullOrEmpty(sort))
+            {
+                orderBy = sort.Split(",")[0];
+                orderDirection = sort.Split(",")[1];
+            }
+            //var products = await _productService.GetProductsWithReviewsAsync();
+            var products = await _productService.GetFilteredProductsAsync(null, null, null, orderBy, orderDirection, null);
             var productViewModels = products.Select(product => new ProductViewModel
             {
                 ProductId = product.ProductId,
@@ -38,13 +49,21 @@ namespace ManeroWebApp.Controllers
                 IsFeatured = product.IsFeatured,
                 Rating = product.Rating,
                 ImageUrl = product.ImageUrl
-            }).ToList();
+
+            }).DistinctBy(p=>p.ProductName).Where(p => p.IsFeatured)
+            .ToList();
 
             return PartialView("/Views/Shared/Product/_ProductCards.cshtml", productViewModels);
         }
         public IActionResult BarMenuPartial()
         {
             return PartialView("/Views/Shared/_BarMenu.cshtml");
+        }
+
+        public async Task<IActionResult> FilterProductPartial(string filterByProperty, string orderDirection)
+        {
+            var filterProduct = await _productService.GetFilteredProductsAsync(null, null,null, filterByProperty, orderDirection,null );
+            return PartialView();
         }
     }
 }

@@ -1,16 +1,22 @@
-﻿body {
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.headLine {
+﻿.headLine {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-left: 10px;
     margin-right: 10px;
+}
+.dropdownStyle {
+    text-align: right;
+    margin-top:5px;
+    margin-right: 5px;
+}
+
+::deep select {
+    outline: none;
+    border: none;
+    -webkit-padding-start: 8px;
+    -webkit-box-shadow: none;
+    color: #626262;
 }
 
 .product-grid {
@@ -19,8 +25,8 @@
     gap: 20px;
     justify-content: center;
     align-items: center;
+    margin:0 15px;
     margin-top: 20px;
-
 }
 
 @media (min-width: 768px) {
