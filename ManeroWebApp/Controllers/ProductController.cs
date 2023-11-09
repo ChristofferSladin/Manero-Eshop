@@ -20,6 +20,15 @@ namespace ManeroWebApp.Controllers
         {
             return View((object)productNumber);
         }
+        public IActionResult Reviews(string productName, string productNumber)
+        {
+            var productViewModel = new ProductViewModel
+            {
+                ProductName = productName,
+                ProductNumber = productNumber
+            };
+            return View(productViewModel);
+        }
         public async Task<IActionResult> ProductCardsPartial()
         {
             var products = await _productService.GetProductsWithReviewsAsync();
@@ -137,8 +146,13 @@ namespace ManeroWebApp.Controllers
 
             return PartialView("/Views/Shared/Product/_ProductColors.cshtml", colorViewModel);
         }
-        public async Task<IActionResult> ProductReviewsPartial(string productName)
+        public async Task<IActionResult> ProductReviewsPartial(string productName, int take)
         {
+            dynamic obj = new
+            {
+                ProuctName = productName,
+                Take = take,
+            };
             var products = await _productService.GetFilteredProductsWithReviewsAsync(null, null, null, null, null, productName);
             var reviewsViewModel = products
                 .Where(p => p.Reviews != null)
@@ -148,7 +162,6 @@ namespace ManeroWebApp.Controllers
                     UserProfile = _userService.GetUserProfileAsync(review.Id).Result
                 })
                 .OrderByDescending(r => r.Review.Created)
-                .Take(5)
                 .Select(combined => new ReviewViewModel
                 {
                     ReviewId = combined.Review.ReviewId,
@@ -162,6 +175,11 @@ namespace ManeroWebApp.Controllers
                     LastName = combined.UserProfile.LastName,
                     ProfileImage = combined.UserProfile.ProfileImage,
                 }).ToList();
+
+            if (take > 0)
+            {
+                reviewsViewModel = reviewsViewModel.Take(take).ToList();
+            }
 
             return PartialView("/Views/Shared/Product/_ProductReviews.cshtml", reviewsViewModel);
         }
