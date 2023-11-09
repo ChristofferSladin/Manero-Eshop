@@ -1,1 +1,48 @@
-﻿
+﻿@{
+    ViewData["Title"] = "Welcome";
+    ViewData["HideHeader"] = true;
+    ViewData["HideFooter"] = true;
+}
+<div class="login-container">
+    <div class="sign-in-header">
+        <a class="go-back-button"></a>
+        <h3>Sign In</h3>
+    </div>
+
+    <div class="title-message">
+        <h1>Welcome Back!</h1>
+        <p>Sign in to continue</p>
+    </div>
+
+    <form class="login-form">
+        <div class="input-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email">
+        </div>
+
+        <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password">
+        </div>
+
+        <div class="options-group">
+            <label for="remember-me">
+                <input type="checkbox" id="remember-me" name="remember-me">
+                Remember me
+            </label>
+            <a href="#" class="forgot-password">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="sign-in-button">Sign In</button>
+
+        <div class="footer">
+            <p>Don't have an account? <a href="#" class="sign-up-link">Sign up.</a></p>
+        </div>
+    </form>
+
+    <div class="social-media-login">
+        <button class="facebook-button">f</button>
+        <button class="twitter-button">t</button>
+        <button class="google-button">G+</button>
+    </div>
+</div>

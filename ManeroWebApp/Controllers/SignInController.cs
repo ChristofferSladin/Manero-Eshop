@@ -6,7 +6,7 @@ namespace ManeroWebApp.Controllers
     {
         public IActionResult SignIn()
         {
-            return View();
+            return View("~/Views/SignInPage/SignIn.cshtml");
         }
     }
 }

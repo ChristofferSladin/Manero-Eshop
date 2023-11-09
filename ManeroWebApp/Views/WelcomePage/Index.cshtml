@@ -3,9 +3,6 @@
     ViewData["HideHeader"] = true;
     ViewData["HideFooter"] = true;
 }
-
-
-
 <div class="carousel-container">
     <div class="carousel">
         <input type="radio" id="slide1" name="carousel-radio" checked>
@@ -16,17 +13,17 @@
             <div class="slide">
                 <h2>Welcome to Manero!</h2>
                 <p>Discover the latest in fashion and style.</p>
-                <button class="get-started">Get Started</button>
+                <a asp-controller="SignIn" asp-action="SignIn" class="get-started">Get Started</a>
             </div>
             <div class="slide">
                 <h2>Easy Track Order!</h2>
                 <p>Your shopping journey, simplified.</p>
-                <button class="get-started">Get Started</button>
+                <a asp-controller="SignIn" asp-action="SignIn" class="get-started">Get Started</a>
             </div>
             <div class="slide">
                 <h2>Door to Door Delivery!</h2>
                 <p>Bringing your clothes right to your doorstep.</p>
-                <a asp-controller="SignInPage" asp-action="SignIn" class="get-started btn btn-primary">Get Started</a>
+                <a asp-controller="SignIn" asp-action="SignIn" class="get-started">Get Started</a>
             </div>
         </div>
 
