@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Html;
 @using ServiceLibrary.Models;
 @using System.Text;
-@model Product
+@model ProductViewModel
 @{
     var userIsPrivateCustomer = false;
     var salePrice = 0.0M;
@@ -26,8 +26,8 @@
 @if (Model != null!)
 {
     <div class="product-card">
-        <div class="pos">
-            <img class="product-image" src="@Model.ImageUrl" alt="prod-img" />
+        <img class="product-image" src="@Model.ImageUrl" alt="prod-img" />
+        <a class="product-link" asp-area="" asp-controller="Product" asp-action="Index" asp-route-productNumber="@Model.ProductNumber"></a>
             <div class="buttons-container">
                 <button class="add-to-favorite-btn">
                     <i class="fa-light fa-heart" aria-hidden="true"></i>
@@ -36,7 +36,6 @@
                     <i class="fa-light fa-bag-shopping" aria-hidden="true"></i>
                 </button>
             </div>
-        </div>
         <div class="product-info">
             <div class="product-rating">@Html.Raw(GetStarRating(@Model.Rating))</div>
             <div class="product-text-item">@Model.ProductName</div>
@@ -49,7 +48,7 @@
                         $@Model.PriceIncTax
                     </div>
                     <div class="sale-price">
-                        $@salePrice
+                        $@salePrice.ToString("0.##")
                     </div>
                 </div>
             }
@@ -64,4 +63,5 @@
 
         </div>
     </div>
+
 }

@@ -1,15 +1,14 @@
 ﻿@model List<ReviewViewModel>
 @{
-    var userImage = "";
 }
 @foreach (var r in Model)
 {
     <div class="review-wrapper">
         <div class="review-box">
             <div class="user-image-container">
-                @if (!string.IsNullOrEmpty(userImage))
+                @if (!string.IsNullOrEmpty(@r.ProfileImage))
                 {
-                    <img class="user-image" src="@userImage" alt="user profile image" />
+                    <img class="user-image" src="@r.ProfileImage" alt="user profile image" />
                 }
                 else
                 {
@@ -19,7 +18,7 @@
             <div class="user-review-container">
                 <div class="review-header">
                     <div class="user-info">
-                        <div class="user-name">Test Name</div>
+                        <div class="user-name">@r.FirstName @r.LastName</div>
                         <div class="review-post-date">@r.Created.Date.ToString(" dd MMMM yyyy")</div>
                     </div>
                     <div class="review-rating-stars">
