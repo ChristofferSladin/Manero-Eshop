@@ -63,7 +63,7 @@
                     <div class="review-text-title">Reviews</div>
                     <div id="productReviewsCount" class="review-count-title"></div>
                 </div>
-                <button class="review-view-all">view all<i class="fa-solid fa-angle-right angle-right"></i></button>
+                <a class="review-view-all" asp-controller="Product" asp-action="Reviews" asp-route-productName="@Model.ProductName" asp-route-productNumber="@Model.ProductNumber">view all<i class="fa-solid fa-angle-right angle-right"></i></a>
             </div>
             <div id="productReviews"></div>
         </div>
@@ -162,6 +162,7 @@
             url: '@Url.Action("ProductReviewsPartial", "Product")',
             data: {
                 productName: productName,
+                take: 5,
             },
             method: 'GET',
             success: function (result) {

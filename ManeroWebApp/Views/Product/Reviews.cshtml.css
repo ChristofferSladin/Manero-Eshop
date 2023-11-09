@@ -1,0 +1,13 @@
+﻿.review-title-bar {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+}
+
+::deep .back-btn {
+    color: #111;
+    text-decoration: none;
+}
+.review-container{
+    margin: 0 15px;
+}
