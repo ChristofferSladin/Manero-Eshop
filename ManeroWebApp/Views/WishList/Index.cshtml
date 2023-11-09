@@ -5,23 +5,17 @@
 <partial name="_ToastrNotification" />
 
 <div class="wishlist-container">
-
-    @* wishlist header *@
-    <section class="wishlist-header">
-        header
-    </section>
-
     @* wishlist products *@
     <section class="wishlist-products">
-        @foreach (var favoriteCard in Model)
+        @if(Model is null || Model.Count() == 0)
         {
-            <partial name="../partials/_favoriteproductcard" model="favoriteCard"></partial>
+            <div class="empty-wishList">Your Wish List is empty.</div>
         }
-    </section>
-
-    @* wishlist footer *@
-    <section class="wishlist-footer">
-        footer
+        @if(Model is not null)
+            @foreach (var favoriteCard in Model)
+            {
+                <partial name="../Shared/FavoriteProduct/_favoriteproductcard" model="favoriteCard"></partial>
+            }
     </section>
 </div>
 

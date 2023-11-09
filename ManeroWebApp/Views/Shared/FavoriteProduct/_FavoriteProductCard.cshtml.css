@@ -12,12 +12,10 @@
         width: 140px;
         position: relative;
     }
-        .favorite-product-card .product-img .img {
-            border: 10px solid red;
+        .favorite-product-card .product-img img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            overflow: hidden;
         }
 
         .favorite-product-card .product-img .sale-tag {
@@ -46,6 +44,11 @@
         .favorite-product-card .card-description .name {
             font-size: 18px;
             color: grey;
+            text-decoration: none;
+        }
+
+        .name{
+            text-decoration: none;
         }
 
         .favorite-product-card .card-description .price-tag {
