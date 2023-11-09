@@ -7,6 +7,7 @@ namespace UserAPI.DTO;
 public class FavoriteProductDto
 {
     public int ProductId { get; set; }
+    public string? ProductNumber { get; set; }
     public string? ImgUrl { get; set; }
     public string? Name { get; set; }
     public decimal PriceWithTax { get; set; }
@@ -22,6 +23,7 @@ public class FavoriteProductDto
         return new FavoriteProductDto
         {
             ProductId = favProduct.ProductId,
+            ProductNumber = favProduct.Product.ProductNumber,
             ImgUrl = favProduct.Product.ImageUrl,
             Name = favProduct.Product.ProductName,
             SalePricePercentage = favProduct.Product.SalePricePercentage,

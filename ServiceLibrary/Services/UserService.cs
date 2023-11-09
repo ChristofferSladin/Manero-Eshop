@@ -92,7 +92,6 @@ public class UserService : IUserService
 
         return null!;
     }
-
     public async Task<UserProfile> GetUserProfileAsync(string id)
     {
         var userProfile = new UserProfile();
@@ -113,5 +112,20 @@ public class UserService : IUserService
         }
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
         return userProfile;
+    }
+    public async Task<bool> RemoveProductFromWishListAsync(int productId, string userId)
+    {
+        try
+        {
+            var request = new HttpRequestMessage(HttpMethod.Post,
+                $"https://localhost:7047/wishList/removeProduct?productId={productId}&userId={userId}");
+            var response = await _httpClient.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+                return true;
+        }
+        catch (Exception e) { Debug.WriteLine(e.Message); }
+
+        return false;
     }
 }

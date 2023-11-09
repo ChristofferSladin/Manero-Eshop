@@ -3,6 +3,7 @@
 public class FavoriteProduct
 {
     public int ProductId { get; set; }
+    public string ProductNumber { get; set; } = null!;
     public string UserId { get; set; }
     public int ShoppingCartId { get; set; }
     public string? ImgUrl { get; set; }
