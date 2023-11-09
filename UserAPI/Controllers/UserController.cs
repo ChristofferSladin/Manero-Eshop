@@ -1,19 +1,16 @@
-﻿using DataAccessLibrary.Entities.ProductEntities;
-using DataAccessLibrary.Entities.UserEntities;
+﻿using DataAccessLibrary.Entities.UserEntities;
 using DataAccessLibrary.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Linq.Expressions;
 using UserAPI.DTO;
 
 namespace UserAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     [EnableCors("AllowAll")]
     public class UserController : ControllerBase
@@ -23,19 +20,16 @@ namespace UserAPI.Controllers
         private readonly ShoppingCartRepository _shoppingCartRepository;
         private readonly ShoppingCartProductRepository _shoppingCartProductRepository;
         private readonly ProductRepository _productRepository;
+        private readonly UserRepository _userRepository;
 
-        public UserController(
-            FavoriteRepository favoriteRepository,
-            ShoppingCartRepository shoppingCartRepository,
-            ShoppingCartProductRepository shoppingCartProductRepository,
-            ProductRepository productRepository,
-            FavoriteProductRepository favoriteProductRepository)
+        public UserController(FavoriteRepository favoriteRepository, ShoppingCartRepository shoppingCartRepository, ShoppingCartProductRepository shoppingCartProductRepository, ProductRepository productRepository, FavoriteProductRepository favoriteProductRepository, UserRepository userRepository)
         {
             _favoriteRepository = favoriteRepository;
             _shoppingCartRepository = shoppingCartRepository;
             _shoppingCartProductRepository = shoppingCartProductRepository;
             _productRepository = productRepository;
             _favoriteProductRepository = favoriteProductRepository;
+            _userRepository = userRepository;
         }
 
         /// <summary>
@@ -52,7 +46,8 @@ namespace UserAPI.Controllers
         /// </response>
         [HttpGet]
         [Route("/favoriteProducts")]
-        public async Task<ActionResult<IEnumerable<FavoriteProductDto>>> GetFavoriteProductsByUserAsync(string userId)
+        [Authorize (Roles = "Customer")]
+        public async Task<ActionResult<IEnumerable<FavoriteProductDto>>> GetFavoriteProductsByUser(string userId)
         {
             try
             {
@@ -65,15 +60,16 @@ namespace UserAPI.Controllers
                 if (query is not null)
                     favProductsList = query.FavoriteProducts!.Select(favProduct => (FavoriteProductDto)favProduct).ToList();
 
-                foreach(var product in favProductsList)
+                foreach (var product in favProductsList)
                     product.ShoppingCartId = _shoppingCartRepository.GetAsync(x => x.Id == userId).Result.ShoppingCartId;
 
                 return Ok(favProductsList);
             }
             catch (Exception e) { Debug.WriteLine(e.Message); }
-         
+
             return Problem();
         }
+
         /// <summary>
         /// Create entry in the  Shopping Cart Products table in the database
         /// </summary>
@@ -110,6 +106,7 @@ namespace UserAPI.Controllers
 
             return Problem();
         }
+
         /// <summary>
         /// Create entry in the  FavoriteProduct  table in the database
         /// </summary>
@@ -131,17 +128,54 @@ namespace UserAPI.Controllers
                 var favorite = await _favoriteRepository.GetAsync(x => x.Id == userId);
                 var product = await _productRepository.GetProductAsync(x => x.ProductId == productId);
 
-                var entry = new FavoriteProduct
+                if (favorite != null && product != null)
                 {
-                    Product = product,
-                    Favorite = favorite,
-                };
-                
-                return Ok((FavoriteDto)await _favoriteProductRepository.AddAsync(entry));
+                    var entry = new FavoriteProduct
+                    {
+                        Product = product,
+                        Favorite = favorite,
+                    };
+
+                    return Ok((FavoriteDto)await _favoriteProductRepository.AddAsync(entry));
+                }
             }
             catch (Exception e) { Debug.WriteLine(e.Message); }
 
             return Problem();
+        }
+
+        /// <summary>
+        /// Retrieve user profile by id
+        /// </summary>
+        /// <returns>
+        /// UserProfile
+        /// </returns>
+        /// <remarks>
+        /// Example end point: GET /user/profile?id={id}
+        /// This returns users firstName, lastName and profilePicture
+        /// </remarks>
+        /// <response code="200">
+        /// Successfully returned a user profile
+        /// </response>
+        [HttpGet]
+        [Route("/user/profile")]
+        public async Task<ActionResult<UserProfile>> GetProductAsync(string id)
+        {
+            Expression<Func<UserProfile, bool>> expression = user => user.Id == id;
+            var user = await _userRepository.GetUserByIdAsync(expression);
+
+            if (user == null!)
+            {
+                return BadRequest("user not found");
+            }
+
+            var userProfile = new UserProfile
+            {
+                ProfileImage = user.ProfileImage,
+                FirstName = user.FirstName,
+                LastName = user.LastName
+            };
+            return Ok(userProfile);
         }
     }
 }

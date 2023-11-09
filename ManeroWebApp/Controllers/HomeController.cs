@@ -1,7 +1,5 @@
-﻿using DataAccessLibrary.Entities.ProductEntities;
-using ManeroWebApp.Models;
+﻿using ManeroWebApp.Models;
 using Microsoft.AspNetCore.Mvc;
-using ServiceLibrary.Models;
 using ServiceLibrary.Services;
 using System.Diagnostics;
 

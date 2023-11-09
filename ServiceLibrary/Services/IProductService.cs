@@ -13,6 +13,6 @@ namespace ServiceLibrary.Services
 
         Task<List<Product>> GetFilteredProductsWithReviewsAsync(int? page, int? take, string? category, string? orderBy,
             string? orderDirection, string? filterByName);
-        Task<DataAccessLibrary.Entities.ProductEntities.Product> GetProductByIdAsync(int id);
+        Task<Product> GetProductByIdAsync(int id);
     }
 }

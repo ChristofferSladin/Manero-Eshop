@@ -59,7 +59,10 @@
         </div>
         <div class="review-container">
             <div class="review-header">
-                <div class="review-text-title">Reviews</div>
+                <div class="review-text-title-wrapper">
+                    <div class="review-text-title">Reviews</div>
+                    <div id="productReviewsCount" class="review-count-title"></div>
+                </div>
                 <button class="review-view-all">view all<i class="fa-solid fa-angle-right angle-right"></i></button>
             </div>
             <div id="productReviews"></div>
@@ -232,6 +235,25 @@
             method: 'GET',
             success: function (result) {
                 $('#productRating').html(result);
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+    }
+</script>
+<script>
+    var productName = '@Html.Raw(Model?.ProductName.Replace("'", "\'").Replace("\"", "\\\""))';
+    $(document).ready(function () {
+        loadProductReviewCountPartial();
+    });
+    function loadProductReviewCountPartial() {
+        $.ajax({
+            url: '@Url.Action("ProductReviewsCountPartial", "Product")',
+            data: { productName: productName },
+            method: 'GET',
+            success: function (result) {
+                $('#productReviewsCount').html(result);
             },
             error: function (error) {
                 console.error(error);

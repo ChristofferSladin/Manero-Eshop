@@ -193,7 +193,7 @@ public class ProductService : IProductService
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
         return products;
     }
-    public async Task<DataAccessLibrary.Entities.ProductEntities.Product> GetProductByIdAsync(int productId)
+    public async Task<Product> GetProductByIdAsync(int productId)
     {
         try
         {
@@ -202,7 +202,7 @@ public class ProductService : IProductService
             if (response.IsSuccessStatusCode)
             {
                 var content = response.Content.ReadAsStringAsync().Result.ToString();
-                var product = JsonConvert.DeserializeObject<DataAccessLibrary.Entities.ProductEntities.Product>(content);
+                var product = JsonConvert.DeserializeObject<Product>(content);
 
                 if (product is not null)
                     return product;

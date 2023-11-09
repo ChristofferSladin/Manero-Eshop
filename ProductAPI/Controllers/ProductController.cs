@@ -135,6 +135,7 @@ namespace ProductAPI.Controllers
         /// </response>
         [HttpGet]
         [Route("/products")]
+        [Authorize]
         public async Task<ActionResult<List<Product>>> GetProductsAsync()
         {
             var products = await _productRepository.GetProductsAsync();
