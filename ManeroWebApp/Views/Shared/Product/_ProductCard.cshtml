@@ -1,0 +1,263 @@
+﻿@model ProductViewModel
+@{
+    var userLoggedInAndLiked = false;
+    var userIsPrivateCustomer = false;
+    var currencySymbol = "$";
+}
+
+@if (Model != null!)
+{
+    <div class="product-container">
+        <div class="image-carusel-container">
+            <div class="image-container">
+                <img class="product-image" src="@Model.ImageUrl" alt="product image of @Model.ProductName @Model.Color" />
+            </div>
+            <div class="image-selector">
+                <div class="elipse"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
+        <div class="product-info-container">
+            <div class="title-bar">
+                <div class="product-title">
+                    @Model.ProductName
+                </div>
+                <div class="heart-icon-mobile"></div>
+            </div>
+            <div id="productRating" class="rating-box"></div>
+            <div class="price-add-container">
+                @if (userIsPrivateCustomer)
+                {
+                    <div class="price-box">@currencySymbol@Model.PriceIncTax</div>
+                }
+                else
+                {
+                    <div class="price-box">@currencySymbol@Model.PriceExcTax</div>
+                }
+                <div class="add-product-box-mobile"></div>
+            </div>
+            <div class="size-select-container">
+                <div class="size-title">Size</div>
+                <div id="productSize" class="sizes-box"></div>
+            </div>
+            <div class="color-select-container">
+                <div class="color-title">Color</div>
+                <div id="productColor" class="colors-box"></div>
+            </div>
+            <div class="product-desc-container">
+                <div class="desc-title">Description</div>
+                <div class="desc">@Model.Description</div>
+            </div>
+        </div>
+        <div id="items-wrapper" class="items-wrapper">
+        </div>
+        <div class="button-container">
+            <div class="button-wrapper">
+                <button class="product-button">+ Add to cart</button>
+            </div>
+        </div>
+        <div class="review-container">
+            <div class="review-header">
+                <div class="review-text-title-wrapper">
+                    <div class="review-text-title">Reviews</div>
+                    <div id="productReviewsCount" class="review-count-title"></div>
+                </div>
+                <button class="review-view-all">view all<i class="fa-solid fa-angle-right angle-right"></i></button>
+            </div>
+            <div id="productReviews"></div>
+        </div>
+        <div class="review-button-container">
+            <button class="product-button">Review this item</button>
+        </div>
+    </div>
+}
+
+
+<div class="heart-icon-wrapper">
+    @if (userLoggedInAndLiked)
+    {
+        <button class="heart-button">
+            <i class="fa-solid fa-heart"></i>
+        </button>
+    }
+    else
+    {
+        <button class="heart-button">
+            <i class="fa-regular fa-heart"></i>
+        </button>
+    }
+</div>
+
+
+<div class="add-product-box">
+    <button id="decrement" onclick="productCounter.decrementCounter()">
+        <i class="fa-solid fa-minus"></i>
+    </button>
+    <div id="displayCounter" class="item-amount"></div>
+    <button id="increment" onclick="productCounter.incrementCounter()">
+        <i class="fa-solid fa-plus"></i>
+    </button>
+</div>
+
+
+<script>
+    function moveInteractionItems() {
+        const heartIcon = document.querySelector('.heart-icon-wrapper');
+        const addProductBox = document.querySelector('.add-product-box');
+
+        const newLocation = document.getElementById('items-wrapper');
+
+        const oldHeartIconLocation = document.querySelector('.heart-icon-mobile');
+        const oldAddProductBoxLocation = document.querySelector('.add-product-box-mobile');
+
+        if (window.innerWidth > 900) {
+            newLocation.appendChild(heartIcon);
+            newLocation.appendChild(addProductBox);
+        } else {
+            if (!oldHeartIconLocation.contains(heartIcon)) {
+                oldHeartIconLocation.appendChild(heartIcon);
+            }
+            if (!oldAddProductBoxLocation.contains(addProductBox)) {
+                oldAddProductBoxLocation.appendChild(addProductBox);
+            }
+        }
+    }
+    moveInteractionItems();
+    window.addEventListener('load', moveInteractionItems);
+    window.addEventListener('resize', moveInteractionItems);
+    window.addEventListener('orientationchange', moveInteractionItems);
+</script>
+<script>
+    var productCounter = {
+        count: 0,
+        incrementCounter: function () {
+            return this.count = this.count + 1;
+        },
+        decrementCounter: function () {
+            if (this.count > 0) {
+                return this.count = this.count - 1;
+            } else {
+                return this.count = 0;
+            }
+        },
+    };
+
+    var displayCout = document.getElementById('displayCounter');
+    displayCout.innerHTML = 0;
+    document.getElementById('increment').onclick = function () {
+        displayCout.innerHTML = productCounter.incrementCounter();
+    }
+    document.getElementById('decrement').onclick = function () {
+        displayCout.innerHTML = productCounter.decrementCounter();
+    }
+</script>
+<script>
+    var productName = '@Html.Raw(Model?.ProductName.Replace("'", "\'").Replace("\"", "\\\""))';
+    $(document).ready(function () {
+        loadProductReviewsPartial();
+    });
+    function loadProductReviewsPartial() {
+        $.ajax({
+            url: '@Url.Action("ProductReviewsPartial", "Product")',
+            data: {
+                productName: productName,
+            },
+            method: 'GET',
+            success: function (result) {
+                $('#productReviews').html(result);
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+    }
+</script>
+<script>
+    var productName = '@Html.Raw(Model?.ProductName.Replace("'", "\'").Replace("\"", "\\\""))';
+    var productNumber = '@Html.Raw(Model?.ProductNumber?.Replace("'", "\'").Replace("\"", "\\\""))';
+    $(document).ready(function () {
+        loadProductSizesPartial();
+    });
+    function loadProductSizesPartial() {
+        $.ajax({
+            url: '@Url.Action("ProductSizesPartial", "Product")',
+            data: {
+                productName: productName,
+                productNumber: productNumber
+            },
+            method: 'GET',
+            success: function (result) {
+                $('#productSize').html(result);
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+    }
+</script>
+<script>
+    var productName = '@Html.Raw(Model?.ProductName.Replace("'", "\'").Replace("\"", "\\\""))';
+    var productNumber = '@Html.Raw(Model?.ProductNumber?.Replace("'", "\'").Replace("\"", "\\\""))';
+    var size = '@Html.Raw(Model?.Size?.Replace("'", "\'").Replace("\"", "\\\""))';
+    $(document).ready(function () {
+        loadProductColorsPartial();
+    });
+    function loadProductColorsPartial() {
+        $.ajax({
+            url: '@Url.Action("ProductColorsPartial", "Product")',
+            data: {
+                productName: productName,
+                productNumber: productNumber,
+                size: size
+            },
+            method: 'GET',
+            success: function (result) {
+                $('#productColor').html(result);
+                var newURL = '/product?productNumber=' + productNumber;
+                history.pushState({}, '', newURL);
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+    }
+</script>
+<script>
+    var productName = '@Html.Raw(Model?.ProductName.Replace("'", "\'").Replace("\"", "\\\""))';
+    $(document).ready(function () {
+        loadProductRatingPartial();
+    });
+    function loadProductRatingPartial() {
+        $.ajax({
+            url: '@Url.Action("ProductRatingPartial", "Product")',
+            data: { productName: productName },
+            method: 'GET',
+            success: function (result) {
+                $('#productRating').html(result);
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+    }
+</script>
+<script>
+    var productName = '@Html.Raw(Model?.ProductName.Replace("'", "\'").Replace("\"", "\\\""))';
+    $(document).ready(function () {
+        loadProductReviewCountPartial();
+    });
+    function loadProductReviewCountPartial() {
+        $.ajax({
+            url: '@Url.Action("ProductReviewsCountPartial", "Product")',
+            data: { productName: productName },
+            method: 'GET',
+            success: function (result) {
+                $('#productReviewsCount').html(result);
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+    }
+</script>

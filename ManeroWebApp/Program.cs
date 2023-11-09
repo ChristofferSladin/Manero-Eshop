@@ -2,6 +2,7 @@ using DataAccessLibrary.Contexts;
 using DataAccessLibrary.Initializers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using ServiceLibrary.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,11 +13,15 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddRoles<IdentityRole>().AddEntityFrameworkStores<ManeroDbContext>();
 builder.Services.AddControllersWithViews();
+builder.Services.AddTransient<IProductService, ProductService>();
+
 
 builder.Services.AddScoped<DataInitializer>();
+builder.Services.AddScoped<HttpClient>();
+builder.Services.AddTransient<IProductService, ProductService>();
+builder.Services.AddTransient<IUserService, UserService>();
 
 var app = builder.Build();
-
 
 using (var scope = app.Services.CreateScope())
 {

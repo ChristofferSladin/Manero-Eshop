@@ -1,0 +1,37 @@
+﻿@*
+*@
+@{
+}
+
+<div class="Navigation-Bar">
+    <div class="container">
+        <div class="Menu-links">
+
+            <a class="Menu-link" asp-area="" asp-controller="Home" asp-action="Index">
+                <i class="fa-regular fa-house
+                    @(ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")"></i>
+            </a>
+
+            <a class="Menu-link" asp-area="" asp-controller="" asp-action="">
+                <i class="fa-regular fa-magnifying-glass
+                @(ViewContext.RouteData.Values["action"]?.ToString() == "" ? "active" : "")"></i>
+            </a>
+
+            <a class="Menu-link" asp-area="" asp-controller="" asp-action="">
+                <i class="fa-regular fa-cart-shopping
+                   @(ViewContext.RouteData.Values["action"]?.ToString() == "" ? "active" : "")"></i>
+            </a>
+
+            <a class="Menu-link" asp-area="" asp-controller="WishList" asp-action="Index">
+                <i class="fa-regular fa-heart
+                   @(ViewContext.RouteData.Values["action"]?.ToString() == "" ? "active" : "")"></i>
+            </a>
+
+            <a class="Menu-link" asp-area="" asp-controller="" asp-action="">
+                <i class="fa-regular fa-user
+                   @(ViewContext.RouteData.Values["action"]?.ToString() == "" ? "active" : "")"></i>
+            </a>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+﻿@model List<ProductViewModel>
+@{
+}
+
+@if (Model != null!)
+{
+    @foreach (var p in Model)
+    {
+        <div class="product-card">
+            <div class="product-image">
+                <img src="@p.ImageUrl" alt="Product Image">
+                <div class="product-icons">
+
+                    <a  class="btn-cart"  >
+                        <i class="fa-regular fa-heart" style="color:black;"></i>
+                    </a>
+                    <a class="btn-cart">
+                        <i class="fa-regular fa-bag-shopping" style="color:black;"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="product-details">
+                <div class="product-review">
+
+                    @for (decimal i = 0.0M; i < 5.0M; i++)
+                    {
+                        if (i + 0.5M < p.Rating)
+                        {
+                            <i id="starsColor" class="fa-solid fa-star"></i>
+                        }
+                        else if (i < p.Rating)
+                        {
+                            <i id="starsColor" class="fa-regular fa-star-half"></i>
+                        }
+                        else
+                        {
+                            <i id="starsColor" class="fa-regular fa-star"></i>
+                        }
+                    }
+                    <span class="review-score">(@p.Rating)</span>
+                </div>
+
+                <div class="product-name">@p.ProductName</div>
+                <div class="product-price">$@p.SalePricePercentage</div>
+            </div>
+        </div>
+    }
+}

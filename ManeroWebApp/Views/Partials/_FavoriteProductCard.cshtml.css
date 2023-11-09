@@ -1,0 +1,105 @@
+﻿.favorite-product-card {
+    display: grid;
+    grid-template-columns: 0fr 1fr 0fr;
+    border-bottom: 2px solid #9bbffa;
+    padding: 10px 20px 18px 20px;
+}
+
+    /*product image*/
+    .favorite-product-card .product-img {
+        background-color: #9bbffa;
+        height: 140px;
+        width: 140px;
+        position: relative;
+    }
+        .favorite-product-card .product-img .img {
+            border: 10px solid red;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            overflow: hidden;
+        }
+
+        .favorite-product-card .product-img .sale-tag {
+            position: absolute;
+            border: 1px solid green;
+            background-color: green;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 500;
+            color: white;
+            z-index: 1;
+            top: 0;
+            width: 50px;
+            height: 25px;
+        }
+
+
+    /*product description, price, discount, rating etc*/
+    .favorite-product-card .card-description {
+        padding-left: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+        .favorite-product-card .card-description .name {
+            font-size: 18px;
+            color: grey;
+        }
+
+        .favorite-product-card .card-description .price-tag {
+            font-size: 18px;
+        }
+        
+        .favorite-product-card .card-description .price {
+            font-size: 18px;
+            color: grey;
+        }
+
+        .favorite-product-card .card-description .sales-price {
+            font-size: 22px;
+            color: red;
+        }
+
+        .favorite-product-card .card-description .rating {
+            display: flex;
+            font-size: 16px;
+            font-weight: 600;
+            color: grey;
+        }
+
+            .favorite-product-card .card-description .rating .star {
+                font-size: 14px;
+                color: gold;
+                padding: 0;
+                margin: 0;
+                align-self: center;
+            }
+
+    /*heart and add to shopping cart buttons*/
+    .favorite-product-card .card-icons {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 20px;
+    }
+
+        .favorite-product-card .card-icons .heart {
+            color: red;
+            font-size: 30px;
+        }
+
+        .favorite-product-card .card-icons .bag-circle {
+            
+        }
+            .card-icons .bag-circle .shopping-bag {
+                text-decoration: none;
+                color: #ffffff;
+                font-size: 20px;
+                border: 2px solid #000000;
+                padding: 10px;
+                border-radius: 50%;
+                background-color: #000000;
+            }

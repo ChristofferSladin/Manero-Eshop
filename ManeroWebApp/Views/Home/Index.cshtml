@@ -1,5 +1,99 @@
-﻿@{
+﻿@model ManeroWebApp.Models.HomeIndexViewModel
+@{
     ViewData["Title"] = "Home Page";
 }
 
+<div class="homePage">
 
+    <section class="showcase">
+        <div class="showcase-img">
+            <div class="showcase-grid">
+                <div class="grid-item"></div>
+                <div class="grid-item"></div>
+                <div class="grid-item">
+                    <p class="showcase-text">Welcome to Manero!</p>
+                    <p class="showcase-text">50% OFF</p>
+                </div>
+                <div class="grid-item"></div>
+            </div>
+        </div>
+
+    </section>
+
+    <section class="bestseller-carousel-section">
+        @await Html.PartialAsync("/Views/Shared/_CarouselPartial.cshtml", Model.OnSaleProducts as CarouselViewModel)
+    </section>
+
+    <section class="discount-offer">
+        <div class="discount-offer-img">
+            <div class="discount-offer-title">
+                <p class="discount-offer-text">Take 50% off now!</p>
+            </div>
+            <button class="discount-offer-btn">shop now</button>
+        </div>
+    </section>
+
+    <section class="featured-carousel-section">
+        @await Html.PartialAsync("/Views/Shared/_CarouselPartial.cshtml", Model.FeaturedProducts as CarouselViewModel)
+    </section>
+
+
+</div>
+
+@section Scripts {
+    <script>
+        // Function to initialize the carousel
+        function initCarousel(carouselId) {
+            const carousel = document.querySelector(`[data-carousel-id="${carouselId}"]`);
+            const slidesContainer = carousel.querySelector('.carousel-slides');
+            const slides = slidesContainer.children;
+            const prevButton = carousel.querySelector('.carousel-control-prev');
+            const nextButton = carousel.querySelector('.carousel-control-next');
+            let currentSlide = 0;
+
+            // Set initial button states
+            prevButton.disabled = currentSlide === 0;
+            nextButton.disabled = currentSlide === slides.length - 1;
+
+            // Function to update the carousel position with smooth transition
+            function updateCarousel() {
+                const slideWidth = slides[0].getBoundingClientRect().width;
+                const slideMargin = parseInt(getComputedStyle(slides[0]).marginLeft) + parseInt(getComputedStyle(slides[0]).marginRight);
+                const fullSlideWidth = slideWidth + slideMargin;
+                const carouselWidth = carousel.getBoundingClientRect().width;
+                const offset = (carouselWidth - slideWidth) / 2;
+                const transformValue = -(currentSlide * fullSlideWidth) + offset;
+
+                slidesContainer.style.transition = 'transform 0.5s ease';
+                slidesContainer.style.transform = `translateX(${transformValue}px)`;
+
+                // Update button states after transition
+                prevButton.disabled = currentSlide === 0;
+                nextButton.disabled = currentSlide >= slides.length - 1;
+            }
+
+            // Event listeners for the buttons
+            prevButton.addEventListener('click', () => {
+                if (currentSlide > 0) {
+                    currentSlide -= 1;
+                    updateCarousel();
+                }
+            });
+
+            nextButton.addEventListener('click', () => {
+                if (currentSlide < slides.length - 1) {
+                    currentSlide += 1;
+                    updateCarousel();
+                }
+            });
+
+            // Call updateCarousel initially to set the correct position
+            updateCarousel();
+        }
+
+        // Initialize all carousels on the page
+        document.querySelectorAll('.carousel').forEach(carousel => {
+            initCarousel(carousel.getAttribute('data-carousel-id'));
+        });
+    </script>
+}

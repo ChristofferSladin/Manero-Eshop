@@ -1,0 +1,134 @@
+﻿.product-card {
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 30px;
+    border: 1px solid #e5e5e5;
+    padding: 15px;
+}
+
+.product-image {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+    .product-image img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
+
+.product-details {
+    text-align: center;
+}
+
+.product-name {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.product-price {
+    font-size: 12px;
+    font-weight: bold;
+    color: #ff7373;
+    margin-bottom: 10px;
+}
+
+.product-review {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    .product-review .star {
+        color: #ffcc00;
+        margin-right: 5px;
+    }
+
+/* Icon plasering */
+.product-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.product-image {
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.product-icons {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+    .product-icons i {
+        margin-bottom: 10px;
+    }
+
+    .product-icons i {
+        border: 2px solid #f9f9f9;
+        border-radius: 50%;
+        padding: 10px;
+        background-color: #f9f9f9;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+/* Desktop styles */
+@media (min-width: 768px) {
+   
+
+    .product-card {
+        width: 23%;
+        max-width: none;
+    }
+
+    h1 {
+        margin-bottom: 30px;
+        margin-top: 30px;
+    }
+
+    .product-image img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
+
+    .product-card {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .product-image {
+        position: relative;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .product-icons {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+        .product-icons i {
+            margin-bottom: 10px;
+        }
+
+        .product-icons i {
+            border: 2px solid #f9f9f9;
+            border-radius: 50%;
+            padding: 10px;
+            background-color: #f9f9f9;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+}
