@@ -22,6 +22,10 @@
         justify-content: flex-end;
     }
 
+    .carousel-title-container ::deep .view-all-btn:hover {
+        color: #999999;
+    }
+
 .carousel {
     position: relative;
     margin-top: 10px;
