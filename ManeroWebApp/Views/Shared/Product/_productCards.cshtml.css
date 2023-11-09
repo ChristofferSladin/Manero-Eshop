@@ -30,14 +30,14 @@
 
 .product-name {
     font-size: 14px;
-    font-weight: bold;
     margin-bottom: 5px;
+    color:#626262;
 }
 
 .product-price {
     font-size: 12px;
-    font-weight: bold;
-    color: #ff7373;
+    font-weight: 500;
+    color: #111111;
 }
 
 .product-review {
@@ -64,7 +64,6 @@
 .product-image {
     position: relative;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
     overflow: hidden;
 }
 
@@ -80,14 +79,11 @@
 
     .product-icons i {
         margin-bottom: 8px;
-        font-size: 12px;
+        font-size: 16px;
         width: 25px;
         height: 25px;
-        border: 2px solid #f9f9f9;
         border-radius: 50%;
         padding: 5px;
-        background-color: #f9f9f9;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
 
@@ -119,8 +115,8 @@
     .product-image {
         position: relative;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
         overflow: hidden;
+
     }
 
     .product-icons {
@@ -144,13 +140,10 @@
 
     .product-icons i {
         margin-bottom: 10px;
-        font-size: 14px;
+        font-size: 20px;
         width: 35px;
         height: 35px;
-        border: 2px solid #f9f9f9;
         border-radius: 50%;
         padding: 10px;
-        background-color: #f9f9f9;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 }

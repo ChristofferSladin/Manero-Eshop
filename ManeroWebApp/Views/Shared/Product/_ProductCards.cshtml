@@ -4,6 +4,7 @@
 
 @if (Model != null!)
 {
+
     @foreach (var p in Model)
     {
         <div class="product-card">
@@ -36,12 +37,13 @@
                             <i id="starsColor" class="fa-regular fa-star"></i>
                         }
                     }
-                    <span class="review-score">(@p.Rating)</span>
+                    <span class="review-score" >(@p.Rating) </span>
                 </div>
-
                 <div class="product-name">@p.ProductName</div>
                 <div class="product-price">$@p.PriceIncTax</div>
             </div>
         </div>
+
     }
 }
+
