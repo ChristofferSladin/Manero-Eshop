@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ServiceLibrary.Models;
 using ServiceLibrary.Services;
+using System.Net;
 
 namespace ManeroWebApp.Tests.Services;
 
@@ -91,4 +92,57 @@ public class ProductServiceTests
         }
     }
 
+    [Fact]
+    public async Task GetOnSaleProductsWithReviewsAsync_Returns_Only_OnSale_Products()
+    {
+        // Arrange
+        var productService = new ProductService();
+
+        // Act
+        var result = await productService.GetOnSaleProductsWithReviewsAsync();
+
+        // Assert
+        Assert.NotEmpty(result);
+        Assert.All(result, product => Assert.True(product.IsOnSale));
+    }
+
+    [Fact]
+    public async Task GetFeaturedProductsWithReviewsAsync_Returns_Only_Featured_Products()
+    {
+        // Arrange
+        var productService = new ProductService();
+
+        // Act
+        var result = await productService.GetFeaturedProductsWithReviewsAsync();
+
+        // Assert
+        Assert.NotEmpty(result);
+        Assert.All(result, product => Assert.True(product.IsFeatured));
+    }
+
+    [Fact]
+    public async Task GetOnSaleProductsWithReviewsAsync_Returns_Products_If_API_Online()
+    {
+        // Arrange
+        var productService = new ProductService();
+
+        // Act
+        var result = await productService.GetOnSaleProductsWithReviewsAsync();
+
+        // Assert
+        Assert.NotEmpty(result);
+    }
+
+    [Fact]
+    public async Task GetFeaturedProductsWithReviewsAsync_Returns_Products_If_API_Online()
+    {
+        // Arrange
+        var productService = new ProductService();
+
+        // Act
+        var result = await productService.GetFeaturedProductsWithReviewsAsync();
+
+        // Assert
+        Assert.NotEmpty(result);
+    }
 }
