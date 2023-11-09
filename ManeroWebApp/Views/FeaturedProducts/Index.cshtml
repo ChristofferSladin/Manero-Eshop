@@ -1,83 +1,50 @@
-﻿    @* @{
-        ViewData["Title"] = "Featured Products Page";
-        ViewData["HideFooter"] = true;
-    }
+﻿@{
+    ViewData["Title"] = "Featured Products Page";
+    ViewData["HideFooter"] = true;
+}
 
-    @model List<ProductViewModel>
-    <div class="headLine">
-        <div>
-            <a href="/Home/Index" class="btn-back">
-                <i class="fa-solid fa-chevron-left" style="color:black;"></i>
-            </a>
-        </div>
-        <h1>Featured Products</h1>
-        <div>
-            <a asp-page="" class="btn-cart">
-                <i class="fa-solid fa-bag-shopping" style="color:black;"></i>
-            </a>
-        </div>
+<div class="headLine">
+    <div>
+        <a href="/Home/Index" class="btn-back">
+            <i class="fa-solid fa-chevron-left" style="color:black;"></i>
+        </a>
     </div>
-
-
-
-
-
-    <div id="barMenuPartial">
+    <h1>Featured Products</h1>
+    <div>
+        <a asp-page="" class="btn-cart">
+            <i class="fa-light fa-bag-shopping" style="color:black;"></i>
+        </a>
     </div>
+</div>
 
-    <partial name="_ToastrNotification" />
-
-    <div class="product-grid" id="featuredProduct">
-    </div>
-    @section Scripts {
-        <script>
-            $('#featuredProduct').load("/FeaturedProducts/ProductCardsPartial");
-        </script>
-        <script>
-            $('#barMenuPartial').load("/FeaturedProducts/BarMenuPartial");
-        </script>
-    }                            *@
-    @{
-        ViewData["Title"] = "Featured Products Page";
-        ViewData["HideFooter"] = true;
-    }
-
-    <div class="headLine">
-        <div>
-            <a href="/Home/Index" class="btn-back">
-                <i class="fa-solid fa-chevron-left" style="color:black;"></i>
-            </a>
-        </div>
-        <h1>Featured Products</h1>
-        <div>
-            <a asp-page="" class="btn-cart">
-                <i class="fa-solid fa-bag-shopping" style="color:black;"></i>
-            </a>
-        </div>
-    </div>
-
-    <div class="dropdownStyle">
-        <select id="sortDropdown" onchange="sortProducts(this.value)">
-            <option value="productName">Product Name</option>
-            <option value="priceIncTax">Price (High to Low)</option>
-            <option value="rating">Rating</option>
-        </select>
-    </div>
+<div class="dropdownStyle">
+    <select id="sortDropdown" onchange="sortProducts(this.value)">
+        <option value="">Sorting by</option>
+        <option value="productName,asc">Name (asc)</option>
+        <option value="productName,desc">Name (desc)</option>
+        <option value="priceIncTax,asc">Price (asc)</option>
+        <option value="priceIncTax,desc">Price (desc)</option>
+        <option value="rating,asc">Rating (asc)</option>
+        <option value="rating,desc">Rating (desc)</option>
+        <option value="Category,asc">Category (asc)</option>
+        <option value="Category,desc">Category (desc)</option>
+    </select>
+</div>
 
 
 
-    <div class="product-grid" id="featuredProduct">
-    </div>
+<div class="product-grid" id="featuredProduct">
+</div>
 
-    @section Scripts {
-        <script>
-            function sortProducts(sortBy) {
-                $('#featuredProduct').load("/FeaturedProducts/ProductCardsPartial?filterByProperty=" + sortBy);
-            }
+@section Scripts {
+    <script>
+        function sortProducts(sortBy) {
+            $('#featuredProduct').load("/FeaturedProducts/ProductCardsPartial?sort=" + sortBy);
+        }
 
-            $('#featuredProduct').load("/FeaturedProducts/ProductCardsPartial");
-        </script>
-       @*  <script>
+        $('#featuredProduct').load("/FeaturedProducts/ProductCardsPartial");
+    </script>
+    @*  <script>
             $('#barMenuPartial').load("/FeaturedProducts/BarMenuPartial");
         </script> *@
     }

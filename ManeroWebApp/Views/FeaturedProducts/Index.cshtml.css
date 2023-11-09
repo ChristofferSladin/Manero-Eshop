@@ -17,6 +17,15 @@
     margin-top:5px;
     margin-right: 5px;
 }
+
+::deep select {
+    outline: none;
+    border: none;
+    -webkit-padding-start: 8px;
+    -webkit-box-shadow: none;
+    color: #626262;
+}
+
 .product-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
