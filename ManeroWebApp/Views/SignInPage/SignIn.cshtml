@@ -14,7 +14,7 @@
         <p>Sign in to continue</p>
     </div>
 
-    <form class="login-form">
+    <form class="login-form" method="post">
         <div class="input-group">
             <label for="email">Email</label>
             <input type="email" id="email" name="email">
@@ -22,7 +22,10 @@
 
         <div class="input-group">
             <label for="password">Password</label>
-            <input type="password" id="password" name="password">
+            <input type="password" id="password" name="password" class="password-field">
+            <button type="button" class="toggle-password" onclick="togglePasswordVisibility()">
+                <i class="fa fa-eye"></i>
+            </button>
         </div>
 
         <div class="options-group">
@@ -33,16 +36,20 @@
             <a href="#" class="forgot-password">Forgot password?</a>
         </div>
 
-        <button type="submit" class="sign-in-button">Sign In</button>
+        <div class="button-container">
+            <button type="submit" class="sign-in-button">Sign In</button>
 
+        </div>
         <div class="footer">
             <p>Don't have an account? <a href="#" class="sign-up-link">Sign up.</a></p>
         </div>
     </form>
 
     <div class="social-media-login">
-        <button class="facebook-button">f</button>
-        <button class="twitter-button">t</button>
-        <button class="google-button">G+</button>
+        <button class="facebook-button"><i class="fa-brands fa-facebook-f"></i></button>
+        <button class="twitter-button"><i class="fa-brands fa-x-twitter"></i></button>
+        <button class="google-button"><i class="fa-brands fa-google"></i></button>
     </div>
 </div>
+
+<script src="~/js/signInPage.js"></script>

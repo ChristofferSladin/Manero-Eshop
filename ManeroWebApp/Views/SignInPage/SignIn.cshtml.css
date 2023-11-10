@@ -1,1 +1,165 @@
-﻿
+﻿/* This is a general example. You'll need to adjust sizes, colors, and fonts to match your design. */
+
+.login-container {
+    max-width: 400px; /* Adjust the size as needed */
+    margin: auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Shadow for a slight depth */
+    height: 100vh;
+}
+
+.sign-in-header {
+    text-align: center;
+}
+
+    .sign-in-header h3 {
+        margin-bottom: 2em; /* Space under the 'Sign In' title */
+        margin-top: 1em;
+    }
+
+.title-message h1 {
+    color: #333;
+    text-align: center;
+}
+
+.title-message p{
+    text-align:center;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 1em;
+}
+
+    .input-group label {
+        display: block;
+        margin-bottom: .5em;
+    }
+
+    .input-group input {
+        width: calc(100% - 0px);
+        padding: 10px;
+        border: 1px solid #ddd;
+    }
+
+.toggle-password {
+    position: absolute;
+    right: 5px;
+    top: 38px;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+.options-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1em;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+}
+
+    .remember-me input {
+        margin-right: 0.5em;
+    }
+
+
+.button-container{
+    display:flex;
+    justify-content: center;
+    align-items:center;
+}
+
+.button-container .sign-in-button {
+    background-color: #000; /* Match to your brand color */
+    color: #fff;
+    border: none;
+    padding: 15px 40%; /* Use percentage for padding */
+    border-radius: 10px;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    font-weight: bold;
+    max-width: 400px; /* Set a maximum width for the button */
+}
+
+.sign-in-button:hover {
+    background-color: #333;
+}
+
+.sign-up-link{
+    text-decoration:none;
+    color: #333;
+}
+    .sign-up-link:hover {
+        transition: background-color 0.3s, box-shadow 0.3s;
+        color: #3b5998;
+    }
+
+.forgot-password {
+    text-decoration: none;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    color: #212529;
+}
+
+    .forgot-password:hover {
+        color: #3b5998;
+    }
+
+.footer {
+    text-align: center;
+    margin-top: 2em;
+}
+
+.social-media-login {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Space between buttons */
+    margin-top: 2em;
+}
+
+    .social-media-login button {
+        border: none;
+        width: 45px;
+        padding: 10px;
+        border-radius: 50%; /* Circular buttons */
+        font-size: 16px;
+        color: #fff;
+    }
+
+.facebook-button {
+    transition: background-color 0.3s, box-shadow 0.3s;
+    background-color: #333; 
+}
+    .facebook-button:hover {
+        background-color:#3b5998;
+    }
+
+.twitter-button {
+    transition: background-color 0.3s, box-shadow 0.3s;
+    background-color: #333;
+}
+    .twitter-button:hover {
+        background-color: #fff;
+    }
+        .twitter-button:hover i {
+            transition: background-color 0.3s, box-shadow 0.3s;
+            color: #333;
+        }
+.google-button {
+    background-color: #333;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+    .google-button:hover {
+        background-color: #db4437;
+    }
