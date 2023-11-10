@@ -9,4 +9,5 @@ public interface IUserService
     Task<ShoppingCartProduct> CreateShoppingCartProductEntry(int productId, int shoppingCartId);
     Task<FavoriteProduct> AddProductToWishList(int productId, string userId);
     Task<UserProfile> GetUserProfileAsync(string id);
+    Task<bool> RemoveProductFromWishListAsync(int productId, string userId);
 }

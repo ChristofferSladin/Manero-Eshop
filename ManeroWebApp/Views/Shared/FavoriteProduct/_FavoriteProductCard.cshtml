@@ -1,12 +1,20 @@
 ﻿@model FavoriteProductViewModel
 
+@{
+    var currency = "$";
+}
+
 <div class="favorite-product-card">
     @* product image *@
     <div class="product-img">
-        @* <img src="@Model.ImgUrl" alt="" /> *@
-
-        @* for testing *@
-        <img class="img" src="~/Resources/Images/shirt.jpg" alt="" /> 
+        <a class=""
+            asp-controller="Product" 
+            asp-action="Index"
+            asp-route-productnumber="@Model.ProductNumber"
+        
+        >
+            <img src="@Model.ImgUrl" alt="" />
+        </a>
 
         @if (Model.IsOnSale is true)
         {
@@ -16,10 +24,16 @@
 
     @* product description, price, discount, rating *@
     <div class="card-description">
-        <h1 class="name">@Model.Name</h1>
+        <a asp-controller ="Product"
+            asp-action="Index"
+            asp-route-productnumber="@Model.ProductNumber" style="text-decoration: none">
+            <h1 class="name">
+                @Model.Name
+            </h1>
+        </a>
         <div class="price-tag">
-            <span class="price">$@Model.PriceWithoutTax</span>
-            <span class="sales-price">$@Model.SalePrice</span>
+            <span class="price">@currency@Model.PriceWithoutTax</span>
+            <span class="sales-price">@currency@String.Format("{0:0.00}", @Model.SalePrice)</span>
         </div>
         <div class="rating">
             <div>
@@ -45,9 +59,15 @@
 
     @* heart and add to shopping cart buttons *@
     <div class="card-icons">
-        <i class="heart fa-solid fa-heart"></i>
-        <a class="bag-circle" 
-            asp-controller="WishList"
+        <a title="Remove from wish list" asp-controller="WishList"
+           asp-action="RemoveProductFromWishList"
+           asp-route-productId="@Model.ProductId">
+
+            <i class="heart fa-solid fa-heart"></i>
+        </a>
+
+        <a title="Add to shopping cart" class="bag-circle"
+           asp-controller="WishList"
             asp-action="AddProductToShoppingCart"
             asp-route-productId="@Model.ProductId" 
             asp-route-shoppingCartId="@Model.ShoppingCartId">

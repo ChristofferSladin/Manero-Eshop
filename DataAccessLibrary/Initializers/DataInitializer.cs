@@ -366,6 +366,7 @@ public class DataInitializer
         var review = new Review
         {
             Rating = rating,
+            ProductName = product.ProductName,
             Created = DateTime.Now,
             Title = "Lorem Ipsum",
             Content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ullamcorper a lacus vestibulum sed.",
