@@ -8,6 +8,9 @@ public class Review
     [Key]
     public int ReviewId { get; set; }
 
+    [Required] 
+    public string ProductName { get; set; } = null!;
+
     [Required]
     public int Rating { get; set; }
 

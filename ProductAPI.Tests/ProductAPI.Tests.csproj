@@ -23,6 +23,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ServiceLibrary\ServiceLibrary.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ProductAPI\ProductAPI.csproj" />
   </ItemGroup>
 

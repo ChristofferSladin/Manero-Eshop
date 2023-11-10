@@ -132,6 +132,10 @@ namespace DataAccessLibrary.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
+                    b.Property<string>("ProductName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Rating")
                         .HasColumnType("int");
 

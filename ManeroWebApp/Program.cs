@@ -14,9 +14,12 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddRoles<IdentityRole>().AddEntityFrameworkStores<ManeroDbContext>();
 builder.Services.AddControllersWithViews();
 
+
+
 builder.Services.AddScoped<DataInitializer>();
 builder.Services.AddScoped<HttpClient>();
 builder.Services.AddTransient<IProductService, ProductService>();
+builder.Services.AddTransient<IReviewService, ReviewService>();
 builder.Services.AddTransient<IUserService, UserService>();
 
 var app = builder.Build();

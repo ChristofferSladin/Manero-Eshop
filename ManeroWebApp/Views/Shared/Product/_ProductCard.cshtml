@@ -59,8 +59,11 @@
         </div>
         <div class="review-container">
             <div class="review-header">
-                <div class="review-text-title">Reviews</div>
-                <button class="review-view-all">view all<i class="fa-solid fa-angle-right angle-right"></i></button>
+                <div class="review-text-title-wrapper">
+                    <div class="review-text-title">Reviews</div>
+                    <div id="productReviewsCount" class="review-count-title"></div>
+                </div>
+                <a class="review-view-all" asp-controller="Product" asp-action="Reviews" asp-route-productName="@Model.ProductName" asp-route-productNumber="@Model.ProductNumber">view all<i class="fa-solid fa-angle-right angle-right"></i></a>
             </div>
             <div id="productReviews"></div>
         </div>
@@ -127,21 +130,21 @@
 </script>
 <script>
     var productCounter = {
-        count: 0,
+        count: 1,
         incrementCounter: function () {
             return this.count = this.count + 1;
         },
         decrementCounter: function () {
-            if (this.count > 0) {
+            if (this.count > 1) {
                 return this.count = this.count - 1;
             } else {
-                return this.count = 0;
+                return this.count = 1;
             }
         },
     };
 
     var displayCout = document.getElementById('displayCounter');
-    displayCout.innerHTML = 0;
+    displayCout.innerHTML = 1;
     document.getElementById('increment').onclick = function () {
         displayCout.innerHTML = productCounter.incrementCounter();
     }
@@ -159,6 +162,7 @@
             url: '@Url.Action("ProductReviewsPartial", "Product")',
             data: {
                 productName: productName,
+                take: 5,
             },
             method: 'GET',
             success: function (result) {
@@ -232,6 +236,25 @@
             method: 'GET',
             success: function (result) {
                 $('#productRating').html(result);
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+    }
+</script>
+<script>
+    var productName = '@Html.Raw(Model?.ProductName.Replace("'", "\'").Replace("\"", "\\\""))';
+    $(document).ready(function () {
+        loadProductReviewCountPartial();
+    });
+    function loadProductReviewCountPartial() {
+        $.ajax({
+            url: '@Url.Action("ProductReviewsCountPartial", "Product")',
+            data: { productName: productName },
+            method: 'GET',
+            success: function (result) {
+                $('#productReviewsCount').html(result);
             },
             error: function (error) {
                 console.error(error);

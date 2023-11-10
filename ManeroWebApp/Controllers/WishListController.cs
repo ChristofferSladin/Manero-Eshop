@@ -1,35 +1,26 @@
-﻿using DataAccessLibrary.Contexts;
-using DataAccessLibrary.Entities;
-using DataAccessLibrary.Entities.ProductEntities;
-using DataAccessLibrary.Entities.UserEntities;
-using ManeroWebApp.Models;
+﻿using ManeroWebApp.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using ServiceLibrary.Services;
 using System.Diagnostics;
-using System.Security.Principal;
+using System.Security.Claims;
 
 namespace ManeroWebApp.Controllers
 {
     public class WishListController : Controller
     {
-        private readonly ManeroDbContext _context;
-        private readonly IProductService _productService;
         private readonly IUserService _userService;
-        public WishListController(ManeroDbContext context, IProductService productService, IUserService userService)
+        public WishListController(IUserService userService)
         {
-            _context = context;
-            _productService = productService;
             _userService = userService;
         }
-        public async Task<IActionResult> Index(string forUserId = "1e776705-a04e-4f48-9563-d548cf5db096") //user id hard coded for testing
+        public async Task<IActionResult> Index()
         {
             try
             {
-                var favProductsByUser = await _userService.GetAllFavoriteProductsForUserAsync(forUserId);
-
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
+                var favProductsByUser = await _userService.GetAllFavoriteProductsForUserAsync(userId);
+                
                 if (favProductsByUser is not null)
                     return View(favProductsByUser.Select(favProduct => (FavoriteProductViewModel)favProduct));
             }
@@ -42,7 +33,7 @@ namespace ManeroWebApp.Controllers
             try
             {
                 var result = await _userService.CreateShoppingCartProductEntry(productId, shoppingCartId);
-                if(result is not null)
+                if (result is not null)
                 {
                     TempData["success"] = $"Product added to the shopping cart.";
                     return RedirectToAction("Index", "WishList");
@@ -52,6 +43,41 @@ namespace ManeroWebApp.Controllers
 
             TempData["error"] = $"Something went wrong.";
             return RedirectToAction("Index", "WishList");
+        }
+        public async Task<IActionResult> RemoveProductFromWishList(int productId)
+        {
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
+                var isSuccess = await _userService.RemoveProductFromWishListAsync(productId, userId);
+                if (isSuccess)
+                {
+                    TempData["success"] = $"Product deleted from the Wish List.";
+                    return RedirectToAction("Index", "WishList");
+                }
+            }
+            catch (Exception e) { Debug.WriteLine(e.Message); }
+
+            TempData["error"] = $"Something went wrong.";
+            return RedirectToAction("Index", "WishList");
+        }
+        public async Task<IActionResult> AddProductToWishList(int productId)
+        {
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
+                var result = await _userService.AddProductToWishList(productId, userId);
+
+                if (result is not null)
+                    TempData["success"] = "Product Added to the Wish List";
+
+                return View();
+
+            }
+            catch (Exception e) { Debug.WriteLine(e.Message); }
+
+            TempData["error"] = "Something went wrong";
+            return View();
         }
     }
 }
