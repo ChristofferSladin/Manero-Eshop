@@ -2,4 +2,19 @@
 *@
 @{
     ViewData["Title"] = "On Sale Products";
+    ViewData["HideFooter"] = true;
 }
+
+<div class="headLine">
+    <div>
+        <a href="/Home/Index" class="btn-back">
+            <i class="fa-solid fa-chevron-left" style="color:black;"></i>
+        </a>
+    </div>
+    <h1>@ViewData["Title"]</h1>
+    <div>
+        <a asp-page="" class="btn-cart">
+            <i class="fa-light fa-bag-shopping" style="color:black;"></i>
+        </a>
+    </div>
+</div>
