@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using DataAccessLibrary.Entities.ProductEntities;
+using DataAccessLibrary.Entities.UserEntities;
 
-namespace DataAccessLibrary.Entities.UserEntities;
+namespace DataAccessLibrary.Entities.OrderEntities;
 
 public enum OrderStatus
 {
@@ -33,7 +33,7 @@ public class Order
     public OrderStatus OrderStatus { get; set; }
 
     [Required]
-    public decimal TotalPriceExcTax { get; set; } 
+    public decimal TotalPriceExcTax { get; set; }
 
     [Required]
     public decimal TotalPriceIncTax { get; set; }
@@ -48,17 +48,14 @@ public class Order
 
     public DateTime PaymentDate { get; set; }
 
-
-
     [Required]
     public string Id { get; set; } = null!;
-    [Required]
-    [ForeignKey(nameof(Id))]
-    public ApplicationUser ApplicationUser { get; set; } = null!;
+
 
     [Required]
     [ForeignKey(nameof(PaymentId))]
     public int PaymentId { get; set; }
+
     [Required]
     public Payment Payment { get; set; } = null!;
 
