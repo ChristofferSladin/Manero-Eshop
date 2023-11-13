@@ -223,13 +223,48 @@ namespace UserAPI.Controllers
         /// </response>
         [HttpGet]
         [Route("/user/cart/products")]
-        public async Task<ActionResult<ShoppingCartProduct>> GetShoppingCartProductsByUser(string user)
+        //[Authorize]
+        public async Task<ActionResult<ShoppingCartProduct>> GetShoppingCartProductsByUserAsync(string user)
         {
             try
             {
+              //var user =  User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
                 if (user != null)
                 {
                     var query = await _shoppingCartProductRepository.GetShoppingCartProductsAsync(user);
+                    return Ok(query);
+                }
+                return Unauthorized();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                return NotFound();
+            }
+        }
+        /// <summary>
+        /// Add product to user's cart
+        /// </summary>
+        /// <returns>
+        /// Product bool
+        /// </returns>
+        /// <remarks>
+        /// Example end point: GET /user/cart/add
+        /// </remarks>
+        /// <response code="200">
+        /// Successfully returned true
+        /// </response>
+        [HttpPost]
+        [Route("/user/cart/add")]
+        //[Authorize]
+        public async Task<ActionResult<ShoppingCartProduct>> AddProductToShoppingCartAsync(string user, int quantity, string productNumber)
+        {
+            try
+            {
+                //var user = User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
+                if (user != null)
+                {
+                    var query = await _shoppingCartProductRepository.AddProductAndQuantityToCart(user, quantity, productNumber);
                     return Ok(query);
                 }
                 return Unauthorized();

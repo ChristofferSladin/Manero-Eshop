@@ -12,4 +12,5 @@ public interface IUserService
     Task<UserProfile> GetUserProfileAsync(string id);
     Task<bool> RemoveProductFromWishListAsync(int productId, string userId);
     Task<List<ShoppingCartProduct>> GetUserShoppingCartProductsAsync(string user);
+    Task<bool> AddProductToShoppingCartAsync(string user, int itemQuantity, string productNumber);
 }

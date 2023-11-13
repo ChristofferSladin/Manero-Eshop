@@ -132,7 +132,25 @@ public class UserService : IUserService
 
         return false;
     }
+    public async Task<bool> AddProductToShoppingCartAsync(string user, int itemQuantity, string productNumber)
+    {
 
+        try
+        {
+            var request = new HttpRequestMessage(HttpMethod.Post,
+                $"https://localhost:7047/user/cart/add?user={user}&quantity={itemQuantity}&productNumber={productNumber}");
+            var response = await _httpClient.SendAsync(request);
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception: {ex.Message}");
+        }
+        return false;
+    }
     public async Task<List<ShoppingCartProduct>> GetUserShoppingCartProductsAsync(string user)
     {
         var shoppingCartProducts = new List<ShoppingCartProduct>();
@@ -161,7 +179,6 @@ public class UserService : IUserService
         {
             Debug.WriteLine($"Exception: {ex.Message}");
         }
-
         return shoppingCartProducts;
     }
 

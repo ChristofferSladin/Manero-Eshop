@@ -1,11 +1,9 @@
-﻿using System.Diagnostics;
-using System.Drawing;
-using System.Security.Claims;
-using ManeroWebApp.Models;
-using Microsoft.AspNetCore.Http;
+﻿using ManeroWebApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using ServiceLibrary.Services;
+using System.Diagnostics;
+using System.Security.Claims;
 
 namespace ManeroWebApp.Controllers
 {
@@ -84,36 +82,43 @@ namespace ManeroWebApp.Controllers
             return PartialView("/Views/Shared/ShoppingCart/_ShoppingCartPartial.cshtml", shoppingCart);
         }
 
-        public IActionResult AddItemToShoppingCart(int itemQuantity, string productNumber)
+        public async Task<IActionResult> AddItemToShoppingCart(int itemQuantity, string productNumber)
         {
             var shoppingCart = new ShoppingCartItems
             {
                 ProductNumber = productNumber,
                 ItemQuantity = itemQuantity
             };
-
-            var existingShoppingCartCookie = Request.Cookies["ShoppingCart"];
-            var cookieOptions = new CookieOptions { Expires = DateTime.Now.AddDays(30) };
-
-            if (!string.IsNullOrEmpty(existingShoppingCartCookie))
+            if (User.Identity.IsAuthenticated)
             {
-                var existingShoppingCart = JsonConvert.DeserializeObject<List<ShoppingCartItems>>(existingShoppingCartCookie);
-                var existingItem = existingShoppingCart.FirstOrDefault(item => item.ProductNumber == productNumber);
-
-                if (existingItem != null)
-                {
-                    existingItem.ItemQuantity += itemQuantity;
-                }
-                else
-                {
-                    existingShoppingCart.Add(shoppingCart);
-                }
-                Response.Cookies.Append("ShoppingCart", JsonConvert.SerializeObject(existingShoppingCart), cookieOptions);
+                var user = User.FindFirst(ClaimTypes.NameIdentifier).Subject;
+                await _userService.AddProductToShoppingCartAsync(user.Name, itemQuantity, productNumber);
             }
             else
             {
-                var newShoppingCart = new List<ShoppingCartItems> { shoppingCart };
-                Response.Cookies.Append("ShoppingCart", JsonConvert.SerializeObject(newShoppingCart), cookieOptions);
+                var existingShoppingCartCookie = Request.Cookies["ShoppingCart"];
+                var cookieOptions = new CookieOptions { Expires = DateTime.Now.AddDays(30) };
+
+                if (!string.IsNullOrEmpty(existingShoppingCartCookie))
+                {
+                    var existingShoppingCart = JsonConvert.DeserializeObject<List<ShoppingCartItems>>(existingShoppingCartCookie);
+                    var existingItem = existingShoppingCart.FirstOrDefault(item => item.ProductNumber == productNumber);
+
+                    if (existingItem != null)
+                    {
+                        existingItem.ItemQuantity += itemQuantity;
+                    }
+                    else
+                    {
+                        existingShoppingCart.Add(shoppingCart);
+                    }
+                    Response.Cookies.Append("ShoppingCart", JsonConvert.SerializeObject(existingShoppingCart), cookieOptions);
+                }
+                else
+                {
+                    var newShoppingCart = new List<ShoppingCartItems> { shoppingCart };
+                    Response.Cookies.Append("ShoppingCart", JsonConvert.SerializeObject(newShoppingCart), cookieOptions);
+                }
             }
 
             return RedirectToAction("Index", "Product", new { productNumber });
