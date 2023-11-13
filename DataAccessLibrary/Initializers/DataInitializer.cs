@@ -1,5 +1,6 @@
 ﻿
 using DataAccessLibrary.Contexts;
+using DataAccessLibrary.Entities.OrderEntities;
 using DataAccessLibrary.Entities.ProductEntities;
 using DataAccessLibrary.Entities.UserEntities;
 using Microsoft.AspNetCore.Identity;
@@ -29,9 +30,9 @@ public class DataInitializer
         SeedShoppingCarts();
         SeedOrders();
         SeedFavoriteProducts();
-        SeedReviews();
         SeedCards();
         SeedAddresses();
+        SeedReviews();
     }
     private void SeedUserProfiles()
     {
@@ -196,17 +197,27 @@ public class DataInitializer
             {
                 if (!orderExists.OrderProducts.Any())
                 {
+                    var product1 = _context.Products.FirstOrDefault(p => p.ProductName.ToLower() == "Denim Jacket".ToLower());
+                    var product2 = _context.Products.FirstOrDefault(p => p.ProductName.ToLower() == "Cargo Pants".ToLower());
                     var orderProduct1 = new OrderProduct
                     {
                         ItemQuantity = 2,
-                        Product = _context.Products.FirstOrDefault(p => p.ProductName.ToLower() == "Denim Jacket".ToLower())!,
+                        ProductNumber = product1.ProductNumber,
+                        ProductName = product1.ProductName,
+                        PriceIncTax = product1.PriceIncTax,
+                        PriceExcTax = product1.PriceExcTax,
+                        SalePricePercentage = product1.SalePricePercentage,
                         OrderId = orderExists.OrderId
                     };
 
                     var orderProduct2 = new OrderProduct
                     {
                         ItemQuantity = 10,
-                        Product = _context.Products.FirstOrDefault(p => p.ProductName.ToLower() == "Cargo Pants".ToLower())!,
+                        ProductNumber = product2.ProductNumber,
+                        ProductName = product2.ProductName,
+                        PriceIncTax = product2.PriceIncTax,
+                        PriceExcTax = product2.PriceExcTax,
+                        SalePricePercentage = product2.SalePricePercentage,
                         OrderId = orderExists.OrderId
                     };
                     _context.OrderProducts.AddRange(orderProduct1, orderProduct2);
@@ -370,6 +381,7 @@ public class DataInitializer
             Title = "Lorem Ipsum",
             Content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ullamcorper a lacus vestibulum sed.",
             ProductId = product.ProductId,
+            ProductName = product.ProductName,
             Id = user.Id,
         };
         var userAlreadyHasReview = _context.Reviews.FirstOrDefault(r => r.Id == user.Id);

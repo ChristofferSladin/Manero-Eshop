@@ -3,6 +3,7 @@
     display: flex;
     justify-content: center;
 }
+
 .review-container {
     padding-bottom: 100px;
 }
@@ -46,5 +47,23 @@
 @media (min-width: 1200px) {
     .review-container {
         max-width: 1180px;
+    }
+}
+
+@media (min-width: 1400px) {
+    .review-container {
+        max-width: 1380px;
+    }
+}
+
+@media (min-width: 1600px) {
+    .review-container {
+        max-width: 1580px;
+    }
+}
+
+@media (min-width: 1800px) {
+    .review-container {
+        max-width: 1780px;
     }
 }

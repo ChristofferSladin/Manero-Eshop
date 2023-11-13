@@ -1,4 +1,5 @@
 ﻿using DataAccessLibrary.Entities;
+using DataAccessLibrary.Entities.OrderEntities;
 using DataAccessLibrary.Entities.ProductEntities;
 using DataAccessLibrary.Entities.UserEntities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;

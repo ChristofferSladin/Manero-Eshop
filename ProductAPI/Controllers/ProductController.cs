@@ -1,10 +1,9 @@
 ﻿using DataAccessLibrary.Entities.ProductEntities;
 using DataAccessLibrary.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 
 namespace ProductAPI.Controllers
 {
@@ -13,7 +12,7 @@ namespace ProductAPI.Controllers
     [EnableCors("AllowAll")]
     public class ProductController : ControllerBase
     {
-        public readonly ProductRepository _productRepository;
+        private readonly ProductRepository _productRepository;
         public ProductController(ProductRepository productRepository)
         {
             _productRepository = productRepository;

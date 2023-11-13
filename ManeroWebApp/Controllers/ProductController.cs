@@ -8,12 +8,14 @@ namespace ManeroWebApp.Controllers
     public class ProductController : Controller
     {
         private readonly IProductService _productService;
+        private readonly IReviewService _reviewService;
         private readonly IUserService _userService;
 
-        public ProductController(IProductService productService, IUserService userService)
+        public ProductController(IProductService productService, IUserService userService, IReviewService reviewService)
         {
             _productService = productService;
             _userService = userService;
+            _reviewService = reviewService;
         }
 
         public IActionResult Index(string productNumber)
@@ -81,19 +83,13 @@ namespace ManeroWebApp.Controllers
         }
         public async Task<IActionResult> ProductRatingPartial(string productName)
         {
-            var products = await _productService.GetFilteredProductsWithReviewsAsync(null, null, null, null, null, productName);
+            var reviews = await _reviewService.GetFilteredReviewsAsync(null, null, null, null, productName);
             var rating = 0.0M;
             var reviewCount = 0;
-            foreach (var p in products)
+            foreach (var p in reviews)
             {
-                if (p.Reviews != null)
-                {
-                    foreach (var r in p.Reviews)
-                    {
-                        rating += r.Rating;
-                        reviewCount++;
-                    }
-                }
+                rating += p.Rating;
+                reviewCount++;
             }
 
             if (reviewCount != 0)
@@ -146,49 +142,38 @@ namespace ManeroWebApp.Controllers
 
             return PartialView("/Views/Shared/Product/_ProductColors.cshtml", colorViewModel);
         }
-        public async Task<IActionResult> ProductReviewsPartial(string productName, int take)
+        public async Task<IActionResult> ProductReviewsPartial(string productName, int? take)
         {
-            dynamic obj = new
-            {
-                ProuctName = productName,
-                Take = take,
-            };
-            var products = await _productService.GetFilteredProductsWithReviewsAsync(null, null, null, null, null, productName);
-            var reviewsViewModel = products
-                .Where(p => p.Reviews != null)
-                .SelectMany(p => p.Reviews!, (_, review) => new
-                {
-                    Review = review,
-                    UserProfile = _userService.GetUserProfileAsync(review.Id).Result
-                })
-                .OrderByDescending(r => r.Review.Created)
-                .Select(combined => new ReviewViewModel
-                {
-                    ReviewId = combined.Review.ReviewId,
-                    Rating = combined.Review.Rating,
-                    Created = combined.Review.Created,
-                    Content = combined.Review.Content,
-                    Title = combined.Review.Title,
-                    ProductId = combined.Review.ProductId,
-                    Id = combined.Review.Id,
-                    FirstName = combined.UserProfile.FirstName,
-                    LastName = combined.UserProfile.LastName,
-                    ProfileImage = combined.UserProfile.ProfileImage,
-                }).ToList();
 
-            if (take > 0)
+            var reviews = await _reviewService.GetFilteredReviewsAsync(null, take, "created", "desc", productName);
+
+            var reviewsViewModel = reviews.Select(r =>
             {
-                reviewsViewModel = reviewsViewModel.Take(take).ToList();
-            }
+                var userProfile = _userService.GetUserProfileAsync(r.Id).Result;
+                return new ReviewViewModel
+                {
+                    ReviewId = r.ReviewId,
+                    ProductName = r.ProductName,
+                    Rating = r.Rating,
+                    Created = r.Created,
+                    Content = r.Content,
+                    Title = r.Title,
+                    ProductId = r.ProductId,
+                    Id = r.Id,
+                    FirstName = userProfile.FirstName,
+                    LastName = userProfile.LastName,
+                    ProfileImage = userProfile.ProfileImage,
+                };
+            }).ToList();
 
             return PartialView("/Views/Shared/Product/_ProductReviews.cshtml", reviewsViewModel);
         }
         public async Task<IActionResult> ProductReviewsCountPartial(string productName)
         {
-            var products = await _productService.GetFilteredProductsWithReviewsAsync(null, null, null, null, null, productName);
+            var reviews = await _reviewService.GetFilteredReviewsAsync(null, null, null, null, productName);
             var reviewsViewModel = new ReviewViewModel
             {
-                ReviewCount = products.Where(p => p.Reviews != null).SelectMany(p => p.Reviews!).Count()
+                ReviewCount = reviews.Count
             };
             return PartialView("/Views/Shared/Product/_ProductReviewsCount.cshtml", reviewsViewModel);
         }
