@@ -15,6 +15,7 @@ namespace ServiceLibrary.Models
         public decimal TotalPriceExcTax { get; set; }
         public int ItemQuantity { get; set; }
         public int ProductId { get; set; }
+        public string ProductNumber { get; set; }
         public int ShoppingCartId { get; set; }
     }
 }

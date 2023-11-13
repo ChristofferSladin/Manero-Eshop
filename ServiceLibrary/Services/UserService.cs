@@ -1,6 +1,10 @@
 ﻿using Newtonsoft.Json;
 using System.Diagnostics;
 using ServiceLibrary.Models;
+using System.Security.Claims;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Net.Http;
 
 namespace ServiceLibrary.Services;
 
@@ -128,4 +132,38 @@ public class UserService : IUserService
 
         return false;
     }
+
+    public async Task<List<ShoppingCartProduct>> GetUserShoppingCartProductsAsync(string user)
+    {
+        var shoppingCartProducts = new List<ShoppingCartProduct>();
+
+        try
+        {
+            var apiUrl = $"https://localhost:7047/user/cart/products?user={user}";
+            using var client = new HttpClient();
+
+            var request = new HttpRequestMessage();
+            request.RequestUri = new Uri(apiUrl);
+            request.Method = HttpMethod.Get;
+            var response = await client.GetAsync(apiUrl);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var responseBody = await response.Content.ReadAsStringAsync();
+                shoppingCartProducts = JsonConvert.DeserializeObject<List<ShoppingCartProduct>>(responseBody);
+            }
+            else
+            {
+                Debug.WriteLine($"Error: {response.StatusCode} - {response.ReasonPhrase}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception: {ex.Message}");
+        }
+
+        return shoppingCartProducts;
+    }
+
+
 }

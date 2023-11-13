@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using System.Linq.Expressions;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
 using UserAPI.DTO;
 
 namespace UserAPI.Controllers
@@ -197,15 +199,46 @@ namespace UserAPI.Controllers
             {
                 var favoriteId = _favoriteRepository.GetAsync(x => x.Id == userId).Result.FavoriteId;
                 var entry = await _favoriteProductRepository.GetAsync(x => x.ProductId == productId, x => x.FavoriteId == favoriteId);
-                if(entry is null)
+                if (entry is null)
                     return NotFound("There is no such entry exists");
 
                 var result = await _favoriteProductRepository.DeleteAsync(entry);
-                if(result)
+                if (result)
                     return Ok($"Deleted successfully");
             }
             catch (Exception e) { Debug.WriteLine(e.Message); }
             return Problem();
+        }
+        /// <summary>
+        /// Retrieve All products in shopping cart for specific user
+        /// </summary>
+        /// <returns>
+        /// Product belonging to user's cart
+        /// </returns>
+        /// <remarks>
+        /// Example end point: GET /user/cart/products
+        /// </remarks>
+        /// <response code="200">
+        /// Successfully returned list of all products in user's cart
+        /// </response>
+        [HttpGet]
+        [Route("/user/cart/products")]
+        public async Task<ActionResult<ShoppingCartProduct>> GetShoppingCartProductsByUser(string user)
+        {
+            try
+            {
+                if (user != null)
+                {
+                    var query = await _shoppingCartProductRepository.GetShoppingCartProductsAsync(user);
+                    return Ok(query);
+                }
+                return Unauthorized();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                return NotFound();
+            }
         }
     }
 }
