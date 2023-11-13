@@ -23,7 +23,7 @@ namespace ManeroWebApp.Controllers
         {
             var orderBy = "";
             var orderDirection = "";
-            
+
             if (!string.IsNullOrEmpty(sort))
             {
                 orderBy = sort.Split(",")[0];
@@ -55,12 +55,6 @@ namespace ManeroWebApp.Controllers
 
             return PartialView("/Views/Shared/Product/_ProductCards.cshtml", productViewModels);
 
-        }
-
-        public async Task<IActionResult> FilterProductPartial(string filterByProperty, string orderDirection)
-        {
-            var filterProduct = await _productService.GetFilteredProductsAsync(null, null, null, filterByProperty, orderDirection, null);
-            return PartialView();
         }
     }
 }
