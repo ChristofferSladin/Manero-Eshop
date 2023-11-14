@@ -24,7 +24,7 @@ builder.Services.AddScoped<IReviewService, ReviewService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
 
-builder.Services.AddScoped<IShoppingCartControllerService, ShoppingCartControllerService>();
+builder.Services.AddScoped<IProductControllerService, ProductControllerService>();
 
 var app = builder.Build();
 
