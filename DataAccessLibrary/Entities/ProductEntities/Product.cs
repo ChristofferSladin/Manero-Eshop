@@ -56,13 +56,13 @@ public class Product
 
     [Column(TypeName = "nvarchar(300)")]
     public string? ImageUrl { get; set; }
-
+    
+    [Column(TypeName = "nvarchar(50)")]
+    public string? Gender { get; set; }
 
     public virtual ICollection<OrderProduct>? OrdersProducts { get; set; }
     public virtual ICollection<ShoppingCartProduct>? ShoppingCartProducts { get; set; }
     public virtual ICollection<FavoriteProduct>? FavoriteProducts { get; set; }
     public virtual ICollection<Review>? Reviews { get; set; }
     
-    [Column(TypeName = "nvarchar(50)")]
-    public string? Gender { get; set; }
 }

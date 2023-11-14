@@ -66,7 +66,7 @@ namespace DataAccessLibrary.Migrations
                         .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Gender")
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(300)");

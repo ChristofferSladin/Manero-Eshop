@@ -4,8 +4,8 @@
 
 .category-main {
     justify-content: center;
-    display: grid;
-    grid-template-rows: 1fr 1fr;
+    /*    display: grid;
+    grid-template-rows: 1fr 4fr;*/
 }
 
     .category-main .gender-categories {
@@ -49,34 +49,95 @@
             background: #dbe3f5;
         }
 
-@media (min-width: 1200px) {
-    .category-main .gender-categories a {
-        width: 60px;
-        height: 60px;
-        font-size: 1.2rem;
-    }
-}
+
 
 .category-main .product-types {
     display: grid;
     grid-template-rows: 1fr 1fr 1fr;
-
 }
+    .category-main .category-small {
+        height: 250px;
+    }
+    
+    .category-main .category-big {
+        height: 250px;
+    }
 
-.category-main .product-types .category{
-    border: 1px solid black;
-}
+    .category-main .product-types .category-item {
+        border: 1px solid white;
+        position: relative;
+        background-color: #dbe3f5;
+    }
+        .category-main .product-types .category-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .category-main .product-types .category-item span {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            margin: 20px;
+            font-size: 25px;
+            font-weight: 700;
+            color: #ffffff;
+        }
 
 .category-small {
     display: grid;
     grid-template-columns: 1fr 1fr;
 }
 
-    .category-small .category-item {
-
-    }
-
 .category-big {
     display: grid;
     grid-template-columns: 1fr;
+}
+
+@media (min-width: 576px) {
+    .category-main .category-small {
+        height: 350px;
+    }
+
+    .category-main .category-big {
+        height: 350px;
+    }
+}
+
+@media (min-width: 768px) {
+    .category-main .category-small {
+        height: 500px;
+    }
+
+    .category-main .category-big {
+        height: 500px;
+    }
+
+    .category-main .product-types .category-item span {
+        margin: 30px;
+        font-size: 34px;
+        font-weight: 700;
+    }
+}
+
+@media (min-width: 1200px) {
+    .category-main .gender-categories a {
+        width: 60px;
+        height: 60px;
+        font-size: 1.2rem;
+    }
+
+    .category-main .category-small {
+        height: 500px;
+    }
+
+    .category-main .category-big {
+        height: 500px;
+    }
+
+    .category-main .product-types .category-item span {
+        margin: 30px;
+        font-size: 40px;
+        font-weight: 700;
+    }
 }
