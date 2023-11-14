@@ -46,7 +46,6 @@ namespace UserAPI.Controllers
         /// </response>
         [HttpGet]
         [Route("/favoriteProducts")]
-        [Authorize (Roles = "Customer")]
         public async Task<ActionResult<IEnumerable<FavoriteProductDto>>> GetFavoriteProductsByUser(string userId)
         {
             try
@@ -176,6 +175,37 @@ namespace UserAPI.Controllers
                 LastName = user.LastName
             };
             return Ok(userProfile);
+        }
+
+        /// <summary>
+        /// Delete product from the wish list of the given user
+        /// </summary>
+        /// <returns>
+        /// Boolean (True/False)
+        /// </returns>
+        /// <remarks>
+        /// Example end point: POST /wishList/removeProduct?productId={id}&&userId={userId}
+        /// </remarks>
+        /// <response code="200">
+        /// Deleted successfully
+        /// </response>
+        [HttpPost]
+        [Route("/wishList/removeProduct")]
+        public async Task<IActionResult> RemoveProductFromFavoriteProductAsync(int productId, string userId)
+        {
+            try
+            {
+                var favoriteId = _favoriteRepository.GetAsync(x => x.Id == userId).Result.FavoriteId;
+                var entry = await _favoriteProductRepository.GetAsync(x => x.ProductId == productId, x => x.FavoriteId == favoriteId);
+                if(entry is null)
+                    return NotFound("There is no such entry exists");
+
+                var result = await _favoriteProductRepository.DeleteAsync(entry);
+                if(result)
+                    return Ok($"Deleted successfully");
+            }
+            catch (Exception e) { Debug.WriteLine(e.Message); }
+            return Problem();
         }
     }
 }

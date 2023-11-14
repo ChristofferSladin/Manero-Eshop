@@ -22,10 +22,6 @@ namespace ProductAPI.Dtos
         public bool IsFeatured { get; set; }
         public decimal Rating { get; set; }
         public string? ImageUrl { get; set; }
-
-        //public virtual ICollection<OrderProduct>? OrdersProducts { get; set; }
-        //public virtual ICollection<ShoppingCartProduct>? ShoppingCartProducts { get; set; }
-        //public virtual ICollection<FavoriteProduct>? FavoriteProducts { get; set; }
         public virtual ICollection<ReviewDto>? Reviews { get; set; }
     }
 }

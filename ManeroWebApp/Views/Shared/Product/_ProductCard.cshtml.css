@@ -192,16 +192,19 @@
     margin-bottom: 20px;
     margin: 0 15px;
 }
-.review-text-title-wrapper{
+
+.review-text-title-wrapper {
     display: flex;
     gap: 5px;
 }
+
 .review-text-title {
     display: flex;
     justify-content: center;
     font-size: 1.7rem;
     font-weight: 700;
 }
+
 .review-count-title {
     display: flex;
     align-items: center;
@@ -209,13 +212,15 @@
     font-weight: 700;
 }
 
-.review-view-all {
+::deep .review-view-all {
+    text-decoration: none;
+    color: #111;
     font-size: 1.4rem;
     font-weight: 500;
     transition: all 0.15s ease-in-out;
 }
 
-    .review-view-all:hover {
+    ::deep .review-view-all:hover {
         color: #808080;
     }
 

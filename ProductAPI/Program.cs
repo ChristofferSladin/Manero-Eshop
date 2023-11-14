@@ -18,6 +18,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 builder.Services.AddDbContext<ManeroDbContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddTransient<ProductRepository>();
+builder.Services.AddTransient<ReviewRepository>();
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<ManeroDbContext>()
     .AddDefaultTokenProviders();

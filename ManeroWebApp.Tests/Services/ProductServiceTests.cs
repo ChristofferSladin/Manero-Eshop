@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ServiceLibrary.Models;
 using ServiceLibrary.Services;
+using System.Net;
 
 namespace ManeroWebApp.Tests.Services;
 
@@ -68,9 +69,9 @@ public class ProductServiceTests
     {
         var result = await _productService.GetFilteredProductsAsync(page, take, null, null, null, null);
         var skip = (page - 1) * take;
-    
-            Assert.Equal(take, result.Count);
-            Assert.True(result.First().ProductId >= skip + 1);
+
+        Assert.Equal(take, result.Count);
+        Assert.True(result.First().ProductId >= skip + 1);
     }
 
     [Fact]
@@ -91,4 +92,152 @@ public class ProductServiceTests
         }
     }
 
+    [Fact]
+    public async Task GetOnSaleProductsWithReviewsAsync_Returns_Only_OnSale_Products()
+    {
+        // Arrange
+        var productService = new ProductService();
+
+        // Act
+        var result = await productService.GetOnSaleProductsWithReviewsAsync();
+
+        // Assert
+        Assert.NotEmpty(result);
+        Assert.All(result, product => Assert.True(product.IsOnSale));
+    }
+
+    [Fact]
+    public async Task GetFeaturedProductsWithReviewsAsync_Returns_Only_Featured_Products()
+    {
+        // Arrange
+        var productService = new ProductService();
+
+        // Act
+        var result = await productService.GetFeaturedProductsWithReviewsAsync();
+
+        // Assert
+        Assert.NotEmpty(result);
+        Assert.All(result, product => Assert.True(product.IsFeatured));
+    }
+
+    [Fact]
+    public async Task GetOnSaleProductsWithReviewsAsync_Returns_Products_If_API_Online()
+    {
+        // Arrange
+        var productService = new ProductService();
+
+        // Act
+        var result = await productService.GetOnSaleProductsWithReviewsAsync();
+
+        // Assert
+        Assert.NotEmpty(result);
+    }
+
+    [Fact]
+    public async Task GetFeaturedProductsWithReviewsAsync_Returns_Products_If_API_Online()
+    {
+        // Arrange
+        var productService = new ProductService();
+
+        // Act
+        var result = await productService.GetFeaturedProductsWithReviewsAsync();
+
+        // Assert
+        Assert.NotEmpty(result);
+    }
+
+
+    //Feactured Product Tests
+    [Fact]
+    public async Task GetProductsWithReviewsAsync_Return_ValidData()
+    {
+        // Arrange
+        var productService = new ProductService();
+
+        // Act
+        var result = await productService.GetProductsWithReviewsAsync();
+
+        // Assert
+        foreach (var product in result)
+        {
+            Assert.NotNull(product.Description);
+        }
+    }
+
+    [Fact]
+    public async Task GetProductsWithReviewsAsync_Return_ValidReviewData()
+    {
+        // Arrange
+        var productService = new ProductService();
+
+        // Act
+        var result = await productService.GetProductsWithReviewsAsync();
+
+        // Assert
+        foreach (var product in result)
+        {
+            foreach (var review in product.Reviews)
+            {
+                Assert.NotNull(review.Id);
+                Assert.InRange(review.Rating, 0, 5);
+            }
+        }
+    }
+
+    [Fact]
+    public async Task GetProductsWithReviewsAsync_Return_ValidProductData()
+    {
+        // Arrange
+        var productService = new ProductService();
+
+        // Act
+        var result = await productService.GetProductsWithReviewsAsync();
+
+        // Assert
+        foreach (var product in result)
+        {
+            Assert.NotNull(product.ProductId);
+            Assert.NotNull(product.ProductNumber);
+            Assert.InRange(product.SalePricePercentage, 0, decimal.MaxValue);
+        }
+    }
+
+
+    [Fact]
+    public async Task GetProductsWithReviewsAsync_Return_NonNullProductFields()
+    {
+        // Arrange
+        var productService = new ProductService();
+
+        // Act
+        var result = await productService.GetProductsWithReviewsAsync();
+
+        // Assert
+        foreach (var product in result)
+        {
+            Assert.NotNull(product.ProductId);
+            Assert.NotNull(product.ProductName);
+            Assert.NotNull(product.Description);
+            Assert.NotNull(product.Category);
+            // Add other assertions for other fields as needed
+        }
+    }
+
+    [Fact]
+    public async Task GetProductsWithReviewsAsync_Return_ValidPriceRange()
+    {
+        // Arrange
+        var productService = new ProductService();
+
+        // Act
+        var result = await productService.GetProductsWithReviewsAsync();
+
+        // Assert
+        foreach (var product in result)
+        {
+            Assert.InRange(product.PriceExcTax, 0, decimal.MaxValue);
+            Assert.InRange(product.PriceIncTax, 0, decimal.MaxValue);
+            Assert.InRange(product.SalePricePercentage, 0, decimal.MaxValue);
+        }
+    }
 }

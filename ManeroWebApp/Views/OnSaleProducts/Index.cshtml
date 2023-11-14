@@ -1,5 +1,7 @@
-﻿@{
-    ViewData["Title"] = "Featured Products Page";
+﻿@*
+*@
+@{
+    ViewData["Title"] = "On Sale Products";
     ViewData["HideFooter"] = true;
 }
 
@@ -9,13 +11,14 @@
             <i class="fa-solid fa-chevron-left" style="color:black;"></i>
         </a>
     </div>
-    <h1>Featured Products</h1>
+    <h1>@ViewData["Title"]</h1>
     <div>
         <a asp-page="" class="btn-cart">
             <i class="fa-light fa-bag-shopping" style="color:black;"></i>
         </a>
     </div>
 </div>
+
 
 <div class="dropdownStyle">
     <select id="sortDropdown" onchange="sortProducts(this.value)">
@@ -31,20 +34,16 @@
     </select>
 </div>
 
-
-
-<div class="product-grid" id="featuredProduct">
+<div class="product-grid" id="onSaleProduct">
 </div>
+
 
 @section Scripts {
     <script>
         function sortProducts(sortBy) {
-            $('#featuredProduct').load("/FeaturedProducts/ProductCardsPartial?sort=" + sortBy);
+            $('#onSaleProduct').load("/OnSaleProducts/ProductCardsPartial?sort=" + sortBy);
         }
 
-        $('#featuredProduct').load("/FeaturedProducts/ProductCardsPartial");
+        $('#onSaleProduct').load("/OnSaleProducts/ProductCardsPartial");
     </script>
-    @*  <script>
-            $('#barMenuPartial').load("/FeaturedProducts/BarMenuPartial");
-        </script> *@
-    }
+}

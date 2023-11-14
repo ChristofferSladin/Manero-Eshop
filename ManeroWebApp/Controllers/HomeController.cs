@@ -49,7 +49,7 @@ namespace ManeroWebApp.Controllers
                 {
                     IdSuffix = "2",
                     Title = "On Sale Products",
-                    EndPoint = "",
+                    EndPoint = "OnSaleProducts",
                     Products = onSaleProducts.Select(p => new ProductViewModel
                     {
                         ProductNumber = p.ProductNumber,

@@ -99,4 +99,15 @@ public abstract class Repository<TEntity> where TEntity : class
 
         return null!;
     }
+    public virtual async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> expression1, Expression<Func<TEntity, bool>> expression2)
+    {
+        try
+        {
+            var entity = await _context.Set<TEntity>().Where(expression1).Where(expression2).FirstOrDefaultAsync();
+            return entity ?? null!;
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+
+        return null!;
+    }
 }
