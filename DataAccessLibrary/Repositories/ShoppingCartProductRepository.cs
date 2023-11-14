@@ -14,25 +14,10 @@ public class ShoppingCartProductRepository : Repository<ShoppingCartProduct>
     }
     public async Task<List<ShoppingCartProduct>> GetShoppingCartProductsAsync(string claim)
     {
-        var shoppingCartProducts = await _context.ShoppingCarts
-            .Join(
-                _context.ShoppingCartProducts,
-                sc => sc.ShoppingCartId,
-                scp => scp.ShoppingCartId,
-                (sc, scp) => new { ShoppingCart = sc, ShoppingCartProduct = scp }
-            )
-            .Join(
-                _context.Users,
-                result => result.ShoppingCart.Id,
-                asp => asp.Id,
-                (result, asp) => new { result.ShoppingCart, result.ShoppingCartProduct, AspNetUser = asp }
-            )
-            .Where(joinedResult => joinedResult.AspNetUser.Email == claim)
-            .Select(joinedResult => joinedResult.ShoppingCartProduct)
-            .ToListAsync();
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == claim);
+        var shoppingCartItems = await _context.ShoppingCarts.Include(u => u.ShoppingCartProducts).Where(s => s.Id == user.Id).SelectMany(s => s.ShoppingCartProducts).ToListAsync();
 
-        return shoppingCartProducts;
-
+        return shoppingCartItems;
     }
 
     public async Task<bool> AddProductAndQuantityToCart(string user, int quantity, string productNumber)
