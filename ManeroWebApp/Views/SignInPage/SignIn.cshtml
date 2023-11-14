@@ -1,5 +1,7 @@
-﻿@{
-    ViewData["Title"] = "Sign In";
+﻿@using ManeroWebApp.Areas.Identity.Pages.Account;
+@model LoginModel
+
+@{
     ViewData["HideHeader"] = true;
     ViewData["HideFooter"] = true;
 }
@@ -14,26 +16,28 @@
         <p>Sign in to continue</p>
     </div>
 
-    <form class="login-form" method="post">
-        <div class="input-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email">
+    <form class="login" method="post">
+        <div class="form-parent">
+            <label asp-for="Input.Email" class="email-label">Email</label>
+            <input asp-for="Input.Email" class="email-input" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+            <span asp-validation-for="Input.Email" class="text-danger"></span>
         </div>
 
-        <div class="input-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" class="password-field">
+        <div class="form-parent">
+            <label asp-for="Input.Password" class="password-label">Password</label>
+            <input asp-for="Input.Password" class="password-input" autocomplete="current-password" aria-required="true" placeholder="password" />
+            <span asp-validation-for="Input.Password" class="text-danger"></span>
             <button type="button" class="toggle-password" onclick="togglePasswordVisibility()">
                 <i class="fa fa-eye"></i>
             </button>
         </div>
 
         <div class="options-group">
-            <label for="remember-me">
-                <input type="checkbox" id="remember-me" name="remember-me">
-                Remember me
+            <label asp-for="Input.RememberMe" class="form-label">
+                <input class="form-check-input" asp-for="Input.RememberMe" />
+                @Html.DisplayNameFor(m => m.Input.RememberMe)
             </label>
-            <a href="#" class="forgot-password">Forgot password?</a>
+            @* <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a> *@
         </div>
 
         <div class="button-container">
@@ -41,7 +45,13 @@
 
         </div>
         <div class="footer">
-            <p>Don't have an account? <a href="#" class="sign-up-link">Sign up.</a></p>
+            <p> Don't have an account?
+@*                 <a asp-page="./Register" class="sign-up-link" asp-route-returnUrl="@Model.ReturnUrl">Sign up.</a>
+ *@         </p>
+
+            <p>
+                <a asp-controller="Home" asp-action="GuestLogin" class="guest-login">Continue as a guest</a>
+            </p>
         </div>
     </form>
 
@@ -52,4 +62,8 @@
     </div>
 </div>
 
-<script src="~/js/signInPage.js"></script>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/signInPage.js"></script>
+}

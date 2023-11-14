@@ -14,6 +14,11 @@ namespace ManeroWebApp.Controllers
             _productService = productService;
         }
 
+        public IActionResult GuestLogin()
+        {
+            return View("~/Views/Home/Index.cshtml");
+        }
+
         public async Task<IActionResult> Index()
         {
             var onSaleProducts = await _productService.GetOnSaleProductsWithReviewsAsync();
