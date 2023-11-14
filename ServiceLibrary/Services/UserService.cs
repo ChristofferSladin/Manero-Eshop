@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Net;
 using ServiceLibrary.Models;
 using System.Security.Claims;
 using System.Net.Http.Headers;
@@ -132,55 +133,7 @@ public class UserService : IUserService
 
         return false;
     }
-    public async Task<bool> AddProductToShoppingCartAsync(string user, int itemQuantity, string productNumber)
-    {
-
-        try
-        {
-            var request = new HttpRequestMessage(HttpMethod.Post,
-                $"https://localhost:7047/user/cart/add?user={user}&quantity={itemQuantity}&productNumber={productNumber}");
-            var response = await _httpClient.SendAsync(request);
-            if (response.IsSuccessStatusCode)
-            {
-                return true;
-            }
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Exception: {ex.Message}");
-        }
-        return false;
-    }
-    public async Task<List<ShoppingCartProduct>> GetUserShoppingCartProductsAsync(string user)
-    {
-        var shoppingCartProducts = new List<ShoppingCartProduct>();
-
-        try
-        {
-            var apiUrl = $"https://localhost:7047/user/cart/products?user={user}";
-            using var client = new HttpClient();
-
-            var request = new HttpRequestMessage();
-            request.RequestUri = new Uri(apiUrl);
-            request.Method = HttpMethod.Get;
-            var response = await client.GetAsync(apiUrl);
-
-            if (response.IsSuccessStatusCode)
-            {
-                var responseBody = await response.Content.ReadAsStringAsync();
-                shoppingCartProducts = JsonConvert.DeserializeObject<List<ShoppingCartProduct>>(responseBody);
-            }
-            else
-            {
-                Debug.WriteLine($"Error: {response.StatusCode} - {response.ReasonPhrase}");
-            }
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Exception: {ex.Message}");
-        }
-        return shoppingCartProducts;
-    }
+   
 
 
 }

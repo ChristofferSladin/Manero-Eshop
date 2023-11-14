@@ -1,5 +1,6 @@
 using DataAccessLibrary.Contexts;
 using DataAccessLibrary.Initializers;
+using ManeroWebApp.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ServiceLibrary.Services;
@@ -18,9 +19,12 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<DataInitializer>();
 builder.Services.AddScoped<HttpClient>();
-builder.Services.AddTransient<IProductService, ProductService>();
-builder.Services.AddTransient<IReviewService, ReviewService>();
-builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IReviewService, ReviewService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
+
+builder.Services.AddScoped<IShoppingCartControllerService, ShoppingCartControllerService>();
 
 var app = builder.Build();
 

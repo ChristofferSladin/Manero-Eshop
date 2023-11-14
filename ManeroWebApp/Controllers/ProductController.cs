@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using ServiceLibrary.Services;
 using System.Diagnostics;
 using System.Security.Claims;
+using ManeroWebApp.Services;
 
 namespace ManeroWebApp.Controllers
 {
@@ -13,112 +14,48 @@ namespace ManeroWebApp.Controllers
         private readonly IReviewService _reviewService;
         private readonly IUserService _userService;
 
-        public ProductController(IProductService productService, IUserService userService, IReviewService reviewService)
+        private readonly IShoppingCartControllerService _shoppingCartControllerService;
+
+        public ProductController(IProductService productService, IUserService userService, IReviewService reviewService, IShoppingCartControllerService shoppingCartControllerService)
         {
             _productService = productService;
             _userService = userService;
             _reviewService = reviewService;
+            _shoppingCartControllerService = shoppingCartControllerService;
         }
 
         public async Task<IActionResult> ShoppingCartPartial()
         {
             var shoppingCart = new List<ShoppingCartViewModel>();
-            if (User.Identity.IsAuthenticated)
+            if (User.Identity != null && User.Identity.IsAuthenticated)
             {
-                try
-                {
-                    var user = User.FindFirst(ClaimTypes.NameIdentifier).Subject;
-                    var shoppingCartItems = await _userService.GetUserShoppingCartProductsAsync(user.Name);
-                    foreach (var cartItem in shoppingCartItems)
-                    {
-                        var item = await _productService.GetProductByIdAsync(cartItem.ProductId);
-                        shoppingCart.Add(new ShoppingCartViewModel
-                        {
-                            ProductNumber = item.ProductNumber,
-                            ProductName = item.ProductName,
-                            Size = item.Size,
-                            Color= item.Color,
-                            PriceExcTax= item.PriceExcTax,
-                            PriceIncTax = item.PriceIncTax,
-                            SalePricePercentage = item.SalePricePercentage,
-                            ImageUrl = item.ImageUrl,
-                            ItemQuantity = cartItem.ItemQuantity
-                        });
-                    }
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine(e.Message);
-                }
+                var user = User.FindFirst(ClaimTypes.NameIdentifier)?.Subject;
+                shoppingCart = await _shoppingCartControllerService.GetShoppingForUserCart(user?.Name!);
             }
             else
             {
-
                 var shoppingCartCookie = Request.Cookies["ShoppingCart"];
-
                 if (shoppingCartCookie != null)
                 {
-                    var shoppingCartItems = JsonConvert.DeserializeObject<List<ShoppingCartItems>>(shoppingCartCookie);
-                    foreach (var cartItem in shoppingCartItems)
-                    {
-                        var item = await _productService.GetProductAsync(cartItem.ProductNumber);
-                        shoppingCart.Add(new ShoppingCartViewModel
-                        {
-                            ProductNumber = item.ProductNumber,
-                            ProductName = item.ProductName,
-                            Size = item.Size,
-                            Color= item.Color,
-                            PriceExcTax= item.PriceExcTax,
-                            PriceIncTax = item.PriceIncTax,
-                            SalePricePercentage = item.SalePricePercentage,
-                            ImageUrl = item.ImageUrl,
-                            ItemQuantity = cartItem.ItemQuantity
-                        });
-                    }
-
-                    return PartialView("/Views/Shared/ShoppingCart/_ShoppingCartPartial.cshtml", shoppingCart);
+                    shoppingCart = await _shoppingCartControllerService.GetShoppingForGuestCart(shoppingCartCookie);
                 }
             }
+
             return PartialView("/Views/Shared/ShoppingCart/_ShoppingCartPartial.cshtml", shoppingCart);
         }
 
         public async Task<IActionResult> AddItemToShoppingCart(int itemQuantity, string productNumber)
         {
-            var shoppingCart = new ShoppingCartItems
+         
+            if (User.Identity != null && User.Identity.IsAuthenticated)
             {
-                ProductNumber = productNumber,
-                ItemQuantity = itemQuantity
-            };
-            if (User.Identity.IsAuthenticated)
-            {
-                var user = User.FindFirst(ClaimTypes.NameIdentifier).Subject;
-                await _userService.AddProductToShoppingCartAsync(user.Name, itemQuantity, productNumber);
+                var user = User.FindFirst(ClaimTypes.NameIdentifier)?.Subject;
+                await _shoppingCartControllerService.AddProductToShoppingCartForUser(user?.Name!, itemQuantity, productNumber);
             }
             else
             {
                 var existingShoppingCartCookie = Request.Cookies["ShoppingCart"];
-                var cookieOptions = new CookieOptions { Expires = DateTime.Now.AddDays(30) };
-
-                if (!string.IsNullOrEmpty(existingShoppingCartCookie))
-                {
-                    var existingShoppingCart = JsonConvert.DeserializeObject<List<ShoppingCartItems>>(existingShoppingCartCookie);
-                    var existingItem = existingShoppingCart.FirstOrDefault(item => item.ProductNumber == productNumber);
-
-                    if (existingItem != null)
-                    {
-                        existingItem.ItemQuantity += itemQuantity;
-                    }
-                    else
-                    {
-                        existingShoppingCart.Add(shoppingCart);
-                    }
-                    Response.Cookies.Append("ShoppingCart", JsonConvert.SerializeObject(existingShoppingCart), cookieOptions);
-                }
-                else
-                {
-                    var newShoppingCart = new List<ShoppingCartItems> { shoppingCart };
-                    Response.Cookies.Append("ShoppingCart", JsonConvert.SerializeObject(newShoppingCart), cookieOptions);
-                }
+                _shoppingCartControllerService.AddProductToShoppingCartForGuest(Response, existingShoppingCartCookie, itemQuantity, productNumber);
             }
 
             return RedirectToAction("Index", "Product", new { productNumber });
