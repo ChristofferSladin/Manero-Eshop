@@ -14,15 +14,14 @@ public class ShoppingCartProductRepository : Repository<ShoppingCartProduct>
     }
     public async Task<List<ShoppingCartProduct>> GetShoppingCartProductsAsync(string claim)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == claim);
-        var shoppingCartItems = await _context.ShoppingCarts.Include(u => u.ShoppingCartProducts).Where(s => s.Id == user.Id).SelectMany(s => s.ShoppingCartProducts).ToListAsync();
+        var shoppingCartItems = await _context.ShoppingCarts.Include(u => u.ShoppingCartProducts).Where(s => s.Id == claim).SelectMany(s => s.ShoppingCartProducts).ToListAsync();
 
         return shoppingCartItems;
     }
 
     public async Task<bool> AddProductAndQuantityToCart(string user, int quantity, string productNumber)
     {
-        var userExists = await _context.Users.FirstOrDefaultAsync(u => u.Email == user);
+        var userExists = await _context.Users.FirstOrDefaultAsync(u => u.Id == user);
         if (userExists == null) return false;
         var shoppingCartExists = await _context.ShoppingCarts.FirstOrDefaultAsync(o => o.Id == userExists.Id);
         if (shoppingCartExists == null)
