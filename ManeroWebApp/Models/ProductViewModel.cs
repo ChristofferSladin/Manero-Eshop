@@ -21,5 +21,28 @@ namespace ManeroWebApp.Models
         public decimal Rating { get; set; }
         public string? ImageUrl { get; set; }
         public List<ReviewViewModel>? Reviews { get; set;}
+
+        public static implicit operator ProductViewModel(Product product)
+        {
+            return new ProductViewModel
+            {
+                ProductId = product.ProductId,
+                ProductNumber = product.ProductNumber,
+                ProductName = product.ProductName,
+                Description = product.Description,
+                Category = product.Category,
+                Type = product.Type,
+                Size = product.Size,
+                QuantityInStock = product.QuantityInStock,
+                Color = product.Color,
+                PriceExcTax = product.PriceExcTax,
+                PriceIncTax = product.PriceIncTax,
+                SalePricePercentage = product.SalePricePercentage,
+                IsOnSale = product.IsOnSale,
+                IsFeatured = product.IsFeatured,
+                Rating = product.Rating,
+                ImageUrl = product.ImageUrl,
+            };
+        }
     }
 }

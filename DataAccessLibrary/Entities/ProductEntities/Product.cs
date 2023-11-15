@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using DataAccessLibrary.Entities.UserEntities;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using DataAccessLibrary.Entities.UserEntities;
 
 namespace DataAccessLibrary.Entities.ProductEntities;
 
@@ -60,7 +60,6 @@ public class Product
     [Column(TypeName = "nvarchar(50)")]
     public string? Gender { get; set; }
 
-    public virtual ICollection<OrderProduct>? OrdersProducts { get; set; }
     public virtual ICollection<ShoppingCartProduct>? ShoppingCartProducts { get; set; }
     public virtual ICollection<FavoriteProduct>? FavoriteProducts { get; set; }
     public virtual ICollection<Review>? Reviews { get; set; }

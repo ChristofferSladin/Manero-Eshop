@@ -1,6 +1,5 @@
 ﻿using DataAccessLibrary.Entities.UserEntities;
 using DataAccessLibrary.Repositories;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -197,11 +196,11 @@ namespace UserAPI.Controllers
             {
                 var favoriteId = _favoriteRepository.GetAsync(x => x.Id == userId).Result.FavoriteId;
                 var entry = await _favoriteProductRepository.GetAsync(x => x.ProductId == productId, x => x.FavoriteId == favoriteId);
-                if(entry is null)
+                if (entry is null)
                     return NotFound("There is no such entry exists");
 
                 var result = await _favoriteProductRepository.DeleteAsync(entry);
-                if(result)
+                if (result)
                     return Ok($"Deleted successfully");
             }
             catch (Exception e) { Debug.WriteLine(e.Message); }

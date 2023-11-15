@@ -1,29 +1,29 @@
-﻿using ManeroWebApp.Models;
+﻿using DataAccessLibrary.Entities.UserEntities;
+using ManeroWebApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using ServiceLibrary.Services;
 
 namespace ManeroWebApp.Controllers
 {
-
-    public class FeaturedProductsController : Controller
+    public class OnSaleProductsController : Controller
     {
         private readonly IProductService _productService;
 
-        public FeaturedProductsController(IProductService productService)
+        public OnSaleProductsController(IProductService productService)
         {
             _productService = productService;
         }
+
         public IActionResult Index()
         {
             return View();
         }
 
-
         public async Task<IActionResult> ProductCardsPartial(string sort)
         {
-
             var orderBy = "";
             var orderDirection = "";
+
             if (!string.IsNullOrEmpty(sort))
             {
                 orderBy = sort.Split(",")[0];
@@ -50,11 +50,11 @@ namespace ManeroWebApp.Controllers
                 Rating = product.Rating,
                 ImageUrl = product.ImageUrl
 
-            }).DistinctBy(p => p.ProductName).Where(p => p.IsFeatured)
-            .ToList();
+            }).DistinctBy(p => p.ProductName).Where(p => p.IsOnSale)
+           .ToList();
 
             return PartialView("/Views/Shared/Product/_ProductCards.cshtml", productViewModels);
-        }
 
+        }
     }
 }
