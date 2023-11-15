@@ -97,4 +97,60 @@ public class ProductRepository
 
         return await query.Skip(skip).Take(take).ToListAsync();
     }
+    public async Task<List<Product>> GetFilteredProductsAsync(int skip, int take, Expression<Func<Product, bool>> filterByName = null!, Expression<Func<Product, bool>> filterByCategory = null!, Expression<Func<Product, dynamic>> orderByField = null!, string orderDirection = null!, Expression<Func<Product, bool>> gender = null!)
+    {
+        var query = _context.Products.AsQueryable();
+
+        if (filterByCategory != null!)
+        {
+            query = query.Where(filterByCategory);
+        }
+
+        if (filterByName != null!)
+        {
+            query = query.Where(filterByName);
+        }
+
+        if (gender != null!)
+        {
+            query = query.Where(gender);
+        }
+
+        if (orderByField != null!)
+        {
+            query = orderDirection switch
+            {
+                "asc" => query.OrderBy(orderByField),
+                "desc" => query.OrderByDescending(orderByField),
+                _ => query
+            };
+        }
+
+        if (take == 0)
+        {
+            return await query.ToListAsync();
+        }
+
+        return await query.Skip(skip).Take(take).ToListAsync();
+    }
+    public async Task<IEnumerable<string>> GetProductCategories(string categoryType)
+    {
+        var categoryList = new List<string>();
+        List<string?> query = new();
+
+        if(categoryType.ToLower() == "gender")
+            query = await _context.Products.Select(x => x.Gender).ToListAsync();
+        if(categoryType.ToLower() == "category")
+            query = await _context.Products.Select(x => x.Category).ToListAsync();
+
+        if(query is not null)
+        {
+            foreach (var category in query)
+                if (!categoryList.Any(x => x == category))
+                    categoryList.Add(category!);
+            
+            return categoryList;
+        }
+        return null!;
+    }
 }

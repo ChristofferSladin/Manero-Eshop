@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ManeroWebApp.Models;
+using Microsoft.AspNetCore.Mvc;
 using ServiceLibrary.Services;
 
 namespace ManeroWebApp.Controllers
@@ -12,9 +13,16 @@ namespace ManeroWebApp.Controllers
             _productService = productService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var genderList = await _productService.GetProductCategoriesAsync("gender");
+            var productCategories = await _productService.GetProductCategoriesAsync("category");
+
+            CategoryPageViewModel viewModel = new();
+            viewModel.GenderCategories = genderList;
+            viewModel.ProductCategories = productCategories;
+
+            return View(viewModel);
         }
     }
 }

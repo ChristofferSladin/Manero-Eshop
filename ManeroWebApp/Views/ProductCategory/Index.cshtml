@@ -1,24 +1,50 @@
-﻿@* categories main *@
+﻿@model CategoryPageViewModel
+@{
+    var count = 0;
+}
+
+@* categories main *@
 <section class="category-main">
     <div class="gender-categories">
-        <button class="active item">Men</button>
-        <button class="item">Women</button>
-        <button class="item">Kids</button>
-        <button class="item">Accessories</button>
-        <button class="item">Accessories</button>
-        <button class="item">Accessories</button>
+        @foreach (var category in Model.GenderCategories!)
+        {
+            <button class="item" onclick="activateItem(this)">@category</button>
+        }
     </div>
     <div class="product-types">
-        <div class="category category-small">
-            <div class="category-item"><img src="../img/dresses.jpg" /><span>Dresses</span></div>
-            <div class="category-item"><img src="../img/pants.jpg" /><span>Pants</span></div>
-        </div>
-        <div class="category category-big category-item"><img src="../img/accessories.jpg" /><span>Accessories</span></div>
-        <div class="category category-small">
-            <div class="category-item"><img src="../img/shoes.jpg" /><span>Shoes</span></div>
-            <div class="category-item"><img src="../img/t-shirts.jpg" /><span>T-Shirts</span></div>
-        </div>
+        @do
+        {
+            var category1 = @Model.ProductCategories[count];
+            <div class="category category-small">
+                <div class="category-item"><img src="../img/dresses.jpg" /><span>@category1</span></div>
+                @if (count + 1 <= Model.ProductCategories.Count() - 1)
+                {
+                    var category2 = @Model.ProductCategories[count + 1];
+                    <div class="category-item"><img src="../img/pants.jpg" /><span>@category2</span></div>
+                }
+            </div>
+            @if (count + 2 <= Model.ProductCategories.Count() - 1)
+            {
+                var category3 = @Model.ProductCategories[count + 2];
+                <div class="category category-big category-item"><img src="../img/accessories.jpg" /><span>@category3</span></div>
+            }
+            count += 3;
+        }
+        while (Model.ProductCategories.Count - 1 >= count);
     </div>
 </section>
+
+@{
+    <script>
+        function activateItem(button) {
+            var buttons = document.querySelectorAll('.item');
+            buttons.forEach(function (btn) {
+                btn.classList.remove('active');
+            });
+
+            button.classList.add('active');
+        }
+    </script>
+}
 
 

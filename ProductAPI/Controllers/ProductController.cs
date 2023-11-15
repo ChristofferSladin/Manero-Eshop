@@ -3,6 +3,7 @@ using DataAccessLibrary.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using ProductAPI.Dtos;
 using System.Linq.Expressions;
 
 namespace ProductAPI.Controllers
@@ -235,7 +236,7 @@ namespace ProductAPI.Controllers
         /// </response>
         [HttpGet]
         [Route("/products/filter")]
-        public async Task<ActionResult<List<Product>>> GetProductsFilteredAsync(int? page, int? take, string filterByName = null!, string filterByCategory = null!, string? orderByField = null!, string orderDirection = null!)
+        public async Task<ActionResult<List<Product>>> GetProductsFilteredAsync(int? page, int? take, string? gender, string filterByName = null!, string filterByCategory = null!, string? orderByField = null!, string orderDirection = null!)
         {
             if (page <= 0 && take <= 0) { return BadRequest($"Invalid page & take, value \"{page}\" & value \"{take}\" is not allowed."); }
             if (page <= 0) { return BadRequest($"Invalid page, value \"{page}\" is not allowed."); }
@@ -290,7 +291,14 @@ namespace ProductAPI.Controllers
                 }
             }
 
-            var products = await _productRepository.GetFilteredProductsAsync(_skip, _take, _filterByName, _filterByCategory, _orderByField, orderDirection);
+            Expression<Func<Product, bool>> _gender = null!;
+
+            if (!string.IsNullOrEmpty(gender))
+            {
+                _gender = product => product.Gender != null && product.Gender.ToLower() == gender.ToLower();
+            }
+
+            var products = await _productRepository.GetFilteredProductsAsync(_skip, _take, _filterByName, _filterByCategory, _orderByField, orderDirection, _gender);
 
             if (products.Count == 0 && !string.IsNullOrEmpty(filterByName)) { return NotFound("Invalid product name, the product does not exist."); }
             if (products.Count == 0 && !string.IsNullOrEmpty(filterByCategory)) { return NotFound("Invalid category name, the category does not exist."); }
@@ -374,6 +382,14 @@ namespace ProductAPI.Controllers
             if (products.Count == 0) { return NotFound("Invalid page, page does not exist or has no products."); }
 
             return Ok(products);
+        }
+
+        [HttpGet]
+        [Route("/products/categories")]
+        public async Task<IActionResult> GetProductCategories(string categoryType)
+        {
+            var categories = await _productRepository.GetProductCategories(categoryType);
+            return Ok(categories);
         }
     }
 }
