@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Net.Http;
+using UserAPI.Models;
 
 namespace ServiceLibrary.Services;
 
@@ -134,7 +135,7 @@ public class UserService : IUserService
         return false;
     }
 
-    public async Task<string> GetUserToken(string email, string password)
+    public async Task<RefreshModel> GetUserToken(string email, string password)
     {
         var userLoginDto = new
         {
@@ -154,7 +155,8 @@ public class UserService : IUserService
 
             if (response.IsSuccessStatusCode)
             {
-                var token = await response.Content.ReadAsStringAsync();
+                var responseString = await response.Content.ReadAsStringAsync();
+                var token = JsonConvert.DeserializeObject<RefreshModel>(responseString);
                 return token;
             }
         }

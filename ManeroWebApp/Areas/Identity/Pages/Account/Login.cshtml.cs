@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using ServiceLibrary.Services;
 
 namespace ManeroWebApp.Areas.Identity.Pages.Account
@@ -119,7 +120,8 @@ namespace ManeroWebApp.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User logged in.");
                     var token = await _userService.GetUserToken(Input.Email, Input.Password);
-                    Response.Cookies.Append("Token", token);
+                    var jsonToken = JsonConvert.SerializeObject(token);
+                    HttpContext.Session.SetString("Token", jsonToken);
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
