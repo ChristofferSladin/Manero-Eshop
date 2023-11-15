@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using ServiceLibrary.Services;
 using System.Diagnostics;
+using ServiceLibrary.Models;
 
 namespace ManeroWebApp.Services
 {
@@ -19,13 +20,18 @@ namespace ManeroWebApp.Services
             _shoppingCartService = shoppingCartService;
             _userService = userService;
         }
-        public async Task<List<ShoppingCartViewModel>> GetShoppingForUserCartAsync(string user)
+
+        public async Task<RefreshModel> RefreshToken(RefreshModel refresh)
+        {
+            return await _userService.RefreshToken(refresh);
+        }
+        public async Task<List<ShoppingCartViewModel>> GetShoppingForUserCartAsync(string token)
         {
             var shoppingCart = new List<ShoppingCartViewModel>();
             try
             {
 
-                var shoppingCartItems = await _shoppingCartService.GetUserShoppingCartProductsAsync(user);
+                var shoppingCartItems = await _shoppingCartService.GetUserShoppingCartProductsAsync(token);
                 foreach (var cartItem in shoppingCartItems)
                 {
                     var item = await _productService.GetProductByIdAsync(cartItem.ProductId);
@@ -67,9 +73,9 @@ namespace ManeroWebApp.Services
 
             return new List<ShoppingCartViewModel>();
         }
-        public async Task AddProductToShoppingCartForUserAsync(string user, int itemQuantity, string productNumber)
+        public async Task AddProductToShoppingCartForUserAsync(string token, int itemQuantity, string productNumber)
         {
-            await _shoppingCartService.AddProductToShoppingCartAsync(user, itemQuantity, productNumber);
+            await _shoppingCartService.AddProductToShoppingCartAsync(token, itemQuantity, productNumber);
         }
         public void AddProductToShoppingCartForGuest(HttpResponse response, string? existingShoppingCartCookie, int itemQuantity, string productNumber)
         {

@@ -6,6 +6,8 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using DataAccessLibrary.Contexts;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using ServiceLibrary.Models;
 
@@ -14,10 +16,14 @@ namespace ServiceLibrary.Services
     public class ShoppingCartService : IShoppingCartService
     {
         private readonly HttpClient _httpClient;
+        private readonly IUserService _userService;
+        private readonly ManeroDbContext _context;
 
-        public ShoppingCartService(HttpClient httpClient)
+        public ShoppingCartService(HttpClient httpClient, IUserService userService, ManeroDbContext context)
         {
             _httpClient = httpClient;
+            _userService = userService;
+            _context = context;
         }
         public async Task<HttpResponseMessage> AddProductToShoppingCartAsync(string token, int itemQuantity, string productNumber)
         {
@@ -46,15 +52,13 @@ namespace ServiceLibrary.Services
             try
             {
                 var apiUrl = $"https://localhost:7047/user/cart/products";
-                using var client = new HttpClient();
                 var request = new HttpRequestMessage
                 {
                     RequestUri = new Uri(apiUrl),
                     Method = HttpMethod.Get,
                 };
                 request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                var response = await client.SendAsync(request);
-
+                var response = await _httpClient.SendAsync(request);
                 if (response.IsSuccessStatusCode)
                 {
                     var responseBody = await response.Content.ReadAsStringAsync();
@@ -72,6 +76,5 @@ namespace ServiceLibrary.Services
 
             return shoppingCartProducts;
         }
-
     }
 }

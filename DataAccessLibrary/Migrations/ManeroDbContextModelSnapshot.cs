@@ -455,6 +455,32 @@ namespace DataAccessLibrary.Migrations
                     b.ToTable("UserProfiles");
                 });
 
+            modelBuilder.Entity("DataAccessLibrary.Entities.UserEntities.UserRefreshToken", b =>
+                {
+                    b.Property<int>("TokenId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TokenId"));
+
+                    b.Property<string>("Id")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("RefreshTokenExpiry")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("TokenId");
+
+                    b.HasIndex("Id")
+                        .IsUnique();
+
+                    b.ToTable("UserRefreshToken");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -669,12 +695,6 @@ namespace DataAccessLibrary.Migrations
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
-                    b.Property<string>("RefreshToken")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("RefreshTokenExpiry")
-                        .HasColumnType("datetime2");
-
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });
 
@@ -816,6 +836,17 @@ namespace DataAccessLibrary.Migrations
                     b.Navigation("ApplicationUser");
                 });
 
+            modelBuilder.Entity("DataAccessLibrary.Entities.UserEntities.UserRefreshToken", b =>
+                {
+                    b.HasOne("DataAccessLibrary.Entities.ApplicationUser", "ApplicationUser")
+                        .WithOne("RefreshToken")
+                        .HasForeignKey("DataAccessLibrary.Entities.UserEntities.UserRefreshToken", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -898,6 +929,8 @@ namespace DataAccessLibrary.Migrations
                     b.Navigation("Cards");
 
                     b.Navigation("FavoriteProducts");
+
+                    b.Navigation("RefreshToken");
 
                     b.Navigation("Reviews");
 

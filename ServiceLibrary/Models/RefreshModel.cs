@@ -1,4 +1,4 @@
-﻿namespace UserAPI.Models
+﻿namespace ServiceLibrary.Models
 {
     public class RefreshModel
     {

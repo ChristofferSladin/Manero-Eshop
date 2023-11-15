@@ -57,7 +57,7 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer = builder.Configuration["JWT:Issuer"],
         ValidAudience = builder.Configuration["JWT:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:LoginKey"]!)),
-        ClockSkew = new TimeSpan(0,1,0)
+        ClockSkew = TimeSpan.FromMinutes(1)
     };
 });
 

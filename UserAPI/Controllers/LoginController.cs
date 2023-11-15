@@ -8,6 +8,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using DataAccessLibrary.Contexts;
+using Microsoft.EntityFrameworkCore;
 using UserAPI.DTO;
 using UserAPI.Models;
 
@@ -21,15 +23,17 @@ namespace UserAPI.Controllers
         private readonly IConfiguration _configuration;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly ManeroDbContext _context;
 
         public LoginController(
             IConfiguration configuration,
             UserManager<IdentityUser> userManager,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager, ManeroDbContext context)
         {
             _configuration = configuration;
             _userManager = userManager;
             _roleManager = roleManager;
+            _context = context;
         }
         [HttpPost]
         [Route("/login")]
@@ -44,37 +48,18 @@ namespace UserAPI.Controllers
                 var passwordVerification = await _userManager.CheckPasswordAsync(existingUser, userLoginDto.Password!);
                 if (passwordVerification)
                 {
-                    var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:LoginKey"]!));
-                    var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-                    var userRoles = await _userManager.GetRolesAsync(existingUser);
-
-                    var claimsList = new Claim[]
-                    {
-                        new Claim(ClaimTypes.NameIdentifier, existingUser.Id!),
-                        new Claim(ClaimTypes.Name, existingUser.Email!),
-                        new Claim(ClaimTypes.Email, existingUser.Email!),
-                    };
-
-                    foreach (var role in userRoles)
-                    {
-                        int newSize = claimsList.Length + 1;
-                        Array.Resize(ref claimsList, newSize);
-                        claimsList[newSize - 1] = new Claim(ClaimTypes.Role, role);
-                    }
-
                     if (existingUser.UserName != null)
                     {
                         var token = await GenerateJwtToken(existingUser.UserName);
-
                         var refreshToken = GenerateRefreshToken();
-                        existingUser.RefreshToken = refreshToken;
-                        existingUser.RefreshTokenExpiry = DateTime.UtcNow.AddMinutes(2);
-                        await _userManager.UpdateAsync(existingUser);
+                        var _refreshToken = await _context.UserRefreshToken.FirstOrDefaultAsync(u => u.Id == existingUser.Id);
+                        _refreshToken.RefreshToken = refreshToken;
+                        _refreshToken.RefreshTokenExpiry = DateTime.UtcNow.AddDays(30);
+                        await _context.SaveChangesAsync();
 
                         var loginResponse = new LoginResponse
                         {
-                            JwtToken = new JwtSecurityTokenHandler().WriteToken(token),
+                            AccessToken = new JwtSecurityTokenHandler().WriteToken(token),
                             Expiration = token.ValidTo,
                             RefreshToken = refreshToken
                         };
@@ -97,15 +82,19 @@ namespace UserAPI.Controllers
             }
 
             var user = await _userManager.FindByNameAsync(principal.Identity.Name);
-            //if (user == null || user.RefreshToken != model.RefreshToken || user.RefreshTokenExpiry < DateTime.UtcNow)
-            //{
-            //    return Unauthorized();
-            //}
+            if (user == null)
+            {
+                var _refreshToken = await _context.UserRefreshToken.FirstOrDefaultAsync(u => u.Id == user!.Id);
+                if (user == null ||  _refreshToken.RefreshToken != model.RefreshToken ||  _refreshToken.RefreshTokenExpiry < DateTime.UtcNow)
+                {
+                    return Unauthorized();
+                }
+            }
             var token = await GenerateJwtToken(principal.Identity.Name);
 
             var loginResponse = new LoginResponse
             {
-                JwtToken = new JwtSecurityTokenHandler().WriteToken(token),
+                AccessToken = new JwtSecurityTokenHandler().WriteToken(token),
                 Expiration = token.ValidTo,
                 RefreshToken = model.RefreshToken
             };
@@ -127,9 +116,9 @@ namespace UserAPI.Controllers
             if (user is null)
                 return Unauthorized();
 
-            //user.RefreshToken = null;
-
-            await _userManager.UpdateAsync(user);
+            var _refreshToken = await _context.UserRefreshToken.FirstOrDefaultAsync(u => u.Id == user!.Id);
+            _refreshToken.RefreshToken = null;
+            await _context.SaveChangesAsync();
 
             return Ok();
         }
@@ -159,7 +148,7 @@ namespace UserAPI.Controllers
                     issuer: _configuration["JWT:Issuer"],
                     audience: _configuration["JWT:Audience"],
                     claimsList,
-                    expires: DateTime.UtcNow.AddMinutes(1),
+                    expires: DateTime.UtcNow.AddMinutes(5),
                     signingCredentials: credentials);
 
             return token;

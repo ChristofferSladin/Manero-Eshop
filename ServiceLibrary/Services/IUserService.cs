@@ -1,6 +1,5 @@
 ﻿using ServiceLibrary.Models;
 using System.Security.Claims;
-using UserAPI.Models;
 
 namespace ServiceLibrary.Services;
 
@@ -13,4 +12,5 @@ public interface IUserService
     Task<UserProfile> GetUserProfileAsync(string id);
     Task<bool> RemoveProductFromWishListAsync(int productId, string userId);
     Task<RefreshModel> GetUserToken(string email, string password);
+    Task<RefreshModel> RefreshToken(RefreshModel refresh);
 }

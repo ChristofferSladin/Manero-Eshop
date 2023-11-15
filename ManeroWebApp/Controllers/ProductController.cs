@@ -2,6 +2,9 @@
 using ManeroWebApp.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using ManeroWebApp.helpers;
+using ServiceLibrary.Models;
+using Azure.Core;
 
 namespace ManeroWebApp.Controllers
 {
@@ -26,6 +29,19 @@ namespace ManeroWebApp.Controllers
                 var token = Request.Cookies["Token"];
                 if (token != null)
                 {
+                    if (TokenChecker.IsTokenExpired(token))
+                    {
+
+                        var refresh = new RefreshModel
+                        {
+                            RefreshToken = Request.Cookies["RefreshToken"]!,
+                            AccessToken = token
+                        };
+                        var refreshedToken = await _productControllerService.RefreshToken(refresh);
+                        var cookieOptions = new CookieOptions { Expires = DateTime.UtcNow.AddDays(1) };
+                        Response.Cookies.Append("Token", refreshedToken.AccessToken, cookieOptions);
+                    }
+
                     shoppingCart = await _productControllerService.GetShoppingForUserCartAsync(token);
                 }
             }
@@ -49,6 +65,17 @@ namespace ManeroWebApp.Controllers
                 var token = Request.Cookies["Token"];
                 if (token != null)
                 {
+                    if (TokenChecker.IsTokenExpired(token))
+                    {
+                        var refresh = new RefreshModel
+                        {
+                            RefreshToken = Request.Cookies["RefreshToken"]!,
+                            AccessToken = token
+                        };
+                        var refreshedToken = await _productControllerService.RefreshToken(refresh);
+                        var cookieOptions = new CookieOptions { Expires = DateTime.UtcNow.AddDays(1) };
+                        Response.Cookies.Append("Token", refreshedToken.AccessToken, cookieOptions);
+                    }
                     await _productControllerService.AddProductToShoppingCartForUserAsync(token, itemQuantity, productNumber);
                 }
             }

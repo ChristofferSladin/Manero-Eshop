@@ -6,7 +6,6 @@ using System.Security.Claims;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Net.Http;
-using UserAPI.Models;
 
 namespace ServiceLibrary.Services;
 
@@ -152,6 +151,33 @@ public class UserService : IUserService
             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
             var response = await client.PostAsync("/login", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var responseString = await response.Content.ReadAsStringAsync();
+                var token = JsonConvert.DeserializeObject<RefreshModel>(responseString);
+                return token;
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.WriteLine(e.Message);
+        }
+        return null!;
+    }
+
+    public async Task<RefreshModel> RefreshToken(RefreshModel refresh)
+    {
+        try
+        {
+            var apiUrl = "https://localhost:7047/refresh";
+            using var client = new HttpClient();
+            client.BaseAddress = new Uri(apiUrl);
+
+            var jsonContent = JsonConvert.SerializeObject(refresh);
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync("/refresh", content);
 
             if (response.IsSuccessStatusCode)
             {
