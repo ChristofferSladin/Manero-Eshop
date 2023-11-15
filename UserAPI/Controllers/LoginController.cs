@@ -50,7 +50,8 @@ namespace UserAPI.Controllers
 
                     var claimsList = new Claim[]
                     {
-                        new Claim(ClaimTypes.NameIdentifier, existingUser.Email!),
+                        new Claim(ClaimTypes.NameIdentifier, existingUser.Id!),
+                        new Claim(ClaimTypes.Name, existingUser.Email!),
                         new Claim(ClaimTypes.Email, existingUser.Email!),
                     };
 

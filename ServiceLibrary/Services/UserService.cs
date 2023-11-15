@@ -1,6 +1,11 @@
 ﻿using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Net;
 using ServiceLibrary.Models;
+using System.Security.Claims;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Net.Http;
 
 namespace ServiceLibrary.Services;
 
@@ -128,4 +133,36 @@ public class UserService : IUserService
 
         return false;
     }
+
+    public async Task<string> GetUserToken(string email, string password)
+    {
+        var userLoginDto = new
+        {
+            Email = email,
+            Password = password
+        };
+        try
+        {
+            var apiUrl = "https://localhost:7047/login";
+            using var client = new HttpClient();
+            client.BaseAddress = new Uri(apiUrl);
+
+            var jsonContent = JsonConvert.SerializeObject(userLoginDto);
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync("/login", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var token = await response.Content.ReadAsStringAsync();
+                return token;
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.WriteLine(e.Message);
+        }
+        return null!;
+    }
+
 }

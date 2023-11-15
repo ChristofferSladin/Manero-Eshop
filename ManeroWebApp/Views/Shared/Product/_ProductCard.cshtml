@@ -1,10 +1,12 @@
 ﻿@model ProductViewModel
 @{
-    var userLoggedInAndLiked = false;
+    var userLiked = false;
     var userIsPrivateCustomer = false;
     var currencySymbol = "$";
+    var userIsLoggedIn = User.Identity.IsAuthenticated;
+    var reviewCount = ViewBag.ReviewCount;
 }
-
+<div id="shoppingCart"></div>
 @if (Model != null!)
 {
     <div class="product-container">
@@ -25,7 +27,10 @@
                 </div>
                 <div class="heart-icon-mobile"></div>
             </div>
-            <div id="productRating" class="rating-box"></div>
+            @if (reviewCount > 0)
+            {
+                <div id="productRating" class="rating-box"></div>
+            }
             <div class="price-add-container">
                 @if (userIsPrivateCustomer)
                 {
@@ -54,7 +59,7 @@
         </div>
         <div class="button-container">
             <div class="button-wrapper">
-                <button class="product-button">+ Add to cart</button>
+                <button class="product-button" id="addToCartBtn">+ Add to cart</button>
             </div>
         </div>
         <div class="review-container">
@@ -63,29 +68,37 @@
                     <div class="review-text-title">Reviews</div>
                     <div id="productReviewsCount" class="review-count-title"></div>
                 </div>
-                <a class="review-view-all" asp-controller="Product" asp-action="Reviews" asp-route-productName="@Model.ProductName" asp-route-productNumber="@Model.ProductNumber">view all<i class="fa-solid fa-angle-right angle-right"></i></a>
+                @if (reviewCount > 0)
+                {
+                    <a class="review-view-all" asp-controller="Product" asp-action="Reviews" asp-route-productName="@Model.ProductName" asp-route-productNumber="@Model.ProductNumber">view all<i class="fa-solid fa-angle-right angle-right"></i></a>
+                }
             </div>
             <div id="productReviews"></div>
         </div>
         <div class="review-button-container">
-            <button class="product-button">Review this item</button>
+            @if (userIsLoggedIn)
+            {
+                <button class="product-button">Review this item</button>
+            }
         </div>
     </div>
 }
 
-
 <div class="heart-icon-wrapper">
-    @if (userLoggedInAndLiked)
+    @if (userIsLoggedIn)
     {
-        <button class="heart-button">
-            <i class="fa-solid fa-heart"></i>
-        </button>
-    }
-    else
-    {
-        <button class="heart-button">
-            <i class="fa-regular fa-heart"></i>
-        </button>
+        @if (userLiked)
+        {
+            <button class="heart-button">
+                <i class="fa-solid fa-heart"></i>
+            </button>
+        }
+        else
+        {
+            <button class="heart-button">
+                <i class="fa-regular fa-heart"></i>
+            </button>
+        }
     }
 </div>
 
@@ -100,6 +113,28 @@
     </button>
 </div>
 
+<script>
+    $(document).ready(function () {
+        $('#addToCartBtn').click(function () {
+            var itemQuantity = productCounter.count;
+            var productNumber = '@Html.Raw(Model?.ProductNumber.Replace("'", "\'").Replace("\"", "\\\""))';
+
+            $.ajax({
+                url: '@Url.Action("AddItemToShoppingCart", "Product")',
+                method: 'POST',
+                data: { itemQuantity: itemQuantity, productNumber: productNumber },
+                success: function (result) {
+                    loadShoppingCartPartial();
+                    productCounter.count = 1;
+                    displayCout.innerHTML = 1;
+                },
+                error: function (error) {
+                    console.error(error);
+                }
+            });
+        });
+    });
+</script>
 
 <script>
     function moveInteractionItems() {
@@ -255,6 +290,24 @@
             method: 'GET',
             success: function (result) {
                 $('#productReviewsCount').html(result);
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+    }
+</script>
+<script>
+    $(document).ready(function () {
+        loadShoppingCartPartial();
+    });
+    function loadShoppingCartPartial() {
+        $.ajax({
+            url: '@Url.Action("ShoppingCartPartial", "Product")',
+            data: {},
+            method: 'GET',
+            success: function (result) {
+                $('#shoppingCart').html(result);
             },
             error: function (error) {
                 console.error(error);
