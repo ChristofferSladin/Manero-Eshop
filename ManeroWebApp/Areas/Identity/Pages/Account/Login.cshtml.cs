@@ -120,7 +120,7 @@ namespace ManeroWebApp.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User logged in.");
                     var token = await _userService.GetUserToken(Input.Email, Input.Password);
-                    var cookieOptions = new CookieOptions { Expires = DateTime.UtcNow.AddDays(1) };
+                    var cookieOptions = new CookieOptions { Expires = DateTime.UtcNow.AddDays(30) };
                     Response.Cookies.Append("Token", token.AccessToken, cookieOptions);
                     Response.Cookies.Append("RefreshToken", token.RefreshToken, cookieOptions);
                     return LocalRedirect(returnUrl);
