@@ -1,10 +1,6 @@
 ﻿using ManeroWebApp.Models;
 using ManeroWebApp.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using ManeroWebApp.helpers;
-using ServiceLibrary.Models;
-using Azure.Core;
 
 namespace ManeroWebApp.Controllers
 {
@@ -29,11 +25,6 @@ namespace ManeroWebApp.Controllers
                 var token = Request.Cookies["Token"];
                 if (token != null)
                 {
-                    if (TokenChecker.IsTokenExpired(token))
-                    {
-                        await _productControllerService.RefreshToken();
-                    }
-
                     shoppingCart = await _productControllerService.GetShoppingForUserCartAsync(token);
                 }
             }
@@ -57,10 +48,6 @@ namespace ManeroWebApp.Controllers
                 var token = Request.Cookies["Token"];
                 if (token != null)
                 {
-                    if (TokenChecker.IsTokenExpired(token))
-                    {
-                        await _productControllerService.RefreshToken();
-                    }
                     await _productControllerService.AddProductToShoppingCartForUserAsync(token, itemQuantity, productNumber);
                 }
             }

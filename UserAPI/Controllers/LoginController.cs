@@ -1,15 +1,13 @@
-﻿using DataAccessLibrary.Entities;
-using Microsoft.AspNetCore.Authorization;
+﻿using DataAccessLibrary.Contexts;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using DataAccessLibrary.Contexts;
-using Microsoft.EntityFrameworkCore;
 using UserAPI.DTO;
 using UserAPI.Models;
 

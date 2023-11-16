@@ -1,11 +1,6 @@
 ﻿using Newtonsoft.Json;
-using System.Diagnostics;
-using System.Net;
 using ServiceLibrary.Models;
-using System.Security.Claims;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Net.Http;
+using System.Diagnostics;
 
 namespace ServiceLibrary.Services;
 

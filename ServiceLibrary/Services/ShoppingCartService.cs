@@ -16,17 +16,15 @@ namespace ServiceLibrary.Services
     public class ShoppingCartService : IShoppingCartService
     {
         private readonly HttpClient _httpClient;
-        private readonly IUserService _userService;
-        private readonly ManeroDbContext _context;
-
-        public ShoppingCartService(HttpClient httpClient, IUserService userService, ManeroDbContext context)
+        private readonly IJwtAuthenticationService _authenticationService;
+        public ShoppingCartService(HttpClient httpClient, IJwtAuthenticationService authenticationService)
         {
             _httpClient = httpClient;
-            _userService = userService;
-            _context = context;
+            _authenticationService = authenticationService;
         }
         public async Task<HttpResponseMessage> AddProductToShoppingCartAsync(string token, int itemQuantity, string productNumber)
         {
+            await _authenticationService.TokenExpired(token);
 
             try
             {
@@ -47,6 +45,7 @@ namespace ServiceLibrary.Services
         }
         public async Task<List<ShoppingCartProduct>> GetUserShoppingCartProductsAsync(string token)
         {
+            await _authenticationService.TokenExpired(token);
             var shoppingCartProducts = new List<ShoppingCartProduct>();
 
             try

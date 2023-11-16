@@ -1,6 +1,4 @@
 ﻿using ManeroWebApp.Models;
-using System.Security.Claims;
-using ServiceLibrary.Models;
 
 namespace ManeroWebApp.Services
 {

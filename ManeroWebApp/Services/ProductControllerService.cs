@@ -2,7 +2,6 @@
 using Newtonsoft.Json;
 using ServiceLibrary.Services;
 using System.Diagnostics;
-using ServiceLibrary.Models;
 
 namespace ManeroWebApp.Services
 {

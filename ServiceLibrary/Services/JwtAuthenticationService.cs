@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using ServiceLibrary.Models;
 using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 
 namespace ServiceLibrary.Services
@@ -15,6 +16,16 @@ namespace ServiceLibrary.Services
         {
             _httpContextAccessor = httpContextAccessor;
         }
+        public async Task<bool> TokenExpired(string accessToken)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.ReadToken(accessToken) as JwtSecurityToken;
+            if (token != null && token.ValidTo >= DateTime.UtcNow) return false;
+            await RefreshTokenAsync();
+            return true;
+
+        }
+
         public async Task<bool> GetTokenAsync(string email, string password)
         {
             var userLogin = new
@@ -94,8 +105,8 @@ namespace ServiceLibrary.Services
 
                 if (response.IsSuccessStatusCode)
                 {
-                   _httpContextAccessor.HttpContext.Response.Cookies.Delete("Token");
-                   _httpContextAccessor.HttpContext.Response.Cookies.Delete("RefreshToken");
+                    _httpContextAccessor.HttpContext.Response.Cookies.Delete("Token");
+                    _httpContextAccessor.HttpContext.Response.Cookies.Delete("RefreshToken");
                     return true;
                 }
             }

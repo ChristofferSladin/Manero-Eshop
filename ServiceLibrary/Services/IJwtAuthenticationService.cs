@@ -8,6 +8,7 @@ namespace ServiceLibrary.Services
 {
     public interface IJwtAuthenticationService
     {
+        Task<bool> TokenExpired(string accessToken);
         Task<bool> GetTokenAsync(string email, string password);
         Task<bool> RefreshTokenAsync();
         Task<bool> RevokeTokenAsync();
