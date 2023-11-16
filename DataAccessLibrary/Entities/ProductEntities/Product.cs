@@ -63,5 +63,8 @@ public class Product
     public virtual ICollection<ShoppingCartProduct>? ShoppingCartProducts { get; set; }
     public virtual ICollection<FavoriteProduct>? FavoriteProducts { get; set; }
     public virtual ICollection<Review>? Reviews { get; set; }
+    [ForeignKey("Category")]
+    public int? CategoryId { get; set; }
+    public virtual Category? ProductCategory { get; set; }
     
 }

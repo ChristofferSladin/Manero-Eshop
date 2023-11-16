@@ -133,17 +133,14 @@ public class ProductRepository
 
         return await query.Skip(skip).Take(take).ToListAsync();
     }
-    public async Task<IEnumerable<string>> GetProductCategories(string categoryType)
+    public async Task<IEnumerable<string>> GetGenderCategories()
     {
         var categoryList = new List<string>();
         List<string?> query = new();
 
-        if(categoryType.ToLower() == "gender")
-            query = await _context.Products.Select(x => x.Gender).ToListAsync();
-        if(categoryType.ToLower() == "category")
-            query = await _context.Products.Select(x => x.Category).ToListAsync();
+        query = await _context.Products.Select(x => x.Gender).ToListAsync();
 
-        if(query is not null)
+        if (query is not null)
         {
             foreach (var category in query)
                 if (!categoryList.Any(x => x == category))
@@ -153,22 +150,23 @@ public class ProductRepository
         }
         return null!;
     }
-    public async Task<IEnumerable<string>> GetProductSubCategories(string genderCategory)
+    public async Task<List<Category>> GetProductSubCategories(string genderCategory)
     {
-        var categoryList = new List<string>();
-        List<string?> query = new();
-
-        if(!string.IsNullOrEmpty(genderCategory))
-            query = await _context.Products.Where(x => x.Gender == genderCategory).Select(x => x.Category).ToListAsync();
-
-        if(query is not null)
+        List<Category> categoryList = new();
+        if (!string.IsNullOrEmpty(genderCategory))
         {
-            foreach (var category in query)
-                if (!categoryList.Any(x => x == category))
-                    categoryList.Add(category!);
+            var query = await _context.Products.Include(x => x.ProductCategory)
+                .Where(x => x.Gender!.ToLower() == genderCategory.ToLower())
+                .Select(x => x.ProductCategory).ToListAsync();
+
+            if (query is not null)
+                foreach (var category in query)
+                    if (!categoryList.Contains(category))
+                        categoryList.Add(category);
             
             return categoryList;
         }
+
         return null!;
     }
 }

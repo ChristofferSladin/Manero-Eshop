@@ -8,25 +8,25 @@
     <div class="gender-categories">
         @foreach (var category in Model.GenderCategories!)
         {
-            <button class="item" asp-controller="ProductCategory" asp-action="Index">@category</button>
+            <a id="@category" class="item" asp-controller="ProductCategory" asp-action="Index" asp-route-genderCategory="@category">@category</a>
         }
     </div>
     <div class="product-types">
         @do
         {
             var category1 = @Model.ProductCategories[count];
-            <div class="category category-small">
-                <div class="category-item"><img src="../img/dresses.jpg" /><span>@category1</span></div>
+            <div class="category category-small category-item">
+                <div class="category-item"><img src="@category1.ImgUrl" /><span>@category1.CategoryName</span></div>
                 @if (count + 1 <= Model.ProductCategories.Count() - 1)
                 {
                     var category2 = @Model.ProductCategories[count + 1];
-                    <div class="category-item"><img src="../img/pants.jpg" /><span>@category2</span></div>
+                    <div class="category-item"><img src="@category2.ImgUrl" /><span>@category2.CategoryName</span></div>
                 }
             </div>
             @if (count + 2 <= Model.ProductCategories.Count() - 1)
             {
                 var category3 = @Model.ProductCategories[count + 2];
-                <div class="category category-big category-item"><img src="../img/accessories.jpg" /><span>@category3</span></div>
+                <div class="category category-big category-item"><img src="@category3.ImgUrl" /><span>@category3.CategoryName</span></div>
             }
             count += 3;
         }
@@ -36,14 +36,9 @@
 
 @{
     <script>
-        function activateItem(button) {
-            var buttons = document.querySelectorAll('.item');
-            buttons.forEach(function (btn) {
-                btn.classList.remove('active');
-            });
 
-            button.classList.add('active');
-        }
+        @Html.Raw(ViewData["script"]);
+
     </script>
 }
 

@@ -385,10 +385,10 @@ namespace ProductAPI.Controllers
         }
 
         [HttpGet]
-        [Route("/products/categories")]
-        public async Task<IActionResult> GetProductCategories(string categoryType)
+        [Route("/products/genderCategories")]
+        public async Task<IActionResult> GetGenderCategories()
         {
-            var categories = await _productRepository.GetProductCategories(categoryType);
+            var categories = await _productRepository.GetGenderCategories();
             return Ok(categories);
         }
         [HttpGet]

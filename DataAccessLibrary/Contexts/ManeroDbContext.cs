@@ -31,5 +31,6 @@ public class ManeroDbContext : IdentityDbContext
     public DbSet<ShoppingCartProduct> ShoppingCartProducts { get; set; }
     public DbSet<FavoriteProduct> FavoriteProducts { get; set; }
     public DbSet<UserProfile> UserProfiles { get; set; }
+    public DbSet<Category> Categories { get; set; }
 
 }

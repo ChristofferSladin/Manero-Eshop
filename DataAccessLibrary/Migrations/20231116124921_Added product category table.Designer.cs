@@ -4,6 +4,7 @@ using DataAccessLibrary.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLibrary.Migrations
 {
     [DbContext(typeof(ManeroDbContext))]
-    partial class ManeroDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231116124921_Added product category table")]
+    partial class Addedproductcategorytable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -150,7 +153,13 @@ namespace DataAccessLibrary.Migrations
                     b.Property<string>("ImgUrl")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ProductId")
+                        .IsUnique();
 
                     b.ToTable("Categories");
                 });
@@ -166,7 +175,7 @@ namespace DataAccessLibrary.Migrations
                     b.Property<string>("Category")
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int?>("CategoryId")
+                    b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
                     b.Property<string>("Color")
@@ -216,8 +225,6 @@ namespace DataAccessLibrary.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("ProductId");
-
-                    b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
                 });
@@ -728,13 +735,15 @@ namespace DataAccessLibrary.Migrations
                     b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("DataAccessLibrary.Entities.ProductEntities.Product", b =>
+            modelBuilder.Entity("DataAccessLibrary.Entities.ProductEntities.Category", b =>
                 {
-                    b.HasOne("DataAccessLibrary.Entities.ProductEntities.Category", "ProductCategory")
-                        .WithMany("Product")
-                        .HasForeignKey("CategoryId");
+                    b.HasOne("DataAccessLibrary.Entities.ProductEntities.Product", "Product")
+                        .WithOne("ProductCategory")
+                        .HasForeignKey("DataAccessLibrary.Entities.ProductEntities.Category", "ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("ProductCategory");
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("DataAccessLibrary.Entities.ProductEntities.Review", b =>
@@ -903,14 +912,11 @@ namespace DataAccessLibrary.Migrations
                     b.Navigation("OrderProducts");
                 });
 
-            modelBuilder.Entity("DataAccessLibrary.Entities.ProductEntities.Category", b =>
-                {
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("DataAccessLibrary.Entities.ProductEntities.Product", b =>
                 {
                     b.Navigation("FavoriteProducts");
+
+                    b.Navigation("ProductCategory");
 
                     b.Navigation("Reviews");
 

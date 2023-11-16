@@ -300,12 +300,11 @@ public class ProductService : IProductService
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
         return products;
     }
-    public async Task<List<string>> GetProductCategoriesAsync(string categoryType)
+    public async Task<List<string>> GetGenderCategoriesAsync()
     {
         try
         {
-            var baseUrl = new StringBuilder("https://localhost:7067/products/categories?");
-            baseUrl.Append($"categoryType={Uri.EscapeDataString(categoryType)}");
+            var baseUrl = new StringBuilder("https://localhost:7067/products/genderCategories?");
             using var client = new HttpClient();
             var request = new HttpRequestMessage();
             request.RequestUri = new Uri(baseUrl.ToString());
@@ -324,7 +323,7 @@ public class ProductService : IProductService
         
         return null!;
     }
-    public async Task<List<string>> GetProductSubCategoriesAsync(string genderCategory)
+    public async Task<List<Category>> GetProductSubCategoriesAsync(string genderCategory)
     {
         try
         {
@@ -339,9 +338,9 @@ public class ProductService : IProductService
             if (response.IsSuccessStatusCode)
             {
                 var responseString = await response.Content.ReadAsStringAsync();
-                var list = JsonConvert.DeserializeObject<List<string>>(responseString);
-                if(list is not null)
-                    return list;
+                var subcategoryList = JsonConvert.DeserializeObject<List<Category>>(responseString);
+                if(subcategoryList is not null)
+                    return subcategoryList;
             }
         }
         catch (Exception e){ Debug.WriteLine(e.Message); }
