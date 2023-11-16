@@ -1,6 +1,7 @@
 using DataAccessLibrary.Contexts;
 using DataAccessLibrary.Initializers;
 using ManeroWebApp.Services;
+using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ServiceLibrary.Services;
@@ -15,6 +16,18 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddRoles<IdentityRole>().AddEntityFrameworkStores<ManeroDbContext>();
 builder.Services.AddControllersWithViews();
 
+builder.Services.Configure<CookiePolicyOptions>(options =>
+{
+    options.MinimumSameSitePolicy = SameSiteMode.Strict;
+    options.HttpOnly = HttpOnlyPolicy.Always;
+    options.OnAppendCookie = cookieContext =>
+    {
+        cookieContext.CookieOptions.Expires = DateTime.UtcNow.AddDays(30);
+        cookieContext.CookieOptions.HttpOnly = true;
+        cookieContext.CookieOptions.SameSite = SameSiteMode.Strict;
+
+    };
+});
 
 
 builder.Services.AddScoped<DataInitializer>();
@@ -23,6 +36,7 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IReviewService, ReviewService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
+builder.Services.AddScoped<IJwtAuthenticationService, JwtAuthenticationService>();
 
 builder.Services.AddScoped<IProductControllerService, ProductControllerService>();
 

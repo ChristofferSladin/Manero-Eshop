@@ -12,18 +12,20 @@ namespace ManeroWebApp.Services
         private readonly IReviewService _reviewService;
         private readonly IProductService _productService;
         private readonly IShoppingCartService _shoppingCartService;
+        private readonly IJwtAuthenticationService _authenticationService;
 
-        public ProductControllerService(IReviewService reviewService, IProductService productService, IShoppingCartService shoppingCartService, IUserService userService)
+        public ProductControllerService(IReviewService reviewService, IProductService productService, IShoppingCartService shoppingCartService, IUserService userService, IJwtAuthenticationService authenticationService)
         {
             _reviewService = reviewService;
             _productService = productService;
             _shoppingCartService = shoppingCartService;
             _userService = userService;
+            _authenticationService = authenticationService;
         }
 
-        public async Task<RefreshModel> RefreshToken(RefreshModel refresh)
+        public async Task<bool> RefreshToken()
         {
-            return await _userService.RefreshToken(refresh);
+            return await _authenticationService.RefreshTokenAsync();
         }
         public async Task<List<ShoppingCartViewModel>> GetShoppingForUserCartAsync(string token)
         {

@@ -11,7 +11,4 @@ public interface IUserService
     Task<FavoriteProduct> AddProductToWishList(int productId, string userId);
     Task<UserProfile> GetUserProfileAsync(string id);
     Task<bool> RemoveProductFromWishListAsync(int productId, string userId);
-    Task<RefreshModel> GetUserToken(string email, string password);
-    Task<RefreshModel> RefreshToken(RefreshModel refresh);
-    Task<HttpResponseMessage> RevokeRefreshToken(RefreshModel refresh);
 }

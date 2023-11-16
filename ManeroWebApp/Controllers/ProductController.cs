@@ -31,15 +31,7 @@ namespace ManeroWebApp.Controllers
                 {
                     if (TokenChecker.IsTokenExpired(token))
                     {
-
-                        var refresh = new RefreshModel
-                        {
-                            RefreshToken = Request.Cookies["RefreshToken"]!,
-                            AccessToken = token
-                        };
-                        var refreshedToken = await _productControllerService.RefreshToken(refresh);
-                        var cookieOptions = new CookieOptions { Expires = DateTime.UtcNow.AddDays(1) };
-                        Response.Cookies.Append("Token", refreshedToken.AccessToken, cookieOptions);
+                        await _productControllerService.RefreshToken();
                     }
 
                     shoppingCart = await _productControllerService.GetShoppingForUserCartAsync(token);
@@ -67,14 +59,7 @@ namespace ManeroWebApp.Controllers
                 {
                     if (TokenChecker.IsTokenExpired(token))
                     {
-                        var refresh = new RefreshModel
-                        {
-                            RefreshToken = Request.Cookies["RefreshToken"]!,
-                            AccessToken = token
-                        };
-                        var refreshedToken = await _productControllerService.RefreshToken(refresh);
-                        var cookieOptions = new CookieOptions { Expires = DateTime.UtcNow.AddDays(1) };
-                        Response.Cookies.Append("Token", refreshedToken.AccessToken, cookieOptions);
+                        await _productControllerService.RefreshToken();
                     }
                     await _productControllerService.AddProductToShoppingCartForUserAsync(token, itemQuantity, productNumber);
                 }

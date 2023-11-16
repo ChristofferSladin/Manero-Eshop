@@ -2,13 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
-using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
 using ServiceLibrary.Models;
 using ServiceLibrary.Services;
 
@@ -18,23 +14,18 @@ namespace ManeroWebApp.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LogoutModel> _logger;
-        private readonly IUserService _userService;
+        private readonly IJwtAuthenticationService _jwtAuthenticationService;
 
-        public LogoutModel(SignInManager<IdentityUser> signInManager, ILogger<LogoutModel> logger, IUserService userService)
+        public LogoutModel(SignInManager<IdentityUser> signInManager, ILogger<LogoutModel> logger, IJwtAuthenticationService jwtAuthenticationService)
         {
             _signInManager = signInManager;
             _logger = logger;
-            _userService = userService;
+            _jwtAuthenticationService = jwtAuthenticationService;
         }
 
         public async Task<IActionResult> OnPost(string returnUrl = null)
         {
-            var refreshModel = new RefreshModel
-            {
-                AccessToken = Request.Cookies["Token"]!,
-                RefreshToken = Request.Cookies["RefreshToken"]!,
-            };
-            await _userService.RevokeRefreshToken(refreshModel);
+            await _jwtAuthenticationService.RevokeTokenAsync();
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
             if (returnUrl != null)
