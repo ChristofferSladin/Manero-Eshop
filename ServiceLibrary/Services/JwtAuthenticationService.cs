@@ -25,10 +25,9 @@ namespace ServiceLibrary.Services
             if (string.IsNullOrEmpty(accessToken)) { return null!; }
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.ReadToken(accessToken) as JwtSecurityToken;
-            if (token != null && token.ValidTo >= DateTime.UtcNow) return null!;
-            await RefreshTokenAsync();
+            if (token != null && token.ValidTo >= DateTime.UtcNow)
+                await RefreshTokenAsync();
             return _httpContextAccessor.HttpContext.Request.Cookies["Token"];
-
         }
 
         public async Task<bool> GetTokenAsync(string email, string password)
