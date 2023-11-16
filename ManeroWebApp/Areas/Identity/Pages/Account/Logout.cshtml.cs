@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using ServiceLibrary.Models;
+using ServiceLibrary.Services;
 
 namespace ManeroWebApp.Areas.Identity.Pages.Account
 {
@@ -16,15 +18,23 @@ namespace ManeroWebApp.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LogoutModel> _logger;
+        private readonly IUserService _userService;
 
-        public LogoutModel(SignInManager<IdentityUser> signInManager, ILogger<LogoutModel> logger)
+        public LogoutModel(SignInManager<IdentityUser> signInManager, ILogger<LogoutModel> logger, IUserService userService)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _userService = userService;
         }
 
         public async Task<IActionResult> OnPost(string returnUrl = null)
         {
+            var refreshModel = new RefreshModel
+            {
+                AccessToken = Request.Cookies["Token"]!,
+                RefreshToken = Request.Cookies["RefreshToken"]!,
+            };
+            await _userService.RevokeRefreshToken(refreshModel);
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
             if (returnUrl != null)

@@ -192,5 +192,27 @@ public class UserService : IUserService
         }
         return null!;
     }
+    public async Task<HttpResponseMessage> RevokeRefreshToken(RefreshModel refresh)
+    {
+        try
+        {
+            var apiUrl = "https://localhost:7047/revoke";
+            using var client = new HttpClient();
+            client.BaseAddress = new Uri(apiUrl);
+            var jsonContent = JsonConvert.SerializeObject(refresh);
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+            var response = await client.PostAsync("/revoke", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.WriteLine(e.Message);
+        }
+        return null!;
+    }
 
 }

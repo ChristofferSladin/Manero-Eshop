@@ -101,17 +101,19 @@ namespace UserAPI.Controllers
 
             return Ok(loginResponse);
         }
-        [Authorize]
-        [HttpDelete]
+
+        [HttpPost]
         [Route("/revoke")]
-        public async Task<IActionResult> Revoke()
+        public async Task<IActionResult> Revoke([FromBody] RefreshModel model)
         {
-            var username = HttpContext.User.Identity?.Name;
+            var principal = GetPrincipalFromExpiredToken(model.AccessToken);
 
-            if (username is null)
+            if (principal?.Identity?.Name == null!)
+            {
                 return Unauthorized();
+            }
 
-            var user = await _userManager.FindByNameAsync(username);
+            var user = await _userManager.FindByNameAsync(principal.Identity.Name);
 
             if (user is null)
                 return Unauthorized();
