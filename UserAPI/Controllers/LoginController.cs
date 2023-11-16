@@ -52,7 +52,7 @@ namespace UserAPI.Controllers
                         var refreshToken = GenerateRefreshToken();
                         var _refreshToken = await _context.UserRefreshToken.FirstOrDefaultAsync(u => u.Id == existingUser.Id);
                         _refreshToken.RefreshToken = refreshToken;
-                        _refreshToken.RefreshTokenExpiry = DateTime.UtcNow.AddDays(30);
+                        _refreshToken.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7);
                         await _context.SaveChangesAsync();
 
                         var loginResponse = new LoginResponse

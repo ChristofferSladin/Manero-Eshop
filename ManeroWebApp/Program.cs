@@ -22,7 +22,7 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
     options.HttpOnly = HttpOnlyPolicy.Always;
     options.OnAppendCookie = cookieContext =>
     {
-        cookieContext.CookieOptions.Expires = DateTime.UtcNow.AddDays(30);
+        cookieContext.CookieOptions.Expires = DateTime.UtcNow.AddDays(7);
         cookieContext.CookieOptions.HttpOnly = true;
         cookieContext.CookieOptions.SameSite = SameSiteMode.Strict;
 
