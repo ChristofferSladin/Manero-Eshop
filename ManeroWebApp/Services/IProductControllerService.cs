@@ -4,9 +4,9 @@ namespace ManeroWebApp.Services
 {
     public interface IProductControllerService
     {
-        Task<List<ShoppingCartViewModel>> GetShoppingForUserCartAsync(string token);
+        Task<List<ShoppingCartViewModel>> GetShoppingForUserCartAsync();
         Task<List<ShoppingCartViewModel>> GetShoppingForGuestCartAsync(string shoppingCartCookie);
-        Task AddProductToShoppingCartForUserAsync(string token, int itemQuantity, string productNumber);
+        Task AddProductToShoppingCartForUserAsync(int itemQuantity, string productNumber);
         public void AddProductToShoppingCartForGuest(HttpResponse response, string? existingShoppingCartCookie, int itemQuantity, string productNumber);
         Task<List<ProductViewModel>> GetProductsWithReviewsAsync();
         Task<ProductViewModel> GetProductAsync(string productNumber);

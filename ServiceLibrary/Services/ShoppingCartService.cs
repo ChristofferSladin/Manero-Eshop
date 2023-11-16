@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using ServiceLibrary.Models;
 using System.Diagnostics;
-using System.Linq;
 using System.Net;
 using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
-using DataAccessLibrary.Contexts;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using ServiceLibrary.Models;
 
 namespace ServiceLibrary.Services
 {
@@ -22,9 +15,9 @@ namespace ServiceLibrary.Services
             _httpClient = httpClient;
             _authenticationService = authenticationService;
         }
-        public async Task<HttpResponseMessage> AddProductToShoppingCartAsync(string token, int itemQuantity, string productNumber)
+        public async Task<HttpResponseMessage> AddProductToShoppingCartAsync(int itemQuantity, string productNumber)
         {
-            await _authenticationService.TokenExpired(token);
+            var token = await _authenticationService.RefreshTokenIfExpired();
 
             try
             {
@@ -43,9 +36,10 @@ namespace ServiceLibrary.Services
             }
             return new HttpResponseMessage(statusCode: HttpStatusCode.BadRequest);
         }
-        public async Task<List<ShoppingCartProduct>> GetUserShoppingCartProductsAsync(string token)
+        public async Task<List<ShoppingCartProduct>> GetUserShoppingCartProductsAsync()
         {
-            await _authenticationService.TokenExpired(token);
+
+            var token = await _authenticationService.RefreshTokenIfExpired();
             var shoppingCartProducts = new List<ShoppingCartProduct>();
 
             try

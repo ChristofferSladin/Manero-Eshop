@@ -22,11 +22,7 @@ namespace ManeroWebApp.Controllers
             var shoppingCart = new List<ShoppingCartViewModel>();
             if (User.Identity != null && User.Identity.IsAuthenticated)
             {
-                var token = Request.Cookies["Token"];
-                if (token != null)
-                {
-                    shoppingCart = await _productControllerService.GetShoppingForUserCartAsync(token);
-                }
+                shoppingCart = await _productControllerService.GetShoppingForUserCartAsync();
             }
             else
             {
@@ -45,11 +41,7 @@ namespace ManeroWebApp.Controllers
 
             if (User.Identity != null && User.Identity.IsAuthenticated)
             {
-                var token = Request.Cookies["Token"];
-                if (token != null)
-                {
-                    await _productControllerService.AddProductToShoppingCartForUserAsync(token, itemQuantity, productNumber);
-                }
+                await _productControllerService.AddProductToShoppingCartForUserAsync(itemQuantity, productNumber);
             }
             else
             {

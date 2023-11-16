@@ -26,13 +26,13 @@ namespace ManeroWebApp.Services
         {
             return await _authenticationService.RefreshTokenAsync();
         }
-        public async Task<List<ShoppingCartViewModel>> GetShoppingForUserCartAsync(string token)
+        public async Task<List<ShoppingCartViewModel>> GetShoppingForUserCartAsync()
         {
             var shoppingCart = new List<ShoppingCartViewModel>();
             try
             {
 
-                var shoppingCartItems = await _shoppingCartService.GetUserShoppingCartProductsAsync(token);
+                var shoppingCartItems = await _shoppingCartService.GetUserShoppingCartProductsAsync();
                 foreach (var cartItem in shoppingCartItems)
                 {
                     var item = await _productService.GetProductByIdAsync(cartItem.ProductId);
@@ -74,9 +74,9 @@ namespace ManeroWebApp.Services
 
             return new List<ShoppingCartViewModel>();
         }
-        public async Task AddProductToShoppingCartForUserAsync(string token, int itemQuantity, string productNumber)
+        public async Task AddProductToShoppingCartForUserAsync(int itemQuantity, string productNumber)
         {
-            await _shoppingCartService.AddProductToShoppingCartAsync(token, itemQuantity, productNumber);
+            await _shoppingCartService.AddProductToShoppingCartAsync(itemQuantity, productNumber);
         }
         public void AddProductToShoppingCartForGuest(HttpResponse response, string? existingShoppingCartCookie, int itemQuantity, string productNumber)
         {

@@ -25,7 +25,6 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
         cookieContext.CookieOptions.Expires = DateTime.UtcNow.AddDays(7);
         cookieContext.CookieOptions.HttpOnly = true;
         cookieContext.CookieOptions.SameSite = SameSiteMode.Strict;
-
     };
 });
 

@@ -1,6 +1,7 @@
 ﻿using Azure;
 using Azure.Core;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 using ServiceLibrary.Models;
 using System.Diagnostics;
@@ -12,17 +13,21 @@ namespace ServiceLibrary.Services
     public class JwtAuthenticationService : IJwtAuthenticationService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public JwtAuthenticationService(IHttpContextAccessor httpContextAccessor)
+        private readonly SignInManager<IdentityUser> _signInManager;
+        public JwtAuthenticationService(IHttpContextAccessor httpContextAccessor, SignInManager<IdentityUser> signInManager)
         {
             _httpContextAccessor = httpContextAccessor;
+            _signInManager = signInManager;
         }
-        public async Task<bool> TokenExpired(string accessToken)
+        public async Task<string> RefreshTokenIfExpired()
         {
+            var accessToken = _httpContextAccessor.HttpContext.Request.Cookies["Token"];
+            if (string.IsNullOrEmpty(accessToken)) { return null!; }
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.ReadToken(accessToken) as JwtSecurityToken;
-            if (token != null && token.ValidTo >= DateTime.UtcNow) return false;
+            if (token != null && token.ValidTo >= DateTime.UtcNow) return null!;
             await RefreshTokenAsync();
-            return true;
+            return _httpContextAccessor.HttpContext.Request.Cookies["Token"];
 
         }
 
@@ -75,13 +80,19 @@ namespace ServiceLibrary.Services
                 var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
                 var response = await client.PostAsync("/refresh", content);
-
-                if (response.IsSuccessStatusCode)
+                switch (response.IsSuccessStatusCode)
                 {
-                    var responseString = await response.Content.ReadAsStringAsync();
-                    var token = JsonConvert.DeserializeObject<RefreshModel>(responseString);
-                    _httpContextAccessor.HttpContext.Response.Cookies.Append("Token", token!.AccessToken);
-                    return true;
+                    case false:
+                        await RevokeTokenAsync();
+                        await _signInManager.SignOutAsync();
+                        return false;
+                    case true:
+                        {
+                            var responseString = await response.Content.ReadAsStringAsync();
+                            var token = JsonConvert.DeserializeObject<RefreshModel>(responseString);
+                            _httpContextAccessor.HttpContext.Response.Cookies.Append("Token", token!.AccessToken);
+                            return true;
+                        }
                 }
             }
             catch (Exception e) { Debug.WriteLine(e.Message); }
