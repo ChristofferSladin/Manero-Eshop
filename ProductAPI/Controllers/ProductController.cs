@@ -391,5 +391,12 @@ namespace ProductAPI.Controllers
             var categories = await _productRepository.GetProductCategories(categoryType);
             return Ok(categories);
         }
+        [HttpGet]
+        [Route("/products/subcategories")]
+        public async Task<IActionResult> GetProductSubCategories(string genderCategory)
+        {
+            var categories = await _productRepository.GetProductSubCategories(genderCategory);
+            return Ok(categories);
+        }
     }
 }

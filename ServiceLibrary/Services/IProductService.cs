@@ -16,6 +16,6 @@ namespace ServiceLibrary.Services
         Task<List<Product>> GetFilteredProductsAsync(int? page, int? take, string? category, string? orderBy,
             string? orderDirection, string? filterByName, string? gender);
         Task<List<string>> GetProductCategoriesAsync(string categoryType);
-
+        Task<List<string>> GetProductSubCategoriesAsync(string genderCategory);
     }
 }

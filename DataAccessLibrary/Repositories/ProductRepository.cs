@@ -153,4 +153,22 @@ public class ProductRepository
         }
         return null!;
     }
+    public async Task<IEnumerable<string>> GetProductSubCategories(string genderCategory)
+    {
+        var categoryList = new List<string>();
+        List<string?> query = new();
+
+        if(!string.IsNullOrEmpty(genderCategory))
+            query = await _context.Products.Where(x => x.Gender == genderCategory).Select(x => x.Category).ToListAsync();
+
+        if(query is not null)
+        {
+            foreach (var category in query)
+                if (!categoryList.Any(x => x == category))
+                    categoryList.Add(category!);
+            
+            return categoryList;
+        }
+        return null!;
+    }
 }

@@ -24,5 +24,11 @@ namespace ManeroWebApp.Controllers
 
             return View(viewModel);
         }
+        public async Task<IActionResult> GetProductSubCategories(string genderCategory)
+        {
+
+            var test = _productService.GetProductSubCategoriesAsync(genderCategory);
+            return RedirectToAction("Index", "ProductCategory");
+        }
     }
 }

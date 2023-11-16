@@ -8,7 +8,7 @@
     <div class="gender-categories">
         @foreach (var category in Model.GenderCategories!)
         {
-            <button class="item" onclick="activateItem(this)">@category</button>
+            <button class="item" asp-controller="ProductCategory" asp-action="Index">@category</button>
         }
     </div>
     <div class="product-types">

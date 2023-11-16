@@ -18,7 +18,7 @@
         justify-content: center;
     }
 
-        .category-main .gender-categories button {
+        .category-main .gender-categories ::deep button {
             padding: 0;
             margin: 0;
             border: none;
@@ -28,7 +28,7 @@
             color: inherit;
         }
 
-        .category-main .gender-categories .item {
+        .category-main .gender-categories ::deep .item {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -41,7 +41,7 @@
             transition: all 0.15s ease-in-out;
         }
 
-            .category-main .gender-categories .item:hover {
+            .category-main .gender-categories ::deep .item:hover {
                 background: #dbe3f5;
             }
 
