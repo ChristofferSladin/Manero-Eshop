@@ -18,13 +18,13 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.Configure<CookiePolicyOptions>(options =>
 {
-    options.MinimumSameSitePolicy = SameSiteMode.Strict;
-    options.HttpOnly = HttpOnlyPolicy.Always;
     options.OnAppendCookie = cookieContext =>
     {
+        if (cookieContext.CookieName is not ("Token" or "RefreshToken")) return;
         cookieContext.CookieOptions.Expires = DateTime.UtcNow.AddDays(7);
         cookieContext.CookieOptions.HttpOnly = true;
         cookieContext.CookieOptions.SameSite = SameSiteMode.Strict;
+        cookieContext.CookieOptions.Secure = true;
     };
 });
 
@@ -60,7 +60,7 @@ else
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
+app.UseCookiePolicy();
 app.UseRouting();
 
 app.UseAuthorization();
