@@ -1,6 +1,4 @@
-﻿using Azure;
-using Azure.Core;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 using ServiceLibrary.Models;
@@ -19,10 +17,29 @@ namespace ServiceLibrary.Services
             _httpContextAccessor = httpContextAccessor;
             _signInManager = signInManager;
         }
+
+        private async Task RevokeCookieTokensAndSignOut()
+        {
+            try
+            {
+                _httpContextAccessor.HttpContext.Response.Cookies.Delete("Token");
+                _httpContextAccessor.HttpContext.Response.Cookies.Delete("RefreshToken");
+                await _signInManager.SignOutAsync();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
+        }
         public async Task<string> RefreshTokenIfExpired()
         {
             var accessToken = _httpContextAccessor.HttpContext.Request.Cookies["Token"];
-            if (string.IsNullOrEmpty(accessToken)) { return null!; }
+            var refreshToken = _httpContextAccessor.HttpContext.Request.Cookies["RefreshToken"];
+            if (string.IsNullOrEmpty(accessToken) || string.IsNullOrEmpty(refreshToken))
+            {
+                await RevokeCookieTokensAndSignOut();
+                return null!;
+            }
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.ReadToken(accessToken) as JwtSecurityToken;
             if (token != null && token.ValidTo >= DateTime.UtcNow)
@@ -83,7 +100,7 @@ namespace ServiceLibrary.Services
                 {
                     case false:
                         await RevokeTokenAsync();
-                        await _signInManager.SignOutAsync();
+                        await RevokeCookieTokensAndSignOut();
                         return false;
                     case true:
                         {
@@ -115,8 +132,7 @@ namespace ServiceLibrary.Services
 
                 if (response.IsSuccessStatusCode)
                 {
-                    _httpContextAccessor.HttpContext.Response.Cookies.Delete("Token");
-                    _httpContextAccessor.HttpContext.Response.Cookies.Delete("RefreshToken");
+                    await RevokeCookieTokensAndSignOut();
                     return true;
                 }
             }

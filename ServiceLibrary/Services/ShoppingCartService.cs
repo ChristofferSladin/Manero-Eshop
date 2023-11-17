@@ -17,13 +17,12 @@ namespace ServiceLibrary.Services
         }
         public async Task<HttpResponseMessage> AddProductToShoppingCartAsync(int itemQuantity, string productNumber)
         {
-            var token = await _authenticationService.RefreshTokenIfExpired();
 
             try
             {
                 var request = new HttpRequestMessage(HttpMethod.Post,
                     $"https://localhost:7047/user/cart/add?quantity={itemQuantity}&productNumber={productNumber}");
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", await _authenticationService.RefreshTokenIfExpired());
                 var response = await _httpClient.SendAsync(request);
                 if (response.IsSuccessStatusCode)
                 {
@@ -39,7 +38,6 @@ namespace ServiceLibrary.Services
         public async Task<List<ShoppingCartProduct>> GetUserShoppingCartProductsAsync()
         {
 
-            var token = await _authenticationService.RefreshTokenIfExpired();
             var shoppingCartProducts = new List<ShoppingCartProduct>();
 
             try
@@ -50,7 +48,7 @@ namespace ServiceLibrary.Services
                     RequestUri = new Uri(apiUrl),
                     Method = HttpMethod.Get,
                 };
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", await _authenticationService.RefreshTokenIfExpired());
                 var response = await _httpClient.SendAsync(request);
                 if (response.IsSuccessStatusCode)
                 {
