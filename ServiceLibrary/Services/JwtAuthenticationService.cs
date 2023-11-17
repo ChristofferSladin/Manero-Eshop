@@ -42,7 +42,7 @@ namespace ServiceLibrary.Services
             }
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.ReadToken(accessToken) as JwtSecurityToken;
-            if (token != null && token.ValidTo >= DateTime.UtcNow)
+            if (token != null && token.ValidTo <= DateTime.UtcNow.AddMinutes(1))
                 await RefreshTokenAsync();
             return _httpContextAccessor.HttpContext.Request.Cookies["Token"];
         }
@@ -107,6 +107,7 @@ namespace ServiceLibrary.Services
                             var responseString = await response.Content.ReadAsStringAsync();
                             var token = JsonConvert.DeserializeObject<RefreshModel>(responseString);
                             _httpContextAccessor.HttpContext.Response.Cookies.Append("Token", token!.AccessToken);
+                            _httpContextAccessor.HttpContext.Response.Cookies.Append("RefreshToken", token!.RefreshToken);
                             return true;
                         }
                 }

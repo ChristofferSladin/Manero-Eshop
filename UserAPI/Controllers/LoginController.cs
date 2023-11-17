@@ -49,11 +49,7 @@ namespace UserAPI.Controllers
                     if (existingUser.UserName != null)
                     {
                         var token = await GenerateJwtToken(existingUser.UserName);
-                        var refreshToken = GenerateRefreshToken();
-                        var _refreshToken = await _context.UserRefreshToken.FirstOrDefaultAsync(u => u.Id == existingUser.Id);
-                        _refreshToken.RefreshToken = refreshToken;
-                        _refreshToken.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7);
-                        await _context.SaveChangesAsync();
+                        var refreshToken = await RefreshToken(existingUser);
 
                         var loginResponse = new LoginResponse
                         {
@@ -69,6 +65,8 @@ namespace UserAPI.Controllers
             return Problem();
         }
 
+
+
         [HttpPost]
         [Route("/refresh")]
         public async Task<IActionResult> Refresh([FromBody] RefreshModel model)
@@ -82,19 +80,25 @@ namespace UserAPI.Controllers
             var user = await _userManager.FindByNameAsync(principal.Identity.Name);
             if (user == null)
             {
-                var _refreshToken = await _context.UserRefreshToken.FirstOrDefaultAsync(u => u.Id == user!.Id);
-                if (user == null ||  _refreshToken.RefreshToken != model.RefreshToken ||  _refreshToken.RefreshTokenExpiry < DateTime.UtcNow)
-                {
-                    return Unauthorized();
-                }
+                return Unauthorized();
+            }
+            var _refreshToken = await _context.UserRefreshToken.FirstOrDefaultAsync(u => u.Id == user.Id);
+            if (_refreshToken == null)
+            {
+                return Unauthorized();
+            }
+            if (_refreshToken.RefreshToken != model.RefreshToken ||  _refreshToken.RefreshTokenExpiry < DateTime.UtcNow)
+            {
+                return Unauthorized();
             }
             var token = await GenerateJwtToken(principal.Identity.Name);
+            var refreshToken = await RefreshToken(user);
 
             var loginResponse = new LoginResponse
             {
                 AccessToken = new JwtSecurityTokenHandler().WriteToken(token),
                 Expiration = token.ValidTo,
-                RefreshToken = model.RefreshToken
+                RefreshToken = refreshToken
             };
 
             return Ok(loginResponse);
@@ -172,6 +176,15 @@ namespace UserAPI.Controllers
             using var generator = RandomNumberGenerator.Create();
             generator.GetBytes(randNum);
             return Convert.ToBase64String(randNum);
+        }
+        private async Task<string> RefreshToken(IdentityUser existingUser)
+        {
+            var refreshToken = GenerateRefreshToken();
+            var _refreshToken = await _context.UserRefreshToken.FirstOrDefaultAsync(u => u.Id == existingUser.Id);
+            _refreshToken.RefreshToken = refreshToken;
+            _refreshToken.RefreshTokenExpiry = DateTime.UtcNow.AddMonths(12);
+            await _context.SaveChangesAsync();
+            return refreshToken;
         }
     }
 }
