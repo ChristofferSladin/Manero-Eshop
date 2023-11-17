@@ -1,8 +1,6 @@
-﻿using DataAccessLibrary.Entities.ProductEntities;
-using DataAccessLibrary.Entities.UserEntities;
-using System.ComponentModel.DataAnnotations;
+﻿using DataAccessLibrary.Entities.UserEntities;
 
-namespace UserAPI.DTO;
+namespace UserAPI.Dtos;
 
 public class ShoppingCartProductDto
 {
