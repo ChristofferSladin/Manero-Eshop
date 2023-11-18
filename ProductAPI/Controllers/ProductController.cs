@@ -3,6 +3,7 @@ using DataAccessLibrary.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using ProductAPI.Dtos;
 using System.Linq.Expressions;
 
@@ -396,7 +397,21 @@ namespace ProductAPI.Controllers
         public async Task<IActionResult> GetProductSubCategories(string genderCategory)
         {
             var categories = await _productRepository.GetProductSubCategories(genderCategory);
-            return Ok(categories);
+            if (categories is not null)
+                return Ok(categories);
+            
+            return null!;
+        }
+        [HttpGet]
+        [Route("/productsByGenderCategory")]
+        public async Task<IActionResult> GetProductByGenderCategory(string genderCategory, string productCategory)
+        {
+            var products = await _productRepository.GetProductsByGenderCategory(genderCategory, productCategory);
+
+            if(products is not null)
+                return Ok(products);
+            
+            return null!;
         }
     }
 }

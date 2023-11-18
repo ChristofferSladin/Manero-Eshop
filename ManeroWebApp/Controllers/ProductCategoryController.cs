@@ -39,9 +39,19 @@ namespace ManeroWebApp.Controllers
                 $"element.classList.add('active')";
             
             ViewData["script"] = script;
-                            
+            ViewData["gender"] = genderCategory;
 
             return View(viewModel);
+        }
+        public async Task<IActionResult> CategoryWiseProducts(string genderCategory, string productCategory, string sort)
+        {
+            var query = await _productService.GetProductsByCategory(genderCategory, productCategory);
+            var productList = query.Select(product => (ProductViewModel)product).ToList();
+
+            ViewData["Gender"] = $"{genderCategory}";
+            ViewData["Category"] = $"{productCategory}";
+
+            return View("ProductsByCategory", productList);
         }
     }
 }

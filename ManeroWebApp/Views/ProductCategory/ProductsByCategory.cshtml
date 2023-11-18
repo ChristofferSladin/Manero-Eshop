@@ -1,0 +1,59 @@
+﻿@model List<ProductViewModel>
+@{
+    ViewData["Title"] = "Product Categories";
+    ViewData["HideFooter"] = true;
+}
+
+<div class="headLine">
+    <div>
+        <a href="/ProductCategory/Index" class="btn-back">
+            <i class="fa-solid fa-chevron-left" style="color:black;"></i>
+        </a>
+    </div>
+    <h1>@ViewData["Title"]</h1>
+    <div>
+        <a asp-page="" class="btn-cart">
+            <i class="fa-light fa-bag-shopping" style="color:black;"></i>
+        </a>
+    </div>
+</div>
+
+<div class="breadcrumb">
+    <a href="/Home/Index">Home</a>
+    <span>&gt;</span>
+    <a href="/ProductCategory/Index">@ViewData["Title"]</a>
+    <span>&gt;</span>
+    <span>@ViewData["Gender"]</span>
+    <span>&gt;</span>
+    <span>@ViewData["Category"]</span>
+</div>
+
+<div class="dropdownStyle">
+    <select id="sortDropdown" onchange="sortProducts(this.value)">
+        <option value="">Sorting by</option>
+        <option value="productName,asc">Name (asc)</option>
+        <option value="productName,desc">Name (desc)</option>
+        <option value="priceIncTax,asc">Price (asc)</option>
+        <option value="priceIncTax,desc">Price (desc)</option>
+        <option value="rating,asc">Rating (asc)</option>
+        <option value="rating,desc">Rating (desc)</option>
+        <option value="Category,asc">Category (asc)</option>
+        <option value="Category,desc">Category (desc)</option>
+    </select>
+</div>
+<div class="product-section">
+    <div id="productCategories" class="product-grid">
+        <partial name="../Shared/Product/_ProductCards" model="Model" />
+    </div>
+</div>
+
+@section Scripts {
+@*     <script>
+
+        function sortProducts(sortBy) {
+            $('#productCategories').load(`/ProductCategory/CategoryWiseProducts?genderCategory=@ViewData["Gender"]&productCategory=@ViewData["Category"]&sort=`+sortBy);
+        }
+
+        $('#productCategories').load(`/ProductCategory/CategoryWiseProducts?genderCategory=@ViewData["Gender"]&productCategory=@ViewData["Category"]`);
+    </script> *@
+}

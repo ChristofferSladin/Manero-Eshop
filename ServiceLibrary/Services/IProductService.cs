@@ -17,5 +17,6 @@ namespace ServiceLibrary.Services
             string? orderDirection, string? filterByName, string? gender);
         Task<List<string>> GetGenderCategoriesAsync();
         Task<List<Category>> GetProductSubCategoriesAsync(string genderCategory);
+        Task<List<Product>> GetProductsByCategory(string genderCategory, string productCategory);
     }
 }

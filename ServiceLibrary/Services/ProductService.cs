@@ -347,5 +347,29 @@ public class ProductService : IProductService
         
         return null!;
     }
+    public async Task<List<Product>> GetProductsByCategory(string genderCategory, string productCategory)
+    {
+        try
+        {
+            var baseUrl = new StringBuilder("https://localhost:7067/productsByGenderCategory?");
+            baseUrl.Append($"genderCategory={Uri.EscapeDataString(genderCategory)}&productCategory={productCategory}");
+            using var client = new HttpClient();
+            var request = new HttpRequestMessage();
+            request.RequestUri = new Uri(baseUrl.ToString());
+            request.Method = HttpMethod.Get;
+            var response = await client.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var responseString = await response.Content.ReadAsStringAsync();
+                var productList = JsonConvert.DeserializeObject<List<Product>>(responseString);
+                if (productList is not null)
+                    return productList;
+            }
+        }
+        catch (Exception e) { Debug.WriteLine(e.Message); }
+
+        return null!;
+    }
 }
 
