@@ -8,7 +8,7 @@ namespace ManeroWebApp.Tests.Services;
 
 public class ProductServiceTests
 {
-    private readonly ProductService _productService = new();
+    private readonly ProductService _productService = new(new HttpClient());
 
     [Fact]
     public async Task Get_ProductAsync_By_ProductNumber_Returns_Valid_Product()
@@ -95,11 +95,8 @@ public class ProductServiceTests
     [Fact]
     public async Task GetOnSaleProductsWithReviewsAsync_Returns_Only_OnSale_Products()
     {
-        // Arrange
-        var productService = new ProductService();
-
         // Act
-        var result = await productService.GetOnSaleProductsWithReviewsAsync();
+        var result = await _productService.GetOnSaleProductsWithReviewsAsync();
 
         // Assert
         Assert.NotEmpty(result);
@@ -109,11 +106,8 @@ public class ProductServiceTests
     [Fact]
     public async Task GetFeaturedProductsWithReviewsAsync_Returns_Only_Featured_Products()
     {
-        // Arrange
-        var productService = new ProductService();
-
         // Act
-        var result = await productService.GetFeaturedProductsWithReviewsAsync();
+        var result = await _productService.GetFeaturedProductsWithReviewsAsync();
 
         // Assert
         Assert.NotEmpty(result);
@@ -123,11 +117,8 @@ public class ProductServiceTests
     [Fact]
     public async Task GetOnSaleProductsWithReviewsAsync_Returns_Products_If_API_Online()
     {
-        // Arrange
-        var productService = new ProductService();
-
         // Act
-        var result = await productService.GetOnSaleProductsWithReviewsAsync();
+        var result = await _productService.GetOnSaleProductsWithReviewsAsync();
 
         // Assert
         Assert.NotEmpty(result);
@@ -136,11 +127,8 @@ public class ProductServiceTests
     [Fact]
     public async Task GetFeaturedProductsWithReviewsAsync_Returns_Products_If_API_Online()
     {
-        // Arrange
-        var productService = new ProductService();
-
         // Act
-        var result = await productService.GetFeaturedProductsWithReviewsAsync();
+        var result = await _productService.GetFeaturedProductsWithReviewsAsync();
 
         // Assert
         Assert.NotEmpty(result);
@@ -151,11 +139,8 @@ public class ProductServiceTests
     [Fact]
     public async Task GetProductsWithReviewsAsync_Return_ValidData()
     {
-        // Arrange
-        var productService = new ProductService();
-
         // Act
-        var result = await productService.GetProductsWithReviewsAsync();
+        var result = await _productService.GetProductsWithReviewsAsync();
 
         // Assert
         foreach (var product in result)
@@ -167,11 +152,8 @@ public class ProductServiceTests
     [Fact]
     public async Task GetProductsWithReviewsAsync_Return_ValidReviewData()
     {
-        // Arrange
-        var productService = new ProductService();
-
         // Act
-        var result = await productService.GetProductsWithReviewsAsync();
+        var result = await _productService.GetProductsWithReviewsAsync();
 
         // Assert
         foreach (var product in result)
@@ -187,11 +169,8 @@ public class ProductServiceTests
     [Fact]
     public async Task GetProductsWithReviewsAsync_Return_ValidProductData()
     {
-        // Arrange
-        var productService = new ProductService();
-
         // Act
-        var result = await productService.GetProductsWithReviewsAsync();
+        var result = await _productService.GetProductsWithReviewsAsync();
 
         // Assert
         foreach (var product in result)
@@ -206,11 +185,8 @@ public class ProductServiceTests
     [Fact]
     public async Task GetProductsWithReviewsAsync_Return_NonNullProductFields()
     {
-        // Arrange
-        var productService = new ProductService();
-
         // Act
-        var result = await productService.GetProductsWithReviewsAsync();
+        var result = await _productService.GetProductsWithReviewsAsync();
 
         // Assert
         foreach (var product in result)
@@ -226,11 +202,8 @@ public class ProductServiceTests
     [Fact]
     public async Task GetProductsWithReviewsAsync_Return_ValidPriceRange()
     {
-        // Arrange
-        var productService = new ProductService();
-
         // Act
-        var result = await productService.GetProductsWithReviewsAsync();
+        var result = await _productService.GetProductsWithReviewsAsync();
 
         // Assert
         foreach (var product in result)
