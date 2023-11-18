@@ -1,7 +1,9 @@
 using System.Diagnostics;
 using DataAccessLibrary.Contexts;
 using DataAccessLibrary.Initializers;
+using ManeroWebApp.DelegatingHandlers;
 using ManeroWebApp.Services;
+using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ServiceLibrary.Services;
@@ -17,12 +19,18 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<HttpClient>();
 builder.Services.AddScoped<DataInitializer>();
+
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IReviewService, ReviewService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
 builder.Services.AddScoped<IJwtAuthenticationService, JwtAuthenticationService>();
 builder.Services.AddScoped<IProductControllerService, ProductControllerService>();
+
+builder.Services.AddTransient<AuthHandler>();
+builder.Services.AddHttpClient<IShoppingCartService, ShoppingCartService>().AddHttpMessageHandler<AuthHandler>();
+
+
 
 builder.Services.Configure<CookiePolicyOptions>(options =>
 {
@@ -42,18 +50,6 @@ using (var scope = app.Services.CreateScope())
 {
     scope.ServiceProvider.GetService<DataInitializer>().SeedData();
 }
-
-app.Use(async (context, next) =>
-{
-    context.Request.Headers.Remove("Authorization");
-    var authService = context.RequestServices.GetRequiredService<IJwtAuthenticationService>();
-    var token = await authService.RefreshTokenIfExpired();
-    if (!string.IsNullOrEmpty(token))
-    {
-        context.Request.Headers.Add("Authorization", "Bearer " + token); 
-    }
-    await next(context);
-});
 
 if (app.Environment.IsDevelopment())
 {
