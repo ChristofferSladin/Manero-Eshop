@@ -10,6 +10,6 @@ namespace ServiceLibrary.Services
     public interface IShoppingCartService
     {
         Task<List<ShoppingCartProduct>> GetUserShoppingCartProductsAsync();
-        Task<HttpResponseMessage> AddProductToShoppingCartAsync(int itemQuantity, string productNumber);
+        Task<bool> AddProductToShoppingCartAsync(int itemQuantity, string productNumber);
     }
 }

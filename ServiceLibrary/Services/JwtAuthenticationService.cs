@@ -12,10 +12,13 @@ namespace ServiceLibrary.Services
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly SignInManager<IdentityUser> _signInManager;
-        public JwtAuthenticationService(IHttpContextAccessor httpContextAccessor, SignInManager<IdentityUser> signInManager)
+        private readonly HttpClient _httpClient;
+
+        public JwtAuthenticationService(IHttpContextAccessor httpContextAccessor, SignInManager<IdentityUser> signInManager, HttpClient httpClient)
         {
             _httpContextAccessor = httpContextAccessor;
             _signInManager = signInManager;
+            _httpClient = httpClient;
         }
 
         private async Task RevokeCookieTokensAndSignOut()
@@ -56,14 +59,11 @@ namespace ServiceLibrary.Services
             };
             try
             {
-                var apiUrl = "https://localhost:7047/login";
-                using var client = new HttpClient();
-                client.BaseAddress = new Uri(apiUrl);
-
+                _httpClient.BaseAddress = new Uri("https://localhost:7047/login");
                 var jsonContent = JsonConvert.SerializeObject(userLogin);
                 var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
-                var response = await client.PostAsync("/login", content);
+                var response = await _httpClient.PostAsync("/login", content);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -88,14 +88,11 @@ namespace ServiceLibrary.Services
                     RefreshToken = _httpContextAccessor.HttpContext.Request.Cookies["RefreshToken"]
                 };
 
-                var apiUrl = "https://localhost:7047/refresh";
-                using var client = new HttpClient();
-                client.BaseAddress = new Uri(apiUrl);
-
+                _httpClient.BaseAddress = new Uri("https://localhost:7047/refresh");
                 var jsonContent = JsonConvert.SerializeObject(model);
                 var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
-                var response = await client.PostAsync("/refresh", content);
+                var response = await _httpClient.PostAsync("/refresh", content);
                 switch (response.IsSuccessStatusCode)
                 {
                     case false:
@@ -124,12 +121,11 @@ namespace ServiceLibrary.Services
                     AccessToken = _httpContextAccessor.HttpContext.Request.Cookies["Token"],
                     RefreshToken = _httpContextAccessor.HttpContext.Request.Cookies["RefreshToken"]
                 };
-                var apiUrl = "https://localhost:7047/revoke";
-                using var client = new HttpClient();
-                client.BaseAddress = new Uri(apiUrl);
+
+                _httpClient.BaseAddress = new Uri("https://localhost:7047/revoke");
                 var jsonContent = JsonConvert.SerializeObject(model);
                 var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-                var response = await client.PostAsync("/revoke", content);
+                var response = await _httpClient.PostAsync("/revoke", content);
 
                 if (response.IsSuccessStatusCode)
                 {

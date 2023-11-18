@@ -11,6 +11,13 @@ namespace ServiceLibrary.Services
 {
     public class ReviewService : IReviewService
     {
+        private readonly HttpClient _httpClient;
+
+        public ReviewService(HttpClient httpClient)
+        {
+            _httpClient = httpClient;
+        }
+
         public async Task<List<Review>> GetFilteredReviewsAsync(int? page, int? take, string? orderBy, string? orderDirection, string? filterByName)
         {
             var reviews = new List<Review>();
@@ -32,13 +39,14 @@ namespace ServiceLibrary.Services
                     query.Length--;
 
                 uriBuilder.Query = query.ToString();
-
                 var baseUrl = uriBuilder.Uri.ToString();
-                using var client = new HttpClient();
-                var request = new HttpRequestMessage();
-                request.RequestUri = new Uri(baseUrl);
-                request.Method = HttpMethod.Get;
-                var response = await client.SendAsync(request);
+
+                var request = new HttpRequestMessage
+                {
+                    RequestUri = new Uri(baseUrl),
+                    Method = HttpMethod.Get,
+                };
+                var response = await _httpClient.SendAsync(request);
                 if (response.IsSuccessStatusCode)
                 {
                     var responseString = await response.Content.ReadAsStringAsync();

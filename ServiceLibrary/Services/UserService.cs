@@ -95,15 +95,14 @@ public class UserService : IUserService
     public async Task<UserProfile> GetUserProfileAsync(string id)
     {
         var userProfile = new UserProfile();
-        var uId = $"?id={id}";
         try
         {
-            var baseUrl = $"https://localhost:7047/user/profile{uId}";
-            using var client = new HttpClient();
-            var request = new HttpRequestMessage();
-            request.RequestUri = new Uri(baseUrl);
-            request.Method = HttpMethod.Get;
-            var response = await client.SendAsync(request);
+            var request = new HttpRequestMessage
+            {
+                RequestUri = new Uri($"https://localhost:7047/user/profile?id={id}"),
+                Method = HttpMethod.Get,
+            };
+            var response = await _httpClient.SendAsync(request);
             if (response.IsSuccessStatusCode)
             {
                 var responseString = await response.Content.ReadAsStringAsync();
