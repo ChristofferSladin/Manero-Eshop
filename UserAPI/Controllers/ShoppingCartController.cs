@@ -1,9 +1,9 @@
-﻿using System.Diagnostics;
-using System.Security.Claims;
-using DataAccessLibrary.Entities.UserEntities;
-using DataAccessLibrary.Repositories;
+﻿using DataAccessLibrary.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
+using System.Security.Claims;
+using UserAPI.Dtos;
 
 namespace UserAPI.Controllers
 {
@@ -31,12 +31,12 @@ namespace UserAPI.Controllers
         [HttpGet]
         [Route("/user/cart/products")]
         [Authorize]
-        public async Task<ActionResult<ShoppingCartProduct>> GetShoppingCartProductsByUserAsync()
+        public async Task<ActionResult<ShoppingCartProductDto>> GetShoppingCartProductsByUserAsync()
         {
             try
             {
                 var user =  User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
-                if (user != null)
+                if (user != null!)
                 {
                     var query = await _shoppingCartProductRepository.GetShoppingCartProductsAsync(user);
                     return Ok(query);
@@ -65,12 +65,12 @@ namespace UserAPI.Controllers
         [HttpPost]
         [Route("/user/cart/add")]
         [Authorize]
-        public async Task<ActionResult<ShoppingCartProduct>> AddProductToShoppingCartAsync(int quantity, string productNumber)
+        public async Task<ActionResult<ShoppingCartProductDto>> AddProductToShoppingCartAsync(int quantity, string productNumber)
         {
             try
             {
                 var user = User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
-                if (user != null)
+                if (user != null!)
                 {
                     var query = await _shoppingCartProductRepository.AddProductAndQuantityToCart(user, quantity, productNumber);
                     return Ok(query);
