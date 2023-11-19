@@ -16,13 +16,19 @@ namespace ManeroWebApp.Controllers
         {
             return View((object)productNumber);
         }
-
-        public async Task<IActionResult> AddToFavorites(string productNumber, bool userLiked)
+        public async Task<IActionResult> ProductLikeButtonPartial(string productNumber)
         {
-            if (userLiked)
+            var userLiked = new LikeViewModel { ProductNumber = productNumber };
+            var userLikes = await _productControllerService.GetFavoritesForUserAsync();
+            userLiked.Liked = userLikes.Any(l => l.ProductNumber == productNumber);
+
+            return PartialView("/Views/Shared/Product/_ProductLikeButton.cshtml", userLiked);
+        }
+        public async Task<IActionResult> AddToFavorites(string productNumber, bool liked)
+        {
+            if (liked)
             {
                 await _productControllerService.RemoveProductToFavoriteForUserAsync(productNumber);
-                
             }
             else
             {
@@ -69,15 +75,7 @@ namespace ManeroWebApp.Controllers
             var productViewModel = await _productControllerService.GetProductAsync(productNumber);
             var reviewData = await _productControllerService.GetReviewDataAsync(productViewModel.ProductName);
             ViewBag.ReviewCount = reviewData.ReviewCount;
-            var userLikes = await _productControllerService.GetFavoritesForUserAsync();
-            if (userLikes.Any(l => l.ProductNumber == productNumber))
-            {
-                ViewBag.UserLiked = true;
-            }
-            else
-            {
-                ViewBag.UserLiked = false;
-            }
+
             return PartialView("/Views/Shared/Product/_ProductCard.cshtml", productViewModel);
         }
 

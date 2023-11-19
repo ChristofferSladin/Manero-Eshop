@@ -1,0 +1,47 @@
+﻿@model LikeViewModel
+@{
+   
+}
+@if (Model.Liked)
+{
+    <button class="heart-button heart-button-liked" id="addToLikesBtn">
+        <i class="fa-solid fa-heart"></i>
+    </button>
+}
+else
+{
+    <button class="heart-button" id="addToLikesBtn">
+        <i class="fa-regular fa-heart"></i>
+    </button>
+}
+
+<script>
+    $(document).ready(function () {
+        $('#addToLikesBtn').click(function () {
+            var userLiked = @(Model.Liked.ToString().ToLower());
+            var productNumber = '@Html.Raw(Model?.ProductNumber.Replace("'", "\'").Replace("\"", "\\\""))';
+
+            $.ajax({
+                url: '@Url.Action("AddToFavorites", "Product")',
+                method: 'POST',
+                data: { productNumber: productNumber, liked: userLiked },
+                success: function (result) {
+                    $.ajax({
+                        url: '@Url.Action("ProductLikeButtonPartial", "Product")',
+                        data: { productNumber: productNumber },
+                        method: 'GET',
+                        success: function (result) {
+                            $('#productLikeButton').html(result);
+                        },
+                        error: function (error) {
+                            console.error(error);
+                        }
+                    });
+                },
+                error: function (error) {
+                    console.error(error);
+                }
+            });
+        });
+    });
+</script>
