@@ -4,6 +4,9 @@ namespace ManeroWebApp.Services
 {
     public interface IProductControllerService
     {
+        Task RemoveProductToFavoriteForUserAsync(string productNumber);
+        Task AddProductToFavoriteForUserAsync(string productNumber);
+        Task<List<FavoriteProductViewModel>> GetFavoritesForUserAsync();
         Task<List<ShoppingCartViewModel>> GetShoppingForUserCartAsync();
         Task<List<ShoppingCartViewModel>> GetShoppingForGuestCartAsync();
         Task AddProductToShoppingCartForUserAsync(int itemQuantity, string productNumber);
@@ -14,5 +17,6 @@ namespace ManeroWebApp.Services
         Task<List<SizeViewModel>> GetProductSizesAsync(string productName, string productNumber);
         Task<List<ColorViewModel>> GetProductColorsAsync(string productName, string size);
         Task<List<ReviewViewModel>> GetReviewsForProductAsync(string productName, int? take);
+       
     }
 }

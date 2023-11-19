@@ -1,9 +1,7 @@
-using System.Diagnostics;
 using DataAccessLibrary.Contexts;
 using DataAccessLibrary.Initializers;
 using ManeroWebApp.DelegatingHandlers;
 using ManeroWebApp.Services;
-using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ServiceLibrary.Services;
@@ -31,6 +29,7 @@ builder.Services.AddTransient<AuthHandler>();
 
 //Add this line of code with YOUR Service if using Authorization
 builder.Services.AddHttpClient<IShoppingCartService, ShoppingCartService>().AddHttpMessageHandler<AuthHandler>();
+builder.Services.AddHttpClient<IFavoriteService, FavoriteService>().AddHttpMessageHandler<AuthHandler>();
 
 
 

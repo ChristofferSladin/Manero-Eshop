@@ -36,18 +36,26 @@ namespace ServiceLibrary.Services
         }
         public async Task<string> RefreshTokenIfExpired()
         {
-            var accessToken = _httpContextAccessor.HttpContext.Request.Cookies["Token"];
-            var refreshToken = _httpContextAccessor.HttpContext.Request.Cookies["RefreshToken"];
-            if (string.IsNullOrEmpty(accessToken) || string.IsNullOrEmpty(refreshToken))
+            try
             {
-                await RevokeCookieTokensAndSignOut();
+                var accessToken = _httpContextAccessor.HttpContext.Request.Cookies["Token"];
+                var refreshToken = _httpContextAccessor.HttpContext.Request.Cookies["RefreshToken"];
+                if (string.IsNullOrEmpty(accessToken) || string.IsNullOrEmpty(refreshToken))
+                {
+                    await RevokeCookieTokensAndSignOut();
+                    return null!;
+                }
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var token = tokenHandler.ReadToken(accessToken) as JwtSecurityToken;
+                if (token != null && token.ValidTo <= DateTime.UtcNow.AddMinutes(1))
+                    await RefreshTokenAsync();
+                return _httpContextAccessor.HttpContext.Request.Cookies["Token"];
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
                 return null!;
             }
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var token = tokenHandler.ReadToken(accessToken) as JwtSecurityToken;
-            if (token != null && token.ValidTo <= DateTime.UtcNow.AddMinutes(1))
-                await RefreshTokenAsync();
-            return _httpContextAccessor.HttpContext.Request.Cookies["Token"];
         }
 
         public async Task<bool> GetTokenAsync(string email, string password)
