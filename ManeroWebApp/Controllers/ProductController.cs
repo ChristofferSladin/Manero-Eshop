@@ -17,25 +17,6 @@ namespace ManeroWebApp.Controllers
             return View((object)productNumber);
         }
 
-        public async Task<IActionResult> ShoppingCartPartial()
-        {
-            var shoppingCart = new List<ShoppingCartViewModel>();
-            if (User.Identity != null && User.Identity.IsAuthenticated)
-            {
-                shoppingCart = await _productControllerService.GetShoppingForUserCartAsync();
-            }
-            else
-            {
-                var shoppingCartCookie = Request.Cookies["ShoppingCart"];
-                if (shoppingCartCookie != null)
-                {
-                    shoppingCart = await _productControllerService.GetShoppingForGuestCartAsync(shoppingCartCookie);
-                }
-            }
-
-            return PartialView("/Views/Shared/ShoppingCart/_ShoppingCartPartial.cshtml", shoppingCart);
-        }
-
         public async Task<IActionResult> AddItemToShoppingCart(int itemQuantity, string productNumber)
         {
 
@@ -45,8 +26,7 @@ namespace ManeroWebApp.Controllers
             }
             else
             {
-                var existingShoppingCartCookie = Request.Cookies["ShoppingCart"];
-                _productControllerService.AddProductToShoppingCartForGuest(Response, existingShoppingCartCookie, itemQuantity, productNumber);
+                _productControllerService.AddProductToShoppingCartForGuest(itemQuantity, productNumber);
             }
 
             return RedirectToAction("Index", "Product", new { productNumber });

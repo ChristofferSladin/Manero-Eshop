@@ -6,7 +6,6 @@
     var userIsLoggedIn = User.Identity.IsAuthenticated;
     var reviewCount = ViewBag.ReviewCount;
 }
-<div id="shoppingCart"></div>
 @if (Model != null!)
 {
     <div class="product-container">
@@ -124,7 +123,6 @@
                 method: 'POST',
                 data: { itemQuantity: itemQuantity, productNumber: productNumber },
                 success: function (result) {
-                    loadShoppingCartPartial();
                     productCounter.count = 1;
                     displayCout.innerHTML = 1;
                 },
@@ -290,24 +288,6 @@
             method: 'GET',
             success: function (result) {
                 $('#productReviewsCount').html(result);
-            },
-            error: function (error) {
-                console.error(error);
-            }
-        });
-    }
-</script>
-<script>
-    $(document).ready(function () {
-        loadShoppingCartPartial();
-    });
-    function loadShoppingCartPartial() {
-        $.ajax({
-            url: '@Url.Action("ShoppingCartPartial", "Product")',
-            data: {},
-            method: 'GET',
-            success: function (result) {
-                $('#shoppingCart').html(result);
             },
             error: function (error) {
                 console.error(error);
