@@ -10,7 +10,6 @@ namespace ServiceLibrary.Services
     {
         Task<string> RefreshTokenIfExpired();
         Task<bool> GetTokenAsync(string email, string password);
-        Task<bool> RefreshTokenAsync();
         Task<bool> RevokeTokenAsync();
     }
 }

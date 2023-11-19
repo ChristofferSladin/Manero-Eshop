@@ -25,10 +25,6 @@ namespace ManeroWebApp.Services
             _contextAccessor = contextAccessor;
         }
 
-        public async Task<bool> RefreshToken()
-        {
-            return await _authenticationService.RefreshTokenAsync();
-        }
         public async Task<List<ShoppingCartViewModel>> GetShoppingForUserCartAsync()
         {
             var shoppingCart = new List<ShoppingCartViewModel>();

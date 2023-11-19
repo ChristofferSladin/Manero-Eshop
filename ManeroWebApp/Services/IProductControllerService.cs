@@ -14,6 +14,5 @@ namespace ManeroWebApp.Services
         Task<List<SizeViewModel>> GetProductSizesAsync(string productName, string productNumber);
         Task<List<ColorViewModel>> GetProductColorsAsync(string productName, string size);
         Task<List<ReviewViewModel>> GetReviewsForProductAsync(string productName, int? take);
-        Task<bool> RefreshToken();
     }
 }

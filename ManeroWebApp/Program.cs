@@ -28,6 +28,8 @@ builder.Services.AddScoped<IJwtAuthenticationService, JwtAuthenticationService>(
 builder.Services.AddScoped<IProductControllerService, ProductControllerService>();
 
 builder.Services.AddTransient<AuthHandler>();
+
+//Add this line of code with YOUR Service if using Authorization
 builder.Services.AddHttpClient<IShoppingCartService, ShoppingCartService>().AddHttpMessageHandler<AuthHandler>();
 
 
