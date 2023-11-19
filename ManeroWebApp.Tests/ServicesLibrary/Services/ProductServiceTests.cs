@@ -4,7 +4,7 @@ using ServiceLibrary.Models;
 using ServiceLibrary.Services;
 using System.Net;
 
-namespace ManeroWebApp.Tests.Services;
+namespace ManeroWebApp.Tests.ServicesLibrary.Services;
 
 public class ProductServiceTests
 {
