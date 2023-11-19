@@ -31,7 +31,7 @@ namespace UserAPI.Services
                 ValidateAudience = true,
                 ValidIssuer = _configuration["JWT:Issuer"],
                 ValidAudience = _configuration["JWT:Audience"],
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:LoginKey"]!)),
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]!)),
                 ValidateLifetime = false
             };
             return new JwtSecurityTokenHandler().ValidateToken(token, validation, out _);
