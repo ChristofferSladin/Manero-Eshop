@@ -1,4 +1,5 @@
-﻿using ManeroWebApp.Models;
+﻿using Azure.Core;
+using ManeroWebApp.Models;
 using Newtonsoft.Json;
 using ServiceLibrary.Services;
 using System.Diagnostics;
@@ -11,21 +12,30 @@ namespace ManeroWebApp.Services
         private readonly IReviewService _reviewService;
         private readonly IProductService _productService;
         private readonly IShoppingCartService _shoppingCartService;
+        private readonly IJwtAuthenticationService _authenticationService;
+        private readonly IHttpContextAccessor _contextAccessor;
 
-        public ProductControllerService(IReviewService reviewService, IProductService productService, IShoppingCartService shoppingCartService, IUserService userService)
+        public ProductControllerService(IReviewService reviewService, IProductService productService, IShoppingCartService shoppingCartService, IUserService userService, IJwtAuthenticationService authenticationService, IHttpContextAccessor contextAccessor)
         {
             _reviewService = reviewService;
             _productService = productService;
             _shoppingCartService = shoppingCartService;
             _userService = userService;
+            _authenticationService = authenticationService;
+            _contextAccessor = contextAccessor;
         }
-        public async Task<List<ShoppingCartViewModel>> GetShoppingForUserCartAsync(string user)
+
+        public async Task<bool> RefreshToken()
+        {
+            return await _authenticationService.RefreshTokenAsync();
+        }
+        public async Task<List<ShoppingCartViewModel>> GetShoppingForUserCartAsync()
         {
             var shoppingCart = new List<ShoppingCartViewModel>();
             try
             {
 
-                var shoppingCartItems = await _shoppingCartService.GetUserShoppingCartProductsAsync(user);
+                var shoppingCartItems = await _shoppingCartService.GetUserShoppingCartProductsAsync();
                 foreach (var cartItem in shoppingCartItems)
                 {
                     var item = await _productService.GetProductByIdAsync(cartItem.ProductId);
@@ -43,13 +53,15 @@ namespace ManeroWebApp.Services
 
             return new List<ShoppingCartViewModel>();
         }
-        public async Task<List<ShoppingCartViewModel>> GetShoppingForGuestCartAsync(string shoppingCartCookie)
+        public async Task<List<ShoppingCartViewModel>> GetShoppingForGuestCartAsync()
         {
             var shoppingCart = new List<ShoppingCartViewModel>();
             try
             {
-
+                var shoppingCartCookie = _contextAccessor.HttpContext!.Request.Cookies["ShoppingCart"];
+                if (shoppingCartCookie == null) return shoppingCart;
                 var shoppingCartItems = JsonConvert.DeserializeObject<List<ShoppingCartItems>>(shoppingCartCookie);
+                if (shoppingCartItems == null) return shoppingCart;
                 foreach (var cartItem in shoppingCartItems)
                 {
                     var item = await _productService.GetProductAsync(cartItem.ProductNumber);
@@ -57,53 +69,46 @@ namespace ManeroWebApp.Services
                     cartViewModel.ItemQuantity = cartItem.ItemQuantity;
                     shoppingCart.Add(cartViewModel);
                 }
-
                 return shoppingCart;
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e.Message);
             }
-
-            return new List<ShoppingCartViewModel>();
+            return shoppingCart;
         }
-        public async Task AddProductToShoppingCartForUserAsync(string user, int itemQuantity, string productNumber)
+        public async Task AddProductToShoppingCartForUserAsync(int itemQuantity, string productNumber)
         {
-            await _shoppingCartService.AddProductToShoppingCartAsync(user, itemQuantity, productNumber);
+            await _shoppingCartService.AddProductToShoppingCartAsync(itemQuantity, productNumber);
         }
-        public void AddProductToShoppingCartForGuest(HttpResponse response, string? existingShoppingCartCookie, int itemQuantity, string productNumber)
+        public void AddProductToShoppingCartForGuest(int itemQuantity, string productNumber)
         {
-            var shoppingCart = new ShoppingCartItems
+            var shoppingCartCookie = _contextAccessor.HttpContext!.Request.Cookies["ShoppingCart"];
+            var cookieOptions = new CookieOptions { Expires = DateTime.Now.AddDays(30) };
+            var shoppingCartList = new List<ShoppingCartItems>();
+            var cartItem = new ShoppingCartItems
             {
                 ProductNumber = productNumber,
                 ItemQuantity = itemQuantity
             };
-            var cookieOptions = new CookieOptions { Expires = DateTime.Now.AddDays(30) };
-
-            if (!string.IsNullOrEmpty(existingShoppingCartCookie))
+            if (!string.IsNullOrEmpty(shoppingCartCookie))
             {
-                var existingShoppingCart = JsonConvert.DeserializeObject<List<ShoppingCartItems>>(existingShoppingCartCookie);
-                if (existingShoppingCart != null)
+                shoppingCartList = JsonConvert.DeserializeObject<List<ShoppingCartItems>>(shoppingCartCookie);
+                var existingItem = shoppingCartList!.FirstOrDefault(item => item.ProductNumber == cartItem.ProductNumber);
+                if (existingItem != null)
                 {
-                    var existingItem = existingShoppingCart.FirstOrDefault(item => item.ProductNumber == productNumber);
-
-                    if (existingItem != null)
-                    {
-                        existingItem.ItemQuantity += itemQuantity;
-                    }
-                    else
-                    {
-                        existingShoppingCart.Add(shoppingCart);
-                    }
+                    existingItem.ItemQuantity += itemQuantity;
                 }
-
-                response.Cookies.Append("ShoppingCart", JsonConvert.SerializeObject(existingShoppingCart), cookieOptions);
+                else
+                {
+                    shoppingCartList!.Add(cartItem);
+                }
             }
             else
             {
-                var newShoppingCart = new List<ShoppingCartItems> { shoppingCart };
-                response.Cookies.Append("ShoppingCart", JsonConvert.SerializeObject(newShoppingCart), cookieOptions);
+                shoppingCartList.Add(cartItem);
             }
+            _contextAccessor.HttpContext.Response.Cookies.Append("ShoppingCart", JsonConvert.SerializeObject(shoppingCartList), cookieOptions);
         }
 
         public async Task<List<ProductViewModel>> GetProductsWithReviewsAsync()

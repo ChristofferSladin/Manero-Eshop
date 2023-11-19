@@ -1,60 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Net;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using ServiceLibrary.Models;
+using System.Diagnostics;
 
 namespace ServiceLibrary.Services
 {
     public class ShoppingCartService : IShoppingCartService
     {
         private readonly HttpClient _httpClient;
-
         public ShoppingCartService(HttpClient httpClient)
         {
             _httpClient = httpClient;
         }
-        public async Task<HttpResponseMessage> AddProductToShoppingCartAsync(string token, int itemQuantity, string productNumber)
+        public async Task<bool> AddProductToShoppingCartAsync(int itemQuantity, string productNumber)
         {
 
             try
             {
-                var request = new HttpRequestMessage(HttpMethod.Post,
-                    $"https://localhost:7047/user/cart/add?quantity={itemQuantity}&productNumber={productNumber}");
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                var request = new HttpRequestMessage
+                {
+                    RequestUri = new Uri($"https://localhost:7047/user/cart/add?quantity={itemQuantity}&productNumber={productNumber}"),
+                    Method = HttpMethod.Post
+                };
                 var response = await _httpClient.SendAsync(request);
                 if (response.IsSuccessStatusCode)
                 {
-                    return new HttpResponseMessage(statusCode: HttpStatusCode.Created);
+                    return true;
                 }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Exception: {ex.Message}");
             }
-            return new HttpResponseMessage(statusCode: HttpStatusCode.BadRequest);
+            return false;
         }
-        public async Task<List<ShoppingCartProduct>> GetUserShoppingCartProductsAsync(string token)
+        public async Task<List<ShoppingCartProduct>> GetUserShoppingCartProductsAsync()
         {
             var shoppingCartProducts = new List<ShoppingCartProduct>();
 
             try
             {
-                var apiUrl = $"https://localhost:7047/user/cart/products";
-                using var client = new HttpClient();
                 var request = new HttpRequestMessage
                 {
-                    RequestUri = new Uri(apiUrl),
+                    RequestUri = new Uri("https://localhost:7047/user/cart/products"),
                     Method = HttpMethod.Get,
                 };
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                var response = await client.SendAsync(request);
-
+                var response = await _httpClient.SendAsync(request);
                 if (response.IsSuccessStatusCode)
                 {
                     var responseBody = await response.Content.ReadAsStringAsync();
@@ -72,6 +62,5 @@ namespace ServiceLibrary.Services
 
             return shoppingCartProducts;
         }
-
     }
 }

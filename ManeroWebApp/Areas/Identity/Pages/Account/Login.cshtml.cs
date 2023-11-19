@@ -2,18 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using ServiceLibrary.Services;
 
 namespace ManeroWebApp.Areas.Identity.Pages.Account
@@ -22,13 +16,13 @@ namespace ManeroWebApp.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
-        private readonly IUserService _userService;
+        private readonly IJwtAuthenticationService _jwtAuthenticationService;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger, IUserService userService)
+        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger, IJwtAuthenticationService jwtAuthenticationService)
         {
             _signInManager = signInManager;
             _logger = logger;
-            _userService = userService;
+            _jwtAuthenticationService = jwtAuthenticationService;
         }
 
         /// <summary>
@@ -118,8 +112,7 @@ namespace ManeroWebApp.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    var token = await _userService.GetUserToken(Input.Email, Input.Password);
-                    Response.Cookies.Append("Token", token);
+                    await _jwtAuthenticationService.GetTokenAsync(Input.Email, Input.Password);
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)

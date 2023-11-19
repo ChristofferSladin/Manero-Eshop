@@ -1,28 +1,31 @@
-﻿using System.Diagnostics;
-using System.Drawing;
-using ServiceLibrary.Models;
-using System.Net.Http;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
+using ServiceLibrary.Models;
+using System.Diagnostics;
 using System.Text;
-using Newtonsoft.Json;
-using System.Text.Json.Nodes;
 
 namespace ServiceLibrary.Services;
 
 public class ProductService : IProductService
 {
+    private readonly HttpClient _httpClient;
+
+    public ProductService(HttpClient httpClient)
+    {
+        _httpClient = httpClient;
+    }
+
     public async Task<List<Product>> GetProductsWithReviewsAsync()
     {
         var products = new List<Product>();
         try
         {
-            var baseUrl = "https://localhost:7067/products/reviews";
-            using var client = new HttpClient();
-            var request = new HttpRequestMessage();
-            request.RequestUri = new Uri(baseUrl);
-            request.Method = HttpMethod.Get;
-            var response = await client.SendAsync(request);
+            var request = new HttpRequestMessage
+            {
+                RequestUri =  new Uri("https://localhost:7067/products/reviews"),
+                Method = HttpMethod.Get
+            };
+            var response = await _httpClient.SendAsync(request);
             if (response.IsSuccessStatusCode)
             {
                 var responseString = await response.Content.ReadAsStringAsync();
@@ -42,12 +45,12 @@ public class ProductService : IProductService
         var products = new List<Product>();
         try
         {
-            var baseUrl = "https://localhost:7067/products/onsale/reviews";
-            using var client = new HttpClient();
-            var request = new HttpRequestMessage();
-            request.RequestUri = new Uri(baseUrl);
-            request.Method = HttpMethod.Get;
-            var response = await client.SendAsync(request);
+            var request = new HttpRequestMessage
+            {
+                RequestUri =  new Uri("https://localhost:7067/products/onsale/reviews"),
+                Method = HttpMethod.Get
+            };
+            var response = await _httpClient.SendAsync(request);
             if (response.IsSuccessStatusCode)
             {
                 var responseString = await response.Content.ReadAsStringAsync();
@@ -67,12 +70,12 @@ public class ProductService : IProductService
         var products = new List<Product>();
         try
         {
-            var baseUrl = "https://localhost:7067/products/featured/reviews";
-            using var client = new HttpClient();
-            var request = new HttpRequestMessage();
-            request.RequestUri = new Uri(baseUrl);
-            request.Method = HttpMethod.Get;
-            var response = await client.SendAsync(request);
+            var request = new HttpRequestMessage
+            {
+                RequestUri =  new Uri("https://localhost:7067/products/featured/reviews"),
+                Method = HttpMethod.Get
+            };
+            var response = await _httpClient.SendAsync(request);
             if (response.IsSuccessStatusCode)
             {
                 var responseString = await response.Content.ReadAsStringAsync();
@@ -89,15 +92,14 @@ public class ProductService : IProductService
     public async Task<Product> GetProductAsync(string productNumber)
     {
         var product = new Product();
-        var pId = $"?productNumber={productNumber}";
         try
         {
-            var baseUrl = $"https://localhost:7067/product{pId}";
-            using var client = new HttpClient();
-            var request = new HttpRequestMessage();
-            request.RequestUri = new Uri(baseUrl);
-            request.Method = HttpMethod.Get;
-            var response = await client.SendAsync(request);
+            var request = new HttpRequestMessage
+            {
+                RequestUri =  new Uri($"https://localhost:7067/product?productNumber={productNumber}"),
+                Method = HttpMethod.Get
+            };
+            var response = await _httpClient.SendAsync(request);
             if (response.IsSuccessStatusCode)
             {
                 var responseString = await response.Content.ReadAsStringAsync();
@@ -130,13 +132,14 @@ public class ProductService : IProductService
                 query.Length--;
 
             uriBuilder.Query = query.ToString();
-
             var baseUrl = uriBuilder.Uri.ToString();
-            using var client = new HttpClient();
-            var request = new HttpRequestMessage();
-            request.RequestUri = new Uri(baseUrl);
-            request.Method = HttpMethod.Get;
-            var response = await client.SendAsync(request);
+
+            var request = new HttpRequestMessage
+            {
+                RequestUri = new Uri(baseUrl),
+                Method = HttpMethod.Get,
+            };
+            var response = await _httpClient.SendAsync(request);
             if (response.IsSuccessStatusCode)
             {
                 var responseString = await response.Content.ReadAsStringAsync();
@@ -173,13 +176,14 @@ public class ProductService : IProductService
                 query.Length--;
 
             uriBuilder.Query = query.ToString();
-
             var baseUrl = uriBuilder.Uri.ToString();
-            using var client = new HttpClient();
-            var request = new HttpRequestMessage();
-            request.RequestUri = new Uri(baseUrl);
-            request.Method = HttpMethod.Get;
-            var response = await client.SendAsync(request);
+
+            var request = new HttpRequestMessage
+            {
+                RequestUri = new Uri(baseUrl),
+                Method = HttpMethod.Get,
+            };
+            var response = await _httpClient.SendAsync(request);
             if (response.IsSuccessStatusCode)
             {
                 var responseString = await response.Content.ReadAsStringAsync();
@@ -197,8 +201,7 @@ public class ProductService : IProductService
     {
         try
         {
-            using var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync($"https://localhost:7067/product?id={productId}");
+            var response = await _httpClient.GetAsync($"https://localhost:7067/product?id={productId}");
             if (response.IsSuccessStatusCode)
             {
                 var content = response.Content.ReadAsStringAsync().Result.ToString();

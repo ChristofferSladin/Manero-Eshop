@@ -1,7 +1,6 @@
 ﻿using ManeroWebApp.Models;
 using ManeroWebApp.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace ManeroWebApp.Controllers
 {
@@ -18,44 +17,16 @@ namespace ManeroWebApp.Controllers
             return View((object)productNumber);
         }
 
-        public async Task<IActionResult> ShoppingCartPartial()
-        {
-            var shoppingCart = new List<ShoppingCartViewModel>();
-            if (User.Identity != null && User.Identity.IsAuthenticated)
-            {
-                var token = Request.Cookies["Token"];
-                if (token != null)
-                {
-                    shoppingCart = await _productControllerService.GetShoppingForUserCartAsync(token);
-                }
-            }
-            else
-            {
-                var shoppingCartCookie = Request.Cookies["ShoppingCart"];
-                if (shoppingCartCookie != null)
-                {
-                    shoppingCart = await _productControllerService.GetShoppingForGuestCartAsync(shoppingCartCookie);
-                }
-            }
-
-            return PartialView("/Views/Shared/ShoppingCart/_ShoppingCartPartial.cshtml", shoppingCart);
-        }
-
         public async Task<IActionResult> AddItemToShoppingCart(int itemQuantity, string productNumber)
         {
 
             if (User.Identity != null && User.Identity.IsAuthenticated)
             {
-                var token = Request.Cookies["Token"];
-                if (token != null)
-                {
-                    await _productControllerService.AddProductToShoppingCartForUserAsync(token, itemQuantity, productNumber);
-                }
+                await _productControllerService.AddProductToShoppingCartForUserAsync(itemQuantity, productNumber);
             }
             else
             {
-                var existingShoppingCartCookie = Request.Cookies["ShoppingCart"];
-                _productControllerService.AddProductToShoppingCartForGuest(Response, existingShoppingCartCookie, itemQuantity, productNumber);
+                _productControllerService.AddProductToShoppingCartForGuest(itemQuantity, productNumber);
             }
 
             return RedirectToAction("Index", "Product", new { productNumber });

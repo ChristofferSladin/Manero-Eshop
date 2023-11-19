@@ -25,6 +25,7 @@ public class DataInitializer
     {
         SeedRoles();
         SeedUsers();
+        SeedUserTokens();
         SeedUserProfiles();
         SeedProducts();
         SeedShoppingCarts();
@@ -34,6 +35,32 @@ public class DataInitializer
         SeedAddresses();
         SeedReviews();
     }
+
+    private void SeedUserTokens()
+    {
+        AddUserTokenIfNotExist();
+    }
+
+    private void AddUserTokenIfNotExist()
+    {
+        var users = _context.Users.ToList();
+        foreach (var user in users)
+        {
+            if (!_context.UserRefreshToken.Any(x => x.Id == user.Id))
+            {
+                _context.Add(new UserRefreshToken
+                {
+                    Id = user.Id,
+                    RefreshToken = null,
+                    RefreshTokenExpiry = DateTime.UtcNow
+                });
+            }
+
+        }
+
+        _context.SaveChanges();
+    }
+
     private void SeedUserProfiles()
     {
         AddUserProfileIfNotExist("Cust", "Omer1", "customer1@customer.com", "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
