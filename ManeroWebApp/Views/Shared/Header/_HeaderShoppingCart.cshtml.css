@@ -209,7 +209,7 @@
     padding: 0 5px;
 }
 
-#displayCounter {
+.item-amount {
     margin: 0 15px;
     font-size: 1.2rem;
 }
