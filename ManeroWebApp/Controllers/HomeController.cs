@@ -63,6 +63,38 @@ namespace ManeroWebApp.Controllers
             return View(viewModel);
         }
 
+        public async Task<IActionResult> HeaderPartial()
+        {
+            var listOfProd = await _productService.GetFeaturedProductsWithReviewsAsync();
+
+            var list = new HomeIndexViewModel
+            {
+                TestModel = new TestingShoppingCartViewModel
+                {
+                    products = new List<ProductViewModel>()
+                }
+            };
+
+            foreach (var prod in listOfProd)
+            {
+                var productViewModel = new ProductViewModel
+                {
+                    ProductId = prod.ProductId,
+                    ProductName = prod.ProductName,
+                    ProductNumber = prod.ProductNumber,
+                    Category = prod.Category,
+                    SalePricePercentage = prod.SalePricePercentage,
+                    ImageUrl = prod.ImageUrl,
+                    PriceExcTax = prod.PriceExcTax,
+                    PriceIncTax = prod.PriceIncTax,
+                    Description = prod.Description
+                };
+                list.TestModel.products.Add(productViewModel);
+            }
+
+            return PartialView("/Views/Shared/Header/_HeaderShoppingCart.cshtml", list);
+        }
+
         public IActionResult Privacy()
         {
             return View();

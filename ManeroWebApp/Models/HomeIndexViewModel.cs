@@ -4,5 +4,6 @@
     {
         public CarouselViewModel FeaturedProducts { get; set; }
         public CarouselViewModel OnSaleProducts { get; set; }
+        public TestingShoppingCartViewModel TestModel { get; set; }
     }
 }

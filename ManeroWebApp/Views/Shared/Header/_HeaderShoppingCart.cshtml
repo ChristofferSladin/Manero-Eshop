@@ -1,0 +1,103 @@
+﻿@model HomeIndexViewModel
+
+@{
+    var countOfProd = 0;
+    var sumInc = 0.0M;
+    var salePrice = 0.0M;
+    var sumExc = 0.0M;
+
+
+    foreach (var item in Model.TestModel.products)
+    {
+        countOfProd++;
+        if (salePrice != 0.0M || salePrice != null!)
+        {
+            sumInc += item.PriceIncTax;
+            sumExc += item.PriceExcTax;
+        }
+        else
+        {
+            sumInc += item.PriceIncTax * item.SalePricePercentage;
+            sumExc += item.PriceExcTax * item.SalePricePercentage;
+        }
+    }
+}
+
+<button id="dropdownButton" class="dropdown-button">
+    <i class="fa-light fa-bag-shopping" aria-hidden="true"></i>
+    <div id="cartCount">@countOfProd</div>
+</button>
+
+<div id="dropdownContent" class="dropdown-content" style="display: none;">
+
+    <div class="shopping-cart-modal">
+        <div class="modal-header">
+            <span class="modal-title">Cart</span>
+            <button class="close-button">x</button>
+        </div>
+
+        <div class="scrollableDiv">
+            @foreach (var item in Model.TestModel.products)
+            {
+                salePrice = item.PriceIncTax * item.SalePricePercentage;
+
+                <div class="modal-body">
+                    <div class="product-item">
+                        <img class="item-img" src="@item.ImageUrl" />
+
+                        <div>
+
+                            <div class="product-details">
+
+                                <div class="product-name">@item.ProductName</div>
+                                <div class="product-category">@item.Category</div>
+                                <div class="product-article">Article Nr: @item.ProductNumber</div>
+                            </div>
+
+                            <div class="price-quantity-container">
+
+                                <div class="product-price">
+
+                                    <div class="original-price">$@item.PriceIncTax</div>
+                                    <div class="discounted-price">$@salePrice.ToString("0.##")</div>
+
+                                </div>
+                                <div class="quantity-selector">
+                                    <button class="minus-button">−</button>
+                                    <input type="number" value="1" />
+                                    <button class="plus-button">+</button>
+                                </div>
+
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div style="border: 1px solid gray;"></div>
+            }
+        </div>
+
+        <div class="total-price">
+            <div class="price-title">Sum:</div>
+            <div class="sumInc">
+                $@sumInc
+            </div>
+            <div class="sumExc">Taxes Excluded: $@sumExc</div>
+
+        </div>
+
+        <div class="modal-footer">
+            <div>
+                <div class="shipping-info">
+                    <span>🚚 Free Shipping Available!</span>
+                </div>
+                <div class="checkout-btn-container">
+                    <button class="checkout-button">Checkout</button>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
