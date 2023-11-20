@@ -43,11 +43,13 @@
         @RenderBody()
     </main>
 
-@*     @if (ViewData["HideFooter"] as bool? != true)
-    {
-        <partial name="_NavBarPartial"/>
-    } *@
 
+    @if (ViewData["HideFooter"] as bool? != true)
+    {
+        <div style="margin-bottom: 60px;"></div> //Do not remove this! Footer height hides the content on all pages after signin in.
+        <partial name="_NavBarPartial"/>
+    }
+    
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 

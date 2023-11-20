@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ServiceLibrary.Services;
 using System.Diagnostics;
+using System.Net;
 
 namespace ManeroWebApp.Controllers
 {
@@ -14,13 +15,21 @@ namespace ManeroWebApp.Controllers
             _productService = productService;
         }
 
-        public IActionResult GuestLogin()
-        {
-            return View("~/Views/Home/Index.cshtml");
-        }
-
         public async Task<IActionResult> Index()
         {
+
+            //Behöver läggas på en service!
+            var cookie = Request.Cookies["UserHasSelectedLogin"];
+            if (cookie == null)
+            {
+                var cookieOptions = new CookieOptions
+                {
+                    Expires = DateTime.UtcNow.AddYears(69),
+                };
+                Response.Cookies.Append("UserHasSelectedLogin", "", cookieOptions);
+                return RedirectToAction("Index", "WelcomePage");
+            }
+
             var onSaleProducts = await _productService.GetOnSaleProductsWithReviewsAsync();
             var featuredProducts = await _productService.GetFeaturedProductsWithReviewsAsync();
 

@@ -172,3 +172,14 @@
     .google-button:hover {
         background-color: #db4437;
     }
+
+
+::deep .guest-login {
+   
+    color: #333;
+}
+
+    ::deep .guest-login:hover {
+        transition: background-color 0.3s, box-shadow 0.3s;
+        color: #3b5998;
+    }
