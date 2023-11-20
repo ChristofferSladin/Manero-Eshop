@@ -1,19 +1,40 @@
-﻿<div class="cover-photo"></div>
+﻿@{
+    ViewData["HideHeader"] = true;
+}
+
+<div class="headLine">
+    <div>
+        <a href="/Home/Index" class="btn-back">
+            <i class="fa-sharp fa-regular fa-bars-sort" style="color:black;"></i>
+        </a>
+    </div>
+    <h5>My Profile</h5>
+    <div>
+        <a asp-page="" class="btn-cart">
+            <i class="fa-light fa-bag-shopping" style="color:black;"></i>
+        </a>
+    </div>
+</div>
+<div class="boderLine" style="margin-top:0;"></div>
+
+
+<div class="cover-photo"></div>
 
 <div class="profile-container">
     <div class="profile-picture">
-        <img src="https://m.media-amazon.com/images/I/81vZT-DmdBL._AC_UL320_.jpg" alt="Profile Picture">
-        <div class="edit-icon">&#9999;</div>
+        <img  src="https://m.media-amazon.com/images/I/81vZT-DmdBL._AC_UL320_.jpg" alt="Profile Picture"/>
+        <div class="edit-icon"><i class="fa-regular fa-pen-line"></i></div>
     </div>
     <div class="profile-info">
-        <h1>Your Name</h1>
+        <h4>Your Name</h4>
         <p>Your Email</p>
     </div>
 </div>
 
 <div class="boderLine"></div>
 <div class="profile-info">
-    <h2 class="lable-info"><i class="fa-light fa-calendar"></i> Order history
+    <h2 class="lable-info">
+        <i class="fa-light fa-calendar"></i> Order history
         <button class="button-style"><span class="fa-solid fa-chevron-right"></span></button>
     </h2>
 </div>
@@ -21,30 +42,32 @@
 <div class="boderLine"></div>
 <div>
     <h2 class="lable-info">
-        <i class="fa-sharp fa-regular fa-credit-card"></i>Payment method 
+        <i class="fa-sharp fa-regular fa-credit-card"></i>Payment method
         <button class="button-style"><span class="fa-solid fa-chevron-right"></span></button>
     </h2>
 </div>
 
 <div class="boderLine"></div>
 <div>
-    <h2 class="lable-info"><i class="fa-light fa-location-dot"></i> My address
+    <h2 class="lable-info">
+        <i class="fa-light fa-location-dot"></i> My address
         <button class="button-style"><span class="fa-solid fa-chevron-right"></span></button>
     </h2>
 </div>
 
 <div class="boderLine"></div>
 <div>
-    <h2 class="lable-info"><i class="fa-regular fa-gift"></i>My promocodes
+    <h2 class="lable-info">
+        <i class="fa-regular fa-gift"></i>My promocodes
         <button class="button-style"><span class="fa-solid fa-chevron-right"></span></button>
     </h2>
 </div>
 
 <div class="boderLine"></div>
 <div>
-    <h2 class="lable-info"><i class="fa-regular fa-arrow-right-from-bracket"></i>Sign out
+    <h2 class="lable-info">
+        <i class="fa-regular fa-arrow-right-from-bracket"></i>Sign out
         <button class="button-style"><span></span></button>
     </h2>
 </div>
 
-<div class="boderLine"></div>
