@@ -292,3 +292,15 @@
     display: flex;
     justify-content: space-between;
 }
+
+@media only screen and (max-width: 425px) {
+    .dropdown-content {
+        width: 80%;
+    }
+}
+
+@media only screen and (max-width: 320px) {
+    .dropdown-content {
+        width: 95%;
+    }
+}
