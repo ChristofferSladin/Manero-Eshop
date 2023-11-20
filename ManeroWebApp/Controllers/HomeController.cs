@@ -65,7 +65,7 @@ namespace ManeroWebApp.Controllers
 
         public async Task<IActionResult> HeaderPartial()
         {
-            var listOfProd = await _productService.GetFeaturedProductsWithReviewsAsync();
+            var listOfProd = await _productService.GetProductsWithReviewsAsync();
 
             var list = new HomeIndexViewModel
             {
@@ -87,7 +87,8 @@ namespace ManeroWebApp.Controllers
                     ImageUrl = prod.ImageUrl,
                     PriceExcTax = prod.PriceExcTax,
                     PriceIncTax = prod.PriceIncTax,
-                    Description = prod.Description
+                    Description = prod.Description,
+                    IsOnSale = prod.IsOnSale,
                 };
                 list.TestModel.products.Add(productViewModel);
             }
