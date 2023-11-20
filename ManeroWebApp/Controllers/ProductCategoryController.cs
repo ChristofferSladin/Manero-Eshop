@@ -17,8 +17,8 @@ namespace ManeroWebApp.Controllers
 
         public async Task<IActionResult> Index(string genderCategory)
         {
-
             var genderCategories = _productService.GetGenderCategoriesAsync().Result;
+
             List<Category> query;
             CategoryPageViewModel viewModel = new();
             viewModel.GenderCategories = genderCategories;
@@ -27,17 +27,17 @@ namespace ManeroWebApp.Controllers
 
             query = await _productService.GetProductSubCategoriesAsync(genderCategory);
             viewModel.ProductCategories = query.Select(x => new Category
-                {
-                    Id = x.Id,
-                    ImgUrl = x.ImgUrl,
-                    CategoryName = x.CategoryName,
-                }).ToList();
+            {
+                Id = x.Id,
+                ImgUrl = x.ImgUrl,
+                CategoryName = x.CategoryName,
+            }).ToList();
 
 
             string script = $"var element = document.getElementById('{genderCategory}'); " +
                 $"console.log(element);" +
                 $"element.classList.add('active')";
-            
+
             ViewData["script"] = script;
             ViewData["gender"] = genderCategory;
 
@@ -45,11 +45,25 @@ namespace ManeroWebApp.Controllers
         }
         public async Task<IActionResult> CategoryWiseProducts(string genderCategory, string productCategory, string sort)
         {
-            var query = await _productService.GetProductsByCategory(genderCategory, productCategory);
+            List<Product> query;
+            var orderBy = "";
+            var orderDirection = "";
+            if (!string.IsNullOrEmpty(sort))
+            {
+                orderBy = sort.Split(",")[0];
+                orderDirection = sort.Split(",")[1];
+            }
+
+            if (!string.IsNullOrEmpty(orderBy) && !string.IsNullOrEmpty(orderDirection))
+                query = await _productService.GetFilteredProductsAsync(null, null, productCategory, orderBy, orderDirection, null, genderCategory);
+            else
+                query = await _productService.GetFilteredProductsAsync(null, null, productCategory, null, null, null, genderCategory);
+
             var productList = query.Select(product => (ProductViewModel)product).ToList();
 
             ViewData["Gender"] = $"{genderCategory}";
             ViewData["Category"] = $"{productCategory}";
+            ViewData["Sort"] = $"{sort}";
 
             return View("ProductsByCategory", productList);
         }

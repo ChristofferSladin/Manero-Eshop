@@ -384,7 +384,18 @@ namespace ProductAPI.Controllers
 
             return Ok(products);
         }
-
+        /// <summary>
+        /// Retrieve Gender Categories from the database for which the products are avaiable
+        /// </summary>
+        /// <returns>
+        /// A full list of GENDER CATEGORIES
+        /// </returns>
+        /// <remarks>
+        /// Example end point: GET /products/genderCategories
+        /// </remarks>
+        /// <response code="200">
+        /// Successfully returned a list of GENDER CATEGORIES for all PRODUCTS
+        /// </response>
         [HttpGet]
         [Route("/products/genderCategories")]
         public async Task<IActionResult> GetGenderCategories()
@@ -392,6 +403,18 @@ namespace ProductAPI.Controllers
             var categories = await _productRepository.GetGenderCategories();
             return Ok(categories);
         }
+        /// <summary>
+        /// Retrieve PRODUCT CATEGORIES from the database for a specific GENDER CATEGORY
+        /// </summary>
+        /// <returns>
+        /// A full list of PRODUCT CATEGORIES for a specific GENDER CATEGORY
+        /// </returns>
+        /// <remarks>
+        /// Example end point: GET /products/subcategories
+        /// </remarks>
+        /// <response code="200">
+        /// Successfully returned a list of GENDER CATEGORIES for all PRODUCTS
+        /// </response>
         [HttpGet]
         [Route("/products/subcategories")]
         public async Task<IActionResult> GetProductSubCategories(string genderCategory)
@@ -399,17 +422,6 @@ namespace ProductAPI.Controllers
             var categories = await _productRepository.GetProductSubCategories(genderCategory);
             if (categories is not null)
                 return Ok(categories);
-            
-            return null!;
-        }
-        [HttpGet]
-        [Route("/productsByGenderCategory")]
-        public async Task<IActionResult> GetProductByGenderCategory(string genderCategory, string productCategory)
-        {
-            var products = await _productRepository.GetProductsByGenderCategory(genderCategory, productCategory);
-
-            if(products is not null)
-                return Ok(products);
             
             return null!;
         }

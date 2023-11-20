@@ -37,8 +37,6 @@
         <option value="priceIncTax,desc">Price (desc)</option>
         <option value="rating,asc">Rating (asc)</option>
         <option value="rating,desc">Rating (desc)</option>
-        <option value="Category,asc">Category (asc)</option>
-        <option value="Category,desc">Category (desc)</option>
     </select>
 </div>
 <div class="product-section">
@@ -48,12 +46,22 @@
 </div>
 
 @section Scripts {
-@*     <script>
-
+    <script>
         function sortProducts(sortBy) {
-            $('#productCategories').load(`/ProductCategory/CategoryWiseProducts?genderCategory=@ViewData["Gender"]&productCategory=@ViewData["Category"]&sort=`+sortBy);
+            window.location.href = `/ProductCategory/CategoryWiseProducts?genderCategory=@ViewData["Gender"]&productCategory=@ViewData["Category"]&sort=` + sortBy;
         }
+        
+        function setSortByFieldValue(value) {
+            var dropdown = document.getElementById("sortDropdown");
+            var options = dropdown.options;
 
-        $('#productCategories').load(`/ProductCategory/CategoryWiseProducts?genderCategory=@ViewData["Gender"]&productCategory=@ViewData["Category"]`);
-    </script> *@
+            for (var i = 0; i < options.length; i++) {
+                if (options[i].value === value) {
+                    options[i].selected = true;
+                }
+            }
+        }
+        
+        setSortByFieldValue("@ViewData["Sort"]");
+    </script>
 }

@@ -169,13 +169,4 @@ public class ProductRepository
 
         return null!;
     }
-    public async Task<List<Product>> GetProductsByGenderCategory(string genderCategory, string productCategory)
-    {
-        if (!string.IsNullOrEmpty(genderCategory) && !string.IsNullOrEmpty(productCategory))
-        {
-            return await _context.Products.Where(x => x.Gender.ToLower() == genderCategory.ToLower())
-                .Where(x => x.ProductCategory.CategoryName.ToLower() == productCategory.ToLower()).ToListAsync();
-        }
-        return null!;
-    }
 }
