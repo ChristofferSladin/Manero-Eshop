@@ -16,7 +16,26 @@ namespace ManeroWebApp.Controllers
         {
             return View((object)productNumber);
         }
+        public async Task<IActionResult> ProductLikeButtonPartial(string productNumber)
+        {
+            var userLiked = new LikeViewModel { ProductNumber = productNumber };
+            var userLikes = await _productControllerService.GetFavoritesForUserAsync();
+            userLiked.Liked = userLikes.Any(l => l.ProductNumber == productNumber);
 
+            return PartialView("/Views/Shared/Product/_ProductLikeButton.cshtml", userLiked);
+        }
+        public async Task<IActionResult> AddToFavorites(string productNumber, bool liked)
+        {
+            if (liked)
+            {
+                await _productControllerService.RemoveProductToFavoriteForUserAsync(productNumber);
+            }
+            else
+            {
+                await _productControllerService.AddProductToFavoriteForUserAsync(productNumber);
+            }
+            return RedirectToAction("Index", "Product", new { productNumber });
+        }
         public async Task<IActionResult> AddItemToShoppingCart(int itemQuantity, string productNumber)
         {
 

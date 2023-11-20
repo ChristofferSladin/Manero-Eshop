@@ -12,19 +12,48 @@ namespace ManeroWebApp.Services
         private readonly IReviewService _reviewService;
         private readonly IProductService _productService;
         private readonly IShoppingCartService _shoppingCartService;
-        private readonly IJwtAuthenticationService _authenticationService;
         private readonly IHttpContextAccessor _contextAccessor;
+        private readonly IFavoriteService _favoriteService;
 
-        public ProductControllerService(IReviewService reviewService, IProductService productService, IShoppingCartService shoppingCartService, IUserService userService, IJwtAuthenticationService authenticationService, IHttpContextAccessor contextAccessor)
+        public ProductControllerService(IReviewService reviewService, IProductService productService, IShoppingCartService shoppingCartService, IUserService userService, IHttpContextAccessor contextAccessor, IFavoriteService favoriteService)
         {
             _reviewService = reviewService;
             _productService = productService;
             _shoppingCartService = shoppingCartService;
             _userService = userService;
-            _authenticationService = authenticationService;
             _contextAccessor = contextAccessor;
+            _favoriteService = favoriteService;
         }
+        public async Task RemoveProductToFavoriteForUserAsync(string productNumber)
+        {
+            await _favoriteService.RemoveProductToFavoritesAsync(productNumber);
+        }
+        public async Task AddProductToFavoriteForUserAsync(string productNumber)
+        {
+            await _favoriteService.AddProductToFavoritesAsync(productNumber);
+        }
+        public async Task<List<FavoriteProductViewModel>> GetFavoritesForUserAsync()
+        {
+            var favorites = new List<FavoriteProductViewModel>();
+            try
+            {
+                var favoriteProducts = await _favoriteService.GetUserFavoriteProductsAsync();
+                foreach (var favoriteProduct in favoriteProducts)
+                {
+                    var item = await _productService.GetProductByIdAsync(favoriteProduct.ProductId);
+                    FavoriteProductViewModel favoriteItem = item;
+                    favorites.Add(favoriteItem);
+                }
 
+                return favorites;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
+
+            return favorites;
+        }
         public async Task<List<ShoppingCartViewModel>> GetShoppingForUserCartAsync()
         {
             var shoppingCart = new List<ShoppingCartViewModel>();
@@ -47,7 +76,7 @@ namespace ManeroWebApp.Services
                 Debug.WriteLine(e.Message);
             }
 
-            return new List<ShoppingCartViewModel>();
+            return shoppingCart;
         }
         public async Task<List<ShoppingCartViewModel>> GetShoppingForGuestCartAsync()
         {
