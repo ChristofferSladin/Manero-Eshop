@@ -126,6 +126,7 @@
                 method: 'POST',
                 data: { itemQuantity: itemQuantity, productNumber: productNumber },
                 success: function (result) {
+                    loadShoppingCartPartial();
                     productCounter.count = 1;
                     displayCout.innerHTML = 1;
                 },

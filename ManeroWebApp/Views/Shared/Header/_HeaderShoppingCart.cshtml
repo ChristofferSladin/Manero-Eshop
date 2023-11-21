@@ -10,20 +10,22 @@
 <div class="rel-container">
     <button id="dropdownButton" class="dropdown-button">
         <i class="fa-light fa-bag-shopping" aria-hidden="true"></i>
-        <div id="cartCount">@Model.TestModel.products.Count</div>
+        <div id="cartCount">@Model.TestModel.ShoppingCartProducts.Count</div>
     </button>
-    <div id="dropdownContent" class="dropdown-content" style="display: none;">
+    <div id="dropdownContent" class="dropdown-content">
         <div class="shopping-cart-model">
             <div class="model-header">
                 <span class="modal-title">Cart</span>
-                <button class="close-button"><i class="fa-regular fa-xmark"></i></button>
+                <button class="close-button" id="close-button"><i class="fa-regular fa-xmark"></i></button>
             </div>
             <div class="scroll-container">
                 <div class="scrollable-div">
-                    @foreach (var item in Model.TestModel.products)
+                    @foreach (var item in Model.TestModel.ShoppingCartProducts)
                     {
                         <div class="product-item">
-                            <button class="remove-item-button"><i class="fa-regular fa-xmark"></i></button>
+                            <button class="remove-item-button" id="remove-product-btn" data-product-number="@item.ProductNumber">
+                                <i class="fa-regular fa-xmark"></i>
+                            </button>
                             <a class="product-content-wrapper" asp-route-productNumber="@item.ProductNumber" asp-action="Index" asp-controller="Product">
                                 <img class="item-img" src="@item.ImageUrl" alt="product image" />
                                 <div class="product-info-wrapper">
@@ -66,16 +68,17 @@
                             </a>
                             <div class="quantity-selector">
                                 <div class="quantity-wrapper">
-                                    <button>
+                                    <button id="decrement-btn" data-product-number="@item.ProductNumber">
                                         <i class="fa-solid fa-minus"></i>
                                     </button>
-                                    <div class="item-amount">1</div>
-                                    <button>
+                                    <div class="item-amount">@item.ItemQuantity</div>
+                                    <button id="increment-btn" data-product-number="@item.ProductNumber">
                                         <i class="fa-solid fa-plus"></i>
                                     </button>
                                 </div>
                             </div>
                         </div>
+
                     }
                 </div>
             </div>
@@ -107,3 +110,54 @@
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+        $('.scrollable-div').on('click', '#remove-product-btn', function () {
+            var productNumber = $(this).data('product-number');
+            $.ajax({
+                url: '@Url.Action("RemoveProductFromShoppingCart", "Home")',
+                method: 'POST',
+                data: { productNumber: productNumber },
+                success: function (result) {
+                    loadShoppingCartPartial();
+                },
+                error: function (error) {
+                    console.error(error);
+                }
+            });
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $('.scrollable-div').on('click', '#increment-btn', function () {
+            var productNumber = $(this).data('product-number');
+            $.ajax({
+                url: '@Url.Action("IncrementShoppingCartProduct", "Home")',
+                method: 'POST',
+                data: { productNumber: productNumber, increment: 1 },
+                success: function (result) {
+                    loadShoppingCartPartial();
+                },
+                error: function (error) {
+                    console.error(error);
+                }
+            });
+        });
+
+        $('.scrollable-div').on('click', '#decrement-btn', function () {
+            var productNumber = $(this).data('product-number');
+            $.ajax({
+                url: '@Url.Action("IncrementShoppingCartProduct", "Home")',
+                method: 'POST',
+                data: { productNumber: productNumber, increment: 2 },
+                success: function (result) {
+                    loadShoppingCartPartial();
+                },
+                error: function (error) {
+                    console.error(error);
+                }
+            });
+        });
+    });
+</script>

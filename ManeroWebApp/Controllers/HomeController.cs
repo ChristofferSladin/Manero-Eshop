@@ -8,10 +8,12 @@ namespace ManeroWebApp.Controllers
     public class HomeController : Controller
     {
         private readonly IProductService _productService;
+        private readonly IShoppingCartService _shoppingCartService;
 
-        public HomeController(IProductService productService)
+        public HomeController(IProductService productService, IShoppingCartService shoppingCartService)
         {
             _productService = productService;
+            _shoppingCartService = shoppingCartService;
         }
 
         public async Task<IActionResult> Index()
@@ -63,37 +65,51 @@ namespace ManeroWebApp.Controllers
             return View(viewModel);
         }
 
+        public async Task<IActionResult> IncrementShoppingCartProductAsync(Increment increment, string productNumber)
+        {
+            await _shoppingCartService.IncrementProductInShoppingCartAsync(increment, productNumber);
+            return RedirectToAction("HeaderPartial", "Home");
+        }
+        public async Task<IActionResult> RemoveProductFromShoppingCartAsync(string productNumber)
+        {
+            await _shoppingCartService.RemoveProductFromShoppingCartAsync(productNumber);
+            return RedirectToAction("HeaderPartial", "Home");
+        }
         public async Task<IActionResult> HeaderPartial()
         {
-            var listOfProd = await _productService.GetProductsWithReviewsAsync();
+            var cartProducts = await _shoppingCartService.GetUserShoppingCartProductsAsync();
 
-            var list = new HomeIndexViewModel
+            var homeIndexViewModel = new HomeIndexViewModel
             {
                 TestModel = new TestingShoppingCartViewModel
                 {
-                    products = new List<ProductViewModel>()
+                    ShoppingCartProducts = new List<ShoppingCartViewModel>(),
                 }
             };
-
-            foreach (var prod in listOfProd)
+            if (User.Identity != null && User.Identity.IsAuthenticated)
             {
-                var productViewModel = new ProductViewModel
+
+                foreach (var cartProduct in cartProducts)
                 {
-                    ProductId = prod.ProductId,
-                    ProductName = prod.ProductName,
-                    ProductNumber = prod.ProductNumber,
-                    Category = prod.Category,
-                    SalePricePercentage = prod.SalePricePercentage,
-                    ImageUrl = prod.ImageUrl,
-                    PriceExcTax = prod.PriceExcTax,
-                    PriceIncTax = prod.PriceIncTax,
-                    Description = prod.Description,
-                    IsOnSale = prod.IsOnSale,
-                };
-                list.TestModel.products.Add(productViewModel);
+                    var product = await _productService.GetProductByIdAsync(cartProduct.ProductId);
+                    var productViewModel = new ShoppingCartViewModel
+                    {
+                        ProductId = product.ProductId,
+                        ProductName = product.ProductName,
+                        ProductNumber = product.ProductNumber,
+                        Category = product.Category,
+                        SalePricePercentage = product.SalePricePercentage,
+                        ImageUrl = product.ImageUrl,
+                        PriceExcTax = product.PriceExcTax,
+                        PriceIncTax = product.PriceIncTax,
+                        IsOnSale = product.IsOnSale,
+                        ItemQuantity = cartProduct.ItemQuantity
+                    };
+                    homeIndexViewModel.TestModel.ShoppingCartProducts.Add(productViewModel);
+                }
             }
 
-            return PartialView("/Views/Shared/Header/_HeaderShoppingCart.cshtml", list);
+            return PartialView("/Views/Shared/Header/_HeaderShoppingCart.cshtml", homeIndexViewModel);
         }
 
         public IActionResult Privacy()

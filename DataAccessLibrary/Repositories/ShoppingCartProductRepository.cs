@@ -94,7 +94,10 @@ public class ShoppingCartProductRepository : Repository<ShoppingCartProduct>
                 existingCartItem.ItemQuantity += 1;
                 break;
             case Increment.Remove:
-                existingCartItem.ItemQuantity -= 1;
+                if (existingCartItem.ItemQuantity > 1)
+                {
+                    existingCartItem.ItemQuantity -= 1;
+                }
                 break;
             case Increment.Default:
             default:

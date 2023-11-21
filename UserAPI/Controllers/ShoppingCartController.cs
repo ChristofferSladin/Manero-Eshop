@@ -36,6 +36,7 @@ namespace UserAPI.Controllers
         {
             try
             {
+                
                 var user = User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
                 if (user != null!)
                 {
