@@ -57,7 +57,7 @@ namespace ServiceLibrary.Services
         }
         public async Task<List<FavoriteProduct>> GetUserFavoriteProductsAsync()
         {
-            var shoppingCartProducts = new List<FavoriteProduct>();
+            var favoriteProducts = new List<FavoriteProduct>();
 
             try
             {
@@ -70,7 +70,7 @@ namespace ServiceLibrary.Services
                 if (response.IsSuccessStatusCode)
                 {
                     var responseBody = await response.Content.ReadAsStringAsync();
-                    shoppingCartProducts = JsonConvert.DeserializeObject<List<FavoriteProduct>>(responseBody);
+                    favoriteProducts = JsonConvert.DeserializeObject<List<FavoriteProduct>>(responseBody);
                 }
                 else
                 {
@@ -82,7 +82,7 @@ namespace ServiceLibrary.Services
                 Debug.WriteLine($"Exception: {ex.Message}");
             }
 
-            return shoppingCartProducts;
+            return favoriteProducts;
         }
     }
 }

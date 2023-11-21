@@ -54,6 +54,7 @@ namespace ServiceLibrary.Services
             catch (Exception e)
             {
                 Debug.WriteLine(e.Message);
+                await RevokeCookieTokensAndSignOut();
                 return null!;
             }
         }

@@ -31,7 +31,7 @@ namespace UserAPI.Controllers
         [HttpGet]
         [Route("/user/favorite/products")]
         [Authorize]
-        public async Task<ActionResult<ShoppingCartProductDto>> GetFavoriteProductsByUserAsync()
+        public async Task<ActionResult<FavoriteProductDto>> GetFavoriteProductsByUserAsync()
         {
             try
             {
