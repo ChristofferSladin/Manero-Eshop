@@ -26,7 +26,7 @@ namespace ManeroWebApp.Controllers
             }
             catch (Exception e) { Debug.WriteLine(e.Message); }
 
-            return View();
+            return View(new List<FavoriteProductViewModel>());
         }
         public async Task<IActionResult> AddProductToShoppingCart(int productId, int shoppingCartId)
         {

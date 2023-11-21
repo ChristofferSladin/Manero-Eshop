@@ -1,0 +1,74 @@
+﻿@model CategoryPageViewModel
+@{
+    var count = 0;
+    ViewData["HideFooter"] = true;
+}
+
+@* categories main *@
+<section class="category-main">
+    <div class="gender-categories">
+        @foreach (var category in Model.GenderCategories!)
+        {
+            <a id="@category" class="item"
+               asp-controller="ProductCategory"
+               asp-action="Index"
+               asp-route-genderCategory="@category">
+               @category
+            </a>
+        }
+    </div>
+    <div class="product-types">
+        @do
+        {
+            var category1 = @Model.ProductCategories[count];
+            <div class="category category-small category-item">
+                <div class="category-item">
+                    <a class="category-link" asp-action="CategoryWiseProducts"
+                       asp-route-productCategory="@category1.CategoryName"
+                       asp-route-genderCategory="@ViewData["gender"]">
+                        <img src="@category1.ImgUrl" />
+                        <span asp-controller="ProductCategory">
+                            @category1.CategoryName
+                        </span>
+                    </a>
+                </div>
+                @if (count + 1 <= Model.ProductCategories.Count() - 1)
+                {
+                    var category2 = @Model.ProductCategories[count + 1];
+                    <div class="category-item">
+                        <a class="category-link" asp-action="CategoryWiseProducts"
+                           asp-route-productCategory="@category2.CategoryName"
+                           asp-route-genderCategory="@ViewData["gender"]">
+                            <img src="@category2.ImgUrl" />
+                            <span>@category2.CategoryName</span>
+                        </a>
+                    </div>
+                }
+            </div>
+            @if (count + 2 <= Model.ProductCategories.Count() - 1)
+            {
+                var category3 = @Model.ProductCategories[count + 2];
+                <div class="category category-big category-item">
+                    <a class="category-link" asp-action="CategoryWiseProducts"
+                       asp-route-productCategory="@category3.CategoryName"
+                       asp-route-genderCategory="@ViewData["gender"]">
+                        <img src="@category3.ImgUrl" />
+                        <span>@category3.CategoryName</span>
+                    </a>
+                </div>
+            }
+            count += 3;
+        }
+        while (Model.ProductCategories.Count - 1 >= count);
+    </div>
+</section>
+
+@{
+    <script>
+
+        @Html.Raw(ViewData["script"]);
+
+    </script>
+}
+
+

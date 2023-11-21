@@ -3,6 +3,8 @@ using DataAccessLibrary.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using ProductAPI.Dtos;
 using System.Linq.Expressions;
 
 namespace ProductAPI.Controllers
@@ -235,7 +237,7 @@ namespace ProductAPI.Controllers
         /// </response>
         [HttpGet]
         [Route("/products/filter")]
-        public async Task<ActionResult<List<Product>>> GetProductsFilteredAsync(int? page, int? take, string filterByName = null!, string filterByCategory = null!, string? orderByField = null!, string orderDirection = null!)
+        public async Task<ActionResult<List<Product>>> GetProductsFilteredAsync(int? page, int? take, string? gender, string filterByName = null!, string filterByCategory = null!, string? orderByField = null!, string orderDirection = null!)
         {
             if (page <= 0 && take <= 0) { return BadRequest($"Invalid page & take, value \"{page}\" & value \"{take}\" is not allowed."); }
             if (page <= 0) { return BadRequest($"Invalid page, value \"{page}\" is not allowed."); }
@@ -290,7 +292,14 @@ namespace ProductAPI.Controllers
                 }
             }
 
-            var products = await _productRepository.GetFilteredProductsAsync(_skip, _take, _filterByName, _filterByCategory, _orderByField, orderDirection);
+            Expression<Func<Product, bool>> _gender = null!;
+
+            if (!string.IsNullOrEmpty(gender))
+            {
+                _gender = product => product.Gender != null && product.Gender.ToLower() == gender.ToLower();
+            }
+
+            var products = await _productRepository.GetFilteredProductsAsync(_skip, _take, _filterByName, _filterByCategory, _orderByField, orderDirection, _gender);
 
             if (products.Count == 0 && !string.IsNullOrEmpty(filterByName)) { return NotFound("Invalid product name, the product does not exist."); }
             if (products.Count == 0 && !string.IsNullOrEmpty(filterByCategory)) { return NotFound("Invalid category name, the category does not exist."); }
@@ -374,6 +383,47 @@ namespace ProductAPI.Controllers
             if (products.Count == 0) { return NotFound("Invalid page, page does not exist or has no products."); }
 
             return Ok(products);
+        }
+        /// <summary>
+        /// Retrieve Gender Categories from the database for which the products are avaiable
+        /// </summary>
+        /// <returns>
+        /// A full list of GENDER CATEGORIES
+        /// </returns>
+        /// <remarks>
+        /// Example end point: GET /products/genderCategories
+        /// </remarks>
+        /// <response code="200">
+        /// Successfully returned a list of GENDER CATEGORIES for all PRODUCTS
+        /// </response>
+        [HttpGet]
+        [Route("/products/genderCategories")]
+        public async Task<IActionResult> GetGenderCategories()
+        {
+            var categories = await _productRepository.GetGenderCategories();
+            return Ok(categories);
+        }
+        /// <summary>
+        /// Retrieve PRODUCT CATEGORIES from the database for a specific GENDER CATEGORY
+        /// </summary>
+        /// <returns>
+        /// A full list of PRODUCT CATEGORIES for a specific GENDER CATEGORY
+        /// </returns>
+        /// <remarks>
+        /// Example end point: GET /products/subcategories
+        /// </remarks>
+        /// <response code="200">
+        /// Successfully returned a list of GENDER CATEGORIES for all PRODUCTS
+        /// </response>
+        [HttpGet]
+        [Route("/products/subcategories")]
+        public async Task<IActionResult> GetProductSubCategories(string genderCategory)
+        {
+            var categories = await _productRepository.GetProductSubCategories(genderCategory);
+            if (categories is not null)
+                return Ok(categories);
+            
+            return null!;
         }
     }
 }
