@@ -4,6 +4,12 @@ using System.Diagnostics;
 
 namespace ServiceLibrary.Services
 {
+    public enum Increment
+    {
+        Default,
+        Add,
+        Remove
+    }
     public class ShoppingCartService : IShoppingCartService
     {
         private readonly HttpClient _httpClient;
