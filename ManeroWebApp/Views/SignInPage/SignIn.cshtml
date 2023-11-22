@@ -1,0 +1,64 @@
+﻿@using ManeroWebApp.Areas.Identity.Pages.Account;
+@model LoginModel
+
+@{
+    ViewData["HideHeader"] = true;
+    ViewData["HideFooter"] = true;
+}
+<div class="login-container">
+    <div class="sign-in-header">
+        <a class="go-back-button"></a>
+        <h3>Sign In</h3>
+    </div>
+
+    <div class="title-message">
+        <h1>Welcome Back!</h1>
+        <p>Sign in to continue</p>
+    </div>
+
+    <form class="login" method="post" action="~/Identity/Account/Login">
+        <div class="form-parent">
+            <label asp-for="Input.Email" class="email-label">Email</label>
+            <input asp-for="Input.Email" class="email-input" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+            <span asp-validation-for="Input.Email" class="text-danger"></span>
+        </div>
+
+        <div class="form-parent">
+            <label asp-for="Input.Password" class="password-label">Password</label>
+            <input asp-for="Input.Password" id="password" class="password-input" autocomplete="current-password" aria-required="true" placeholder="password" />
+            <span asp-validation-for="Input.Password" class="text-danger"></span>
+            <button type="button" class="toggle-password" onclick="togglePasswordVisibility()">
+                <i class="fa fa-eye"></i>
+            </button>
+        </div>
+
+        <div class="options-group">
+                <input asp-for="Input.RememberMe" type="hidden" value="true" />
+        </div>
+
+        <div class="button-container">
+            <button type="submit" class="sign-in-button">Sign In</button>
+
+        </div>
+        <div class="footer">
+            <p> Don't have an account?
+            </p>
+
+            <p>
+                <a class="guest-login" asp-area="" asp-controller="Home" asp-action="Index">Continue as a guest</a>
+            </p>
+        </div>
+    </form>
+
+    <div class="social-media-login">
+        <button class="facebook-button"><i class="fa-brands fa-facebook-f"></i></button>
+        <button class="twitter-button"><i class="fa-brands fa-x-twitter"></i></button>
+        <button class="google-button"><i class="fa-brands fa-google"></i></button>
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/signInPage.js"></script>
+}
