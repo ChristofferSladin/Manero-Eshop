@@ -11,8 +11,8 @@
     });
 
     function loadShoppingCartPartial() {
-        var dropdownStatus = sessionStorage.getItem('dropdownStatus');
-        var savedScrollPosition = sessionStorage.getItem('scrollPosition');
+        var dropdownStatus = localStorage.getItem('dropdownStatus');
+        var savedScrollPosition = localStorage.getItem('scrollPosition');
         $.ajax({
             url: '@Url.Action("ShoppingCartPartial", "Home")',
             data: {},
@@ -31,7 +31,7 @@
 
                 scrollableDiv.on('scroll', function () {
                     var currentPosition = $(this).scrollTop();
-                    sessionStorage.setItem('scrollPosition', currentPosition);
+                    localStorage.setItem('scrollPosition', currentPosition);
                 });
             },
             error: function (error) {

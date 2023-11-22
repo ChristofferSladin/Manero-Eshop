@@ -110,7 +110,7 @@
 </div>
 <script>
     $(document).ready(function () {
-        var dropdownStatus = sessionStorage.getItem('dropdownStatus');
+        var dropdownStatus = localStorage.getItem('dropdownStatus');
         if (dropdownStatus === 'hidden') {
             $('#dropdown-content').hide();
         } else {
@@ -118,13 +118,13 @@
         }
         $('#dropdown-content').on('click', '#close-button', function () {
             $('#dropdown-content').hide();
-            sessionStorage.setItem('dropdownStatus', 'hidden');
+            localStorage.setItem('dropdownStatus', 'hidden');
         });
 
         $('#dropdown-button').on('click', function () {
             $('#dropdown-content').toggle();
             var currentStatus = $('#dropdown-content').is(':visible') ? 'shown' : 'hidden';
-            sessionStorage.setItem('dropdownStatus', currentStatus);
+            localStorage.setItem('dropdownStatus', currentStatus);
         });
     });
 
