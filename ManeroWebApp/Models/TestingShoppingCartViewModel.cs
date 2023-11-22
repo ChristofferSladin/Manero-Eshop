@@ -1,7 +1,9 @@
-﻿namespace ManeroWebApp.Models
+﻿using ServiceLibrary.Services;
+
+namespace ManeroWebApp.Models
 {
     public class TestingShoppingCartViewModel
     {
-        public List<ProductViewModel> products = new List<ProductViewModel>();
+        public List<ShoppingCartViewModel> ShoppingCartProducts = new List<ShoppingCartViewModel>();
     }
 }

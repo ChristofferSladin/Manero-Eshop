@@ -3,7 +3,12 @@ using DataAccessLibrary.Entities.UserEntities;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccessLibrary.Repositories;
-
+public enum Increment
+{
+    Default,
+    Add,
+    Remove
+}
 public class ShoppingCartProductRepository : Repository<ShoppingCartProduct>
 {
     private readonly ManeroDbContext _context;
@@ -56,6 +61,49 @@ public class ShoppingCartProductRepository : Repository<ShoppingCartProduct>
             };
             await _context.AddAsync(shoppingCartProduct);
         }
+        await _context.SaveChangesAsync();
+        return true;
+    }
+    public async Task<bool> RemoveProductFromCart(string user, string productNumber)
+    {
+        var userExists = await _context.Users.FirstOrDefaultAsync(u => u.Id == user);
+        if (userExists == null) return false;
+        var shoppingCartExists = await _context.ShoppingCarts.FirstOrDefaultAsync(o => o.Id == userExists.Id);
+        if (shoppingCartExists == null) return false;
+        var product = await _context.Products.FirstOrDefaultAsync(p => p.ProductNumber == productNumber);
+        if (product == null) return false;
+        var existingCartItem = await _context.ShoppingCartProducts.FirstOrDefaultAsync(c => c.ShoppingCartId == shoppingCartExists.ShoppingCartId && c.ProductId == product.ProductId);
+        if (existingCartItem == null) return false;
+        _context.Remove(existingCartItem);
+        await _context.SaveChangesAsync();
+        return true;
+    }
+    public async Task<bool> IncrementProductInCart(string user, Increment increment, string productNumber)
+    {
+        var userExists = await _context.Users.FirstOrDefaultAsync(u => u.Id == user);
+        if (userExists == null) return false;
+        var shoppingCartExists = await _context.ShoppingCarts.FirstOrDefaultAsync(o => o.Id == userExists.Id);
+        if (shoppingCartExists == null) return false;
+        var product = await _context.Products.FirstOrDefaultAsync(p => p.ProductNumber == productNumber);
+        if (product == null) return false;
+        var existingCartItem = await _context.ShoppingCartProducts.FirstOrDefaultAsync(c => c.ShoppingCartId == shoppingCartExists.ShoppingCartId && c.ProductId == product.ProductId);
+        if (existingCartItem == null) return false;
+        switch (increment)
+        {
+            case Increment.Add:
+                existingCartItem.ItemQuantity += 1;
+                break;
+            case Increment.Remove:
+                if (existingCartItem.ItemQuantity > 1)
+                {
+                    existingCartItem.ItemQuantity -= 1;
+                }
+                break;
+            case Increment.Default:
+            default:
+                return false;
+        }
+        _context.Update(existingCartItem);
         await _context.SaveChangesAsync();
         return true;
     }

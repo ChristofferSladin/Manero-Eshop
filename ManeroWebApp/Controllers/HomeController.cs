@@ -1,5 +1,6 @@
 ﻿using ManeroWebApp.Models;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using ServiceLibrary.Services;
 using System.Diagnostics;
 using System.Net;
@@ -9,10 +10,12 @@ namespace ManeroWebApp.Controllers
     public class HomeController : Controller
     {
         private readonly IProductService _productService;
+        private readonly IShoppingCartService _shoppingCartService;
 
-        public HomeController(IProductService productService)
+        public HomeController(IProductService productService, IShoppingCartService shoppingCartService)
         {
             _productService = productService;
+            _shoppingCartService = shoppingCartService;
         }
 
         public async Task<IActionResult> Index()
@@ -77,37 +80,106 @@ namespace ManeroWebApp.Controllers
             return View(viewModel);
         }
 
-        public async Task<IActionResult> HeaderPartial()
+        public async Task<IActionResult> IncrementShoppingCartProductAsync(Increment increment, string productNumber)
         {
-            var listOfProd = await _productService.GetProductsWithReviewsAsync();
+            if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                await _shoppingCartService.IncrementProductInShoppingCartAsync(increment, productNumber);
+            }
+            else
+            {
+                var cookieOptions = new CookieOptions { Expires = DateTime.Now.AddDays(30) };
+                var shoppingCartCookie = Request.Cookies["ShoppingCart"];
+                if (shoppingCartCookie != null)
+                {
+                    var shoppingCartItems = JsonConvert.DeserializeObject<List<ShoppingCartItems>>(shoppingCartCookie);
+                    var product = shoppingCartItems?.FirstOrDefault(s => s.ProductNumber == productNumber);
+                    if (product != null)
+                    {
+                        switch (increment)
+                        {
+                            case Increment.Add:
+                                product.ItemQuantity += 1;
+                                break;
+                            case Increment.Remove:
+                                if (product.ItemQuantity > 1)
+                                {
+                                    product.ItemQuantity -= 1;
+                                }
+                                break;
+                        }
+                    }
+                    Response.Cookies.Append("ShoppingCart", JsonConvert.SerializeObject(shoppingCartItems), cookieOptions);
+                }
+            }
+            return RedirectToAction("HeaderPartial", "Home");
+        }
+        public async Task<IActionResult> RemoveProductFromShoppingCartAsync(string productNumber)
+        {
+            if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                await _shoppingCartService.RemoveProductFromShoppingCartAsync(productNumber);
+            }
+            else
+            {
+                var cookieOptions = new CookieOptions { Expires = DateTime.Now.AddDays(30) };
+                var shoppingCartCookie = Request.Cookies["ShoppingCart"];
+                if (shoppingCartCookie != null)
+                {
+                    var shoppingCartItems = JsonConvert.DeserializeObject<List<ShoppingCartItems>>(shoppingCartCookie);
+                    shoppingCartItems?.RemoveAll(s => s.ProductNumber == productNumber);
+                    Response.Cookies.Append("ShoppingCart", JsonConvert.SerializeObject(shoppingCartItems), cookieOptions);
+                }
+            }
+            return RedirectToAction("HeaderPartial", "Home");
+        }
 
-            var list = new HomeIndexViewModel
+        public IActionResult HeaderPartial()
+        {
+            return PartialView("/Views/Shared/Header/_Header.cshtml");
+        }
+
+        public async Task<IActionResult> ShoppingCartPartial()
+        {
+            var cartProducts = await _shoppingCartService.GetUserShoppingCartProductsAsync();
+
+            var homeIndexViewModel = new HomeIndexViewModel
             {
                 TestModel = new TestingShoppingCartViewModel
                 {
-                    products = new List<ProductViewModel>()
+                    ShoppingCartProducts = new List<ShoppingCartViewModel>(),
                 }
             };
-
-            foreach (var prod in listOfProd)
+            if (User.Identity != null && User.Identity.IsAuthenticated)
             {
-                var productViewModel = new ProductViewModel
+                foreach (var cartProduct in cartProducts)
                 {
-                    ProductId = prod.ProductId,
-                    ProductName = prod.ProductName,
-                    ProductNumber = prod.ProductNumber,
-                    Category = prod.Category,
-                    SalePricePercentage = prod.SalePricePercentage,
-                    ImageUrl = prod.ImageUrl,
-                    PriceExcTax = prod.PriceExcTax,
-                    PriceIncTax = prod.PriceIncTax,
-                    Description = prod.Description,
-                    IsOnSale = prod.IsOnSale,
-                };
-                list.TestModel.products.Add(productViewModel);
+                    var product = await _productService.GetProductByIdAsync(cartProduct.ProductId);
+                    ShoppingCartViewModel shoppingCartViewModel = product;
+                    homeIndexViewModel.TestModel.ShoppingCartProducts.Add(shoppingCartViewModel);
+                    shoppingCartViewModel.ItemQuantity = cartProduct.ItemQuantity;
+                }
+            }
+            else
+            {
+                var shoppingCartCookie = Request.Cookies["ShoppingCart"];
+                if (shoppingCartCookie != null)
+                {
+                    var shoppingCartItems = JsonConvert.DeserializeObject<List<ShoppingCartItems>>(shoppingCartCookie);
+                    if (shoppingCartItems != null)
+                    {
+                        foreach (var cartProduct in shoppingCartItems)
+                        {
+                            var product = await _productService.GetProductAsync(cartProduct.ProductNumber);
+                            ShoppingCartViewModel shoppingCartViewModel = product;
+                            homeIndexViewModel.TestModel.ShoppingCartProducts.Add(shoppingCartViewModel);
+                            shoppingCartViewModel.ItemQuantity = cartProduct.ItemQuantity;
+                        }
+                    }
+                }
             }
 
-            return PartialView("/Views/Shared/Header/_HeaderShoppingCart.cshtml", list);
+            return PartialView("/Views/Shared/Header/_ShoppingCart.cshtml", homeIndexViewModel);
         }
 
         public IActionResult Privacy()

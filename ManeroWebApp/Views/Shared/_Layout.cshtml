@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.CodeAnalysis.Scripting
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -45,9 +46,7 @@
             </nav>
         </header>
     }
-    <div id="shoppingCart">
-    </div>
-
+    <div id="header-partial"></div>
     <main role="main">
         @RenderBody()
     </main>
@@ -63,8 +62,21 @@
 
     <!-- custom script -->
     <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="~/js/shoppingCart.js" asp-append-version="true"></script>
-
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: '@Url.Action("HeaderPartial", "Home")',
+                data: {},
+                method: 'GET',
+                success: function (result) {
+                    $('#header-partial').html(result);
+                },
+                error: function (error) {
+                    console.error(error);
+                }
+            });
+        });
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
