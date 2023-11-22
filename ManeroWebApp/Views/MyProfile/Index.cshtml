@@ -1,7 +1,6 @@
 ﻿@{
     ViewData["HideHeader"] = true;
 }
-
 <div class="headLine">
     <div>
         <a href="/Home/Index" class="btn-back">
@@ -17,13 +16,11 @@
 </div>
 <div class="boderLine" style="margin-top:0;"></div>
 
-
-<div class="cover-photo"></div>
-
-<div class="profile-container">
-    <div class="profile-picture">
-        <img  src="https://m.media-amazon.com/images/I/81vZT-DmdBL._AC_UL320_.jpg" alt="Profile Picture"/>
-        <div class="edit-icon"><i class="fa-regular fa-pen-line"></i></div>
+<div class="profile-wrapper">
+    <div class="cover-photo"></div>
+    <div class="profile-container">
+        <img class="profile-picture" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Profile Picture" />
+        <div class="edit-icon"><button class="button-edit"><i class="fa-regular fa-pen-line"></i></button></div>
     </div>
     <div class="profile-info">
         <h4>Your Name</h4>
@@ -32,7 +29,7 @@
 </div>
 
 <div class="boderLine"></div>
-<div class="profile-info">
+<div>
     <h2 class="lable-info">
         <i class="fa-light fa-calendar"></i> Order history
         <button class="button-style"><span class="fa-solid fa-chevron-right"></span></button>
@@ -70,4 +67,3 @@
         <button class="button-style"><span></span></button>
     </h2>
 </div>
-
