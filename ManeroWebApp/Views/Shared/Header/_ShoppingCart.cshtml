@@ -1,0 +1,183 @@
+﻿@model HomeIndexViewModel
+
+@{
+    var userIsPriveCustomer = true;
+    var salePrice = 0.0M;
+    var price = 0.0M;
+    var totalPriceIncTax = 0.0M;
+    var totalPriceExcTax = 0.0M;
+}
+<button id="dropdown-button" class="dropdown-button">
+    <i class="fa-light fa-bag-shopping" aria-hidden="true"></i>
+    <div id="cartCount">@Model.TestModel.ShoppingCartProducts.Count</div>
+</button>
+<div id="dropdown-content" class="dropdown-content">
+    <div class="shopping-cart-model">
+        <div class="model-header">
+            <span class="modal-title">Cart</span>
+            <button class="close-button" id="close-button"><i class="fa-regular fa-xmark"></i></button>
+        </div>
+        <div class="scroll-container">
+            <div class="scrollable-div">
+                @foreach (var item in Model.TestModel.ShoppingCartProducts)
+                {
+                    <div class="product-item">
+                        <button class="remove-item-button" id="remove-product-btn" data-product-number="@item.ProductNumber">
+                            <i class="fa-regular fa-xmark"></i>
+                        </button>
+                        <a class="product-content-wrapper" asp-route-productNumber="@item.ProductNumber" asp-action="Index" asp-controller="Product">
+                            <img class="item-img" src="@item.ImageUrl" alt="product image" />
+                            <div class="product-info-wrapper">
+                                <div class="product-details">
+                                    <div class="product-name">@item.ProductName</div>
+                                    <div class="product-category">Category: @item.Category</div>
+                                    <div class="product-article">Art Nr: @item.ProductNumber</div>
+                                </div>
+                                <div class="price-quantity-container">
+                                    <div class="product-price">
+
+                                        @if (userIsPriveCustomer)
+                                        {
+                                            price = item.PriceIncTax;
+                                            salePrice = item.PriceIncTax * item.SalePricePercentage;
+                                        }
+                                        else
+                                        {
+                                            price = item.PriceExcTax;
+                                            salePrice = item.PriceExcTax * item.SalePricePercentage;
+                                        }
+
+                                        @if (@item.IsOnSale)
+                                        {
+                                            <div style="text-decoration: line-through;" class="original-price">$@price</div>
+                                            <div class="discounted-price">$@salePrice.ToString("0.##")</div>
+                                            totalPriceExcTax += item.PriceExcTax * item.SalePricePercentage;
+                                            totalPriceIncTax += item.PriceIncTax * item.SalePricePercentage;
+                                        }
+                                        else
+                                        {
+                                            <div class="original-price">$@price</div>
+                                            totalPriceExcTax += item.PriceExcTax;
+                                            totalPriceIncTax += item.PriceIncTax;
+                                        }
+                                    </div>
+
+                                </div>
+                            </div>
+                        </a>
+                        <div class="quantity-selector">
+                            <div class="quantity-wrapper">
+                                <button id="decrement-btn" data-product-number="@item.ProductNumber">
+                                    <i class="fa-solid fa-minus"></i>
+                                </button>
+                                <div class="item-amount">@item.ItemQuantity</div>
+                                <button id="increment-btn" data-product-number="@item.ProductNumber">
+                                    <i class="fa-solid fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+            </div>
+        </div>
+        <div class="shipping-info-container">
+            <div class="total-price">
+                <div class="price-title">Total Price:</div>
+                <div class="prices">
+                    @if (userIsPriveCustomer)
+                    {
+                        <div class="sumExc">$@totalPriceExcTax.ToString("00.##") exc. tax.</div>
+                        <div class="sumInc">$@totalPriceIncTax.ToString("00.##") inc. tax.</div>
+                    }
+                    else
+                    {
+                        <div class="sumInc">$@totalPriceIncTax.ToString("00.##") inc. tax.</div>
+                        <div class="sumExc">$@totalPriceExcTax.ToString("00.##") exc. tax.</div>
+                    }
+                </div>
+            </div>
+            <div class="model-footer">
+                <div class="shipping-container">
+                    <div class="shipping-info">
+                        <span>🚚 Free Shipping Available!</span>
+                    </div>
+                    <button class="checkout-button">Checkout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var dropdownStatus = sessionStorage.getItem('dropdownStatus');
+        if (dropdownStatus === 'hidden') {
+            $('#dropdown-content').hide();
+        } else {
+            $('#dropdown-content').show();
+        }
+        $('#dropdown-content').on('click', '#close-button', function () {
+            $('#dropdown-content').hide();
+            sessionStorage.setItem('dropdownStatus', 'hidden');
+        });
+
+        $('#dropdown-button').on('click', function () {
+            $('#dropdown-content').toggle();
+            var currentStatus = $('#dropdown-content').is(':visible') ? 'shown' : 'hidden';
+            sessionStorage.setItem('dropdownStatus', currentStatus);
+        });
+    });
+
+</script>
+<script>
+    $(document).ready(function () {
+        $('.scrollable-div').on('click', '#remove-product-btn', function () {
+            var productNumber = $(this).data('product-number');
+            $.ajax({
+                url: '@Url.Action("RemoveProductFromShoppingCart", "Home")',
+                method: 'POST',
+                data: { productNumber: productNumber },
+                success: function (result) {
+                    loadShoppingCartPartial();
+                },
+                error: function (error) {
+                    console.error(error);
+                }
+            });
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $('.scrollable-div').on('click', '#increment-btn', function () {
+            var productNumber = $(this).data('product-number');
+            $.ajax({
+                url: '@Url.Action("IncrementShoppingCartProduct", "Home")',
+                method: 'POST',
+                data: { productNumber: productNumber, increment: 1 },
+                success: function (result) {
+                    loadShoppingCartPartial();
+                },
+                error: function (error) {
+                    console.error(error);
+                }
+            });
+        });
+
+        $('.scrollable-div').on('click', '#decrement-btn', function () {
+            var productNumber = $(this).data('product-number');
+            $.ajax({
+                url: '@Url.Action("IncrementShoppingCartProduct", "Home")',
+                method: 'POST',
+                data: { productNumber: productNumber, increment: 2 },
+                success: function (result) {
+                    loadShoppingCartPartial();
+                },
+                error: function (error) {
+                    console.error(error);
+                }
+            });
+        });
+    });
+</script>
+

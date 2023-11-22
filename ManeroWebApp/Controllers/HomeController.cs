@@ -1,5 +1,6 @@
 ﻿using ManeroWebApp.Models;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using ServiceLibrary.Services;
 using System.Diagnostics;
 
@@ -67,15 +68,64 @@ namespace ManeroWebApp.Controllers
 
         public async Task<IActionResult> IncrementShoppingCartProductAsync(Increment increment, string productNumber)
         {
-            await _shoppingCartService.IncrementProductInShoppingCartAsync(increment, productNumber);
+            if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                await _shoppingCartService.IncrementProductInShoppingCartAsync(increment, productNumber);
+            }
+            else
+            {
+                var cookieOptions = new CookieOptions { Expires = DateTime.Now.AddDays(30) };
+                var shoppingCartCookie = Request.Cookies["ShoppingCart"];
+                if (shoppingCartCookie != null)
+                {
+                    var shoppingCartItems = JsonConvert.DeserializeObject<List<ShoppingCartItems>>(shoppingCartCookie);
+                    var product = shoppingCartItems?.FirstOrDefault(s => s.ProductNumber == productNumber);
+                    if (product != null)
+                    {
+                        switch (increment)
+                        {
+                            case Increment.Add:
+                                product.ItemQuantity += 1;
+                                break;
+                            case Increment.Remove:
+                                if (product.ItemQuantity > 1)
+                                {
+                                    product.ItemQuantity -= 1;
+                                }
+                                break;
+                        }
+                    }
+                    Response.Cookies.Append("ShoppingCart", JsonConvert.SerializeObject(shoppingCartItems), cookieOptions);
+                }
+            }
             return RedirectToAction("HeaderPartial", "Home");
         }
         public async Task<IActionResult> RemoveProductFromShoppingCartAsync(string productNumber)
         {
-            await _shoppingCartService.RemoveProductFromShoppingCartAsync(productNumber);
+            if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                await _shoppingCartService.RemoveProductFromShoppingCartAsync(productNumber);
+            }
+            else
+            {
+                var cookieOptions = new CookieOptions { Expires = DateTime.Now.AddDays(30) };
+                var shoppingCartCookie = Request.Cookies["ShoppingCart"];
+                if (shoppingCartCookie != null)
+                {
+                    var shoppingCartItems = JsonConvert.DeserializeObject<List<ShoppingCartItems>>(shoppingCartCookie);
+                    shoppingCartItems?.RemoveAll(s => s.ProductNumber == productNumber);
+                    Response.Cookies.Append("ShoppingCart", JsonConvert.SerializeObject(shoppingCartItems), cookieOptions);
+                }
+            }
             return RedirectToAction("HeaderPartial", "Home");
         }
-        public async Task<IActionResult> HeaderPartial()
+
+        public IActionResult HeaderPartial()
+        {
+            return PartialView("/Views/Shared/Header/_Header.cshtml");
+        }
+
+        public async Task<IActionResult> ShoppingCartPartial()
         {
             var cartProducts = await _shoppingCartService.GetUserShoppingCartProductsAsync();
 
@@ -88,28 +138,34 @@ namespace ManeroWebApp.Controllers
             };
             if (User.Identity != null && User.Identity.IsAuthenticated)
             {
-
                 foreach (var cartProduct in cartProducts)
                 {
                     var product = await _productService.GetProductByIdAsync(cartProduct.ProductId);
-                    var productViewModel = new ShoppingCartViewModel
+                    ShoppingCartViewModel shoppingCartViewModel = product;
+                    homeIndexViewModel.TestModel.ShoppingCartProducts.Add(shoppingCartViewModel);
+                    shoppingCartViewModel.ItemQuantity = cartProduct.ItemQuantity;
+                }
+            }
+            else
+            {
+                var shoppingCartCookie = Request.Cookies["ShoppingCart"];
+                if (shoppingCartCookie != null)
+                {
+                    var shoppingCartItems = JsonConvert.DeserializeObject<List<ShoppingCartItems>>(shoppingCartCookie);
+                    if (shoppingCartItems != null)
                     {
-                        ProductId = product.ProductId,
-                        ProductName = product.ProductName,
-                        ProductNumber = product.ProductNumber,
-                        Category = product.Category,
-                        SalePricePercentage = product.SalePricePercentage,
-                        ImageUrl = product.ImageUrl,
-                        PriceExcTax = product.PriceExcTax,
-                        PriceIncTax = product.PriceIncTax,
-                        IsOnSale = product.IsOnSale,
-                        ItemQuantity = cartProduct.ItemQuantity
-                    };
-                    homeIndexViewModel.TestModel.ShoppingCartProducts.Add(productViewModel);
+                        foreach (var cartProduct in shoppingCartItems)
+                        {
+                            var product = await _productService.GetProductAsync(cartProduct.ProductNumber);
+                            ShoppingCartViewModel shoppingCartViewModel = product;
+                            homeIndexViewModel.TestModel.ShoppingCartProducts.Add(shoppingCartViewModel);
+                            shoppingCartViewModel.ItemQuantity = cartProduct.ItemQuantity;
+                        }
+                    }
                 }
             }
 
-            return PartialView("/Views/Shared/Header/_HeaderShoppingCart.cshtml", homeIndexViewModel);
+            return PartialView("/Views/Shared/Header/_ShoppingCart.cshtml", homeIndexViewModel);
         }
 
         public IActionResult Privacy()

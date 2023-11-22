@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.CodeAnalysis.Scripting
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -33,30 +34,29 @@
                         </li>
                     </ul>
 
-                  
+
                     <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
     </header>
 
+    <div id="header-partial"></div>
 
-    <div id="shoppingCart">
-    </div>
 
     <main role="main">
         @RenderBody()
     </main>
 
-<footer class="border-top footer text-muted">
-    <div class="container">
-        &copy; 2023 - ManeroWebApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-    </div>
-</footer>
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2023 - ManeroWebApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
 
     @if (ViewData["HideFooter"] as bool? != true)
     {
-        <partial name="_NavBarPartial"/>
+        <partial name="_NavBarPartial" />
     }
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -64,8 +64,21 @@
 
     <!-- custom script -->
     <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="~/js/shoppingCart.js" asp-append-version="true"></script>
-
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: '@Url.Action("HeaderPartial", "Home")',
+                data: {},
+                method: 'GET',
+                success: function (result) {
+                    $('#header-partial').html(result);
+                },
+                error: function (error) {
+                    console.error(error);
+                }
+            });
+        });
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
