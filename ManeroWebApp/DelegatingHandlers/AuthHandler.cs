@@ -4,18 +4,17 @@ namespace ManeroWebApp.DelegatingHandlers
 {
     public class AuthHandler : DelegatingHandler
     {
-        private readonly IHttpContextAccessor _contextAccessor;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AuthHandler(IHttpContextAccessor contextAccessor)
+        public AuthHandler(IHttpContextAccessor httpContextAccessor)
         {
-            _contextAccessor = contextAccessor;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            var authService = _contextAccessor.HttpContext!.RequestServices.GetRequiredService<IJwtAuthenticationService>();
-            var token = await authService.RefreshTokenIfExpired();
-            request.Headers.Add("Authorization", "Bearer " + token);
+            await _httpContextAccessor.HttpContext!.RequestServices.GetRequiredService<IJwtAuthenticationService>().RenewTokenIfExpiredAsync();
+            request.Headers.Add("Authorization", "Bearer " + _httpContextAccessor.HttpContext.Request.Cookies["Token"]);
             return await base.SendAsync(request, cancellationToken);
         }
     }
