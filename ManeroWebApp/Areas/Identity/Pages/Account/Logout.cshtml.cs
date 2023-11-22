@@ -14,18 +14,18 @@ namespace ManeroWebApp.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LogoutModel> _logger;
-        private readonly IJwtAuthenticationService _jwtAuthenticationService;
+        private readonly IJwtAuthService _jwtAuthService;
 
-        public LogoutModel(SignInManager<IdentityUser> signInManager, ILogger<LogoutModel> logger, IJwtAuthenticationService jwtAuthenticationService)
+        public LogoutModel(SignInManager<IdentityUser> signInManager, ILogger<LogoutModel> logger, IJwtAuthService jwtAuthService)
         {
             _signInManager = signInManager;
             _logger = logger;
-            _jwtAuthenticationService = jwtAuthenticationService;
+            _jwtAuthService = jwtAuthService;
         }
 
         public async Task<IActionResult> OnPost(string returnUrl = null)
         {
-            await _jwtAuthenticationService.RevokeTokenAsync();
+            await _jwtAuthService.RevokeTokenAsync();
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
             if (returnUrl != null)

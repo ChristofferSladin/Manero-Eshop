@@ -22,7 +22,7 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IReviewService, ReviewService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
-builder.Services.AddScoped<IJwtAuthenticationService, JwtAuthenticationService>();
+builder.Services.AddScoped<IJwtAuthService, JwtAuthService>();
 builder.Services.AddScoped<IProductControllerService, ProductControllerService>();
 
 builder.Services.AddTransient<AuthHandler>();

@@ -9,13 +9,13 @@ using System.Text;
 
 namespace ServiceLibrary.Services
 {
-    public class JwtAuthenticationService : IJwtAuthenticationService
+    public class JwtAuthService : IJwtAuthService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly HttpClient _httpClient;
 
-        public JwtAuthenticationService(IHttpContextAccessor httpContextAccessor, SignInManager<IdentityUser> signInManager, HttpClient httpClient)
+        public JwtAuthService(IHttpContextAccessor httpContextAccessor, SignInManager<IdentityUser> signInManager, HttpClient httpClient)
         {
             _httpContextAccessor = httpContextAccessor;
             _signInManager = signInManager;

@@ -16,13 +16,13 @@ namespace ManeroWebApp.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
-        private readonly IJwtAuthenticationService _jwtAuthenticationService;
+        private readonly IJwtAuthService _jwtAuthService;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger, IJwtAuthenticationService jwtAuthenticationService)
+        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger, IJwtAuthService jwtAuthService)
         {
             _signInManager = signInManager;
             _logger = logger;
-            _jwtAuthenticationService = jwtAuthenticationService;
+            _jwtAuthService = jwtAuthService;
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace ManeroWebApp.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    await _jwtAuthenticationService.GetTokenAsync(Input.Email, Input.Password);
+                    await _jwtAuthService.GetTokenAsync(Input.Email, Input.Password);
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)

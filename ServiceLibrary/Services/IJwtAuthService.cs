@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ServiceLibrary.Services
 {
-    public interface IJwtAuthenticationService
+    public interface IJwtAuthService
     {
         Task<bool> RenewTokenIfExpiredAsync();
         Task<bool> GetTokenAsync(string email, string password);
