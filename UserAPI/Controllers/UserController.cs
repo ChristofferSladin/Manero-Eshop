@@ -7,8 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using System.Linq.Expressions;
-using System.Security.Claims;
-using UserAPI.DTO;
+using UserAPI.Dtos;
 
 namespace UserAPI.Controllers
 {
@@ -152,7 +151,7 @@ namespace UserAPI.Controllers
         /// UserProfile
         /// </returns>
         /// <remarks>
-        /// Example end point: GET /user/profile?id={id}
+        /// Example end point: GET /user/profile{id}
         /// This returns users firstName, lastName and profilePicture
         /// </remarks>
         /// <response code="200">

@@ -1,0 +1,33 @@
+﻿button {
+    position: relative;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding: 0;
+    margin: 0;
+    border: none;
+    outline: none;
+    background: none;
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    resize: none;
+}
+
+.heart-button {
+    font-size: 1.2rem;
+    color: #626262;
+    transition: all 0.15s ease-in-out;
+}
+
+    .heart-button:hover {
+        color: red;
+    }
+
+.heart-button-liked {
+    color: red;
+    transition: all 0.15s ease-in-out;
+}
+    .heart-button-liked:hover {
+        color: #626262;
+    }

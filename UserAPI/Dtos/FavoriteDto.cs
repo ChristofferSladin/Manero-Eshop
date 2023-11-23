@@ -1,6 +1,6 @@
 ﻿using DataAccessLibrary.Entities.UserEntities;
 
-namespace UserAPI.DTO;
+namespace UserAPI.Dtos;
 
 public class FavoriteDto
 {

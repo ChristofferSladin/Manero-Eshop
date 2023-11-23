@@ -56,9 +56,15 @@ public class Product
 
     [Column(TypeName = "nvarchar(300)")]
     public string? ImageUrl { get; set; }
-
+    
+    [Column(TypeName = "nvarchar(50)")]
+    public string? Gender { get; set; }
 
     public virtual ICollection<ShoppingCartProduct>? ShoppingCartProducts { get; set; }
     public virtual ICollection<FavoriteProduct>? FavoriteProducts { get; set; }
     public virtual ICollection<Review>? Reviews { get; set; }
+    [ForeignKey("Category")]
+    public int? CategoryId { get; set; }
+    public virtual Category? ProductCategory { get; set; }
+    
 }

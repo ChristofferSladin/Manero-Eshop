@@ -135,6 +135,26 @@ namespace DataAccessLibrary.Migrations
                     b.ToTable("Payment");
                 });
 
+            modelBuilder.Entity("DataAccessLibrary.Entities.ProductEntities.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImgUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+                });
+
             modelBuilder.Entity("DataAccessLibrary.Entities.ProductEntities.Product", b =>
                 {
                     b.Property<int>("ProductId")
@@ -146,11 +166,17 @@ namespace DataAccessLibrary.Migrations
                     b.Property<string>("Category")
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Color")
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Gender")
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(300)");
@@ -190,6 +216,8 @@ namespace DataAccessLibrary.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("ProductId");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
                 });
@@ -455,6 +483,32 @@ namespace DataAccessLibrary.Migrations
                     b.ToTable("UserProfiles");
                 });
 
+            modelBuilder.Entity("DataAccessLibrary.Entities.UserEntities.UserRefreshToken", b =>
+                {
+                    b.Property<int>("TokenId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TokenId"));
+
+                    b.Property<string>("Id")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("RefreshTokenExpiry")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("TokenId");
+
+                    b.HasIndex("Id")
+                        .IsUnique();
+
+                    b.ToTable("UserRefreshToken");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -700,6 +754,15 @@ namespace DataAccessLibrary.Migrations
                     b.Navigation("Order");
                 });
 
+            modelBuilder.Entity("DataAccessLibrary.Entities.ProductEntities.Product", b =>
+                {
+                    b.HasOne("DataAccessLibrary.Entities.ProductEntities.Category", "ProductCategory")
+                        .WithMany("Product")
+                        .HasForeignKey("CategoryId");
+
+                    b.Navigation("ProductCategory");
+                });
+
             modelBuilder.Entity("DataAccessLibrary.Entities.ProductEntities.Review", b =>
                 {
                     b.HasOne("DataAccessLibrary.Entities.ApplicationUser", "ApplicationUser")
@@ -810,6 +873,17 @@ namespace DataAccessLibrary.Migrations
                     b.Navigation("ApplicationUser");
                 });
 
+            modelBuilder.Entity("DataAccessLibrary.Entities.UserEntities.UserRefreshToken", b =>
+                {
+                    b.HasOne("DataAccessLibrary.Entities.ApplicationUser", "ApplicationUser")
+                        .WithOne("RefreshToken")
+                        .HasForeignKey("DataAccessLibrary.Entities.UserEntities.UserRefreshToken", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -866,6 +940,11 @@ namespace DataAccessLibrary.Migrations
                     b.Navigation("OrderProducts");
                 });
 
+            modelBuilder.Entity("DataAccessLibrary.Entities.ProductEntities.Category", b =>
+                {
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("DataAccessLibrary.Entities.ProductEntities.Product", b =>
                 {
                     b.Navigation("FavoriteProducts");
@@ -892,6 +971,8 @@ namespace DataAccessLibrary.Migrations
                     b.Navigation("Cards");
 
                     b.Navigation("FavoriteProducts");
+
+                    b.Navigation("RefreshToken");
 
                     b.Navigation("Reviews");
 

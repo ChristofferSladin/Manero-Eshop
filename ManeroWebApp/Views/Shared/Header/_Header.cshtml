@@ -1,0 +1,42 @@
+﻿@{
+}
+<div class="custom-header">
+    <div class="place-holder">placeHolder</div>
+    <div class="place-holder">placeHolder</div>
+    <div id="shopping-cart" class="shopping-cart"></div>
+</div>
+<script>
+    $(document).ready(function () {
+        loadShoppingCartPartial();
+    });
+
+    function loadShoppingCartPartial() {
+        var dropdownStatus = localStorage.getItem('dropdownStatus');
+        var savedScrollPosition = localStorage.getItem('scrollPosition');
+        $.ajax({
+            url: '@Url.Action("ShoppingCartPartial", "Home")',
+            data: {},
+            method: 'GET',
+            success: function (result) {
+                $('#shopping-cart').html(result);
+                if (dropdownStatus === 'hidden') {
+                    $('#dropdown-content').hide();
+                } else {
+                    $('#dropdown-content').show();
+                }
+                var scrollableDiv = $('.scrollable-div');
+                if (savedScrollPosition) {
+                    scrollableDiv.scrollTop(savedScrollPosition);
+                }
+
+                scrollableDiv.on('scroll', function () {
+                    var currentPosition = $(this).scrollTop();
+                    localStorage.setItem('scrollPosition', currentPosition);
+                });
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+    }
+</script>

@@ -1,12 +1,10 @@
 ﻿@model ProductViewModel
 @{
-    var userLiked = false;
     var userIsPrivateCustomer = false;
     var currencySymbol = "$";
     var userIsLoggedIn = User.Identity.IsAuthenticated;
     var reviewCount = ViewBag.ReviewCount;
 }
-<div id="shoppingCart"></div>
 @if (Model != null!)
 {
     <div class="product-container">
@@ -87,18 +85,7 @@
 <div class="heart-icon-wrapper">
     @if (userIsLoggedIn)
     {
-        @if (userLiked)
-        {
-            <button class="heart-button">
-                <i class="fa-solid fa-heart"></i>
-            </button>
-        }
-        else
-        {
-            <button class="heart-button">
-                <i class="fa-regular fa-heart"></i>
-            </button>
-        }
+        <div id="productLikeButton"></div>
     }
 </div>
 
@@ -112,7 +99,22 @@
         <i class="fa-solid fa-plus"></i>
     </button>
 </div>
-
+<script>
+    var productNumber = '@Html.Raw(Model?.ProductNumber.Replace("'", "\'").Replace("\"", "\\\""))';
+    $(document).ready(function () {
+        $.ajax({
+            url: '@Url.Action("ProductLikeButtonPartial", "Product")',
+            data: { productNumber: productNumber },
+            method: 'GET',
+            success: function (result) {
+                $('#productLikeButton').html(result);
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+    });
+</script>
 <script>
     $(document).ready(function () {
         $('#addToCartBtn').click(function () {
@@ -290,24 +292,6 @@
             method: 'GET',
             success: function (result) {
                 $('#productReviewsCount').html(result);
-            },
-            error: function (error) {
-                console.error(error);
-            }
-        });
-    }
-</script>
-<script>
-    $(document).ready(function () {
-        loadShoppingCartPartial();
-    });
-    function loadShoppingCartPartial() {
-        $.ajax({
-            url: '@Url.Action("ShoppingCartPartial", "Product")',
-            data: {},
-            method: 'GET',
-            success: function (result) {
-                $('#shoppingCart').html(result);
             },
             error: function (error) {
                 console.error(error);

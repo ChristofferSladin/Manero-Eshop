@@ -10,9 +10,12 @@ namespace ServiceLibrary.Services
         Task<Product> GetProductAsync(string productNumber);
         Task<List<Product>> GetFilteredProductsAsync(int? page, int? take, string? category, string? orderBy,
             string? orderDirection, string? filterByName);
-
         Task<List<Product>> GetFilteredProductsWithReviewsAsync(int? page, int? take, string? category, string? orderBy,
             string? orderDirection, string? filterByName);
         Task<Product> GetProductByIdAsync(int id);
+        Task<List<Product>> GetFilteredProductsAsync(int? page, int? take, string? category, string? orderBy,
+            string? orderDirection, string? filterByName, string? gender);
+        Task<List<string>> GetGenderCategoriesAsync();
+        Task<List<Category>> GetProductSubCategoriesAsync(string genderCategory);
     }
 }

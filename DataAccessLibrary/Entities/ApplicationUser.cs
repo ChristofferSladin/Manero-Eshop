@@ -13,4 +13,5 @@ public class ApplicationUser : IdentityUser
     public virtual ShoppingCart? ShoppingCart { get; set; }
     public virtual UserProfile? UserProfile { get; set; }
     public virtual ICollection<Favorite>? FavoriteProducts { get; set; }
+    public UserRefreshToken? RefreshToken { get; set; }
 }

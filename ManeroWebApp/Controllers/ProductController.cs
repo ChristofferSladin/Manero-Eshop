@@ -1,7 +1,6 @@
 ﻿using ManeroWebApp.Models;
 using ManeroWebApp.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace ManeroWebApp.Controllers
 {
@@ -17,45 +16,36 @@ namespace ManeroWebApp.Controllers
         {
             return View((object)productNumber);
         }
-
-        public async Task<IActionResult> ShoppingCartPartial()
+        public async Task<IActionResult> ProductLikeButtonPartial(string productNumber)
         {
-            var shoppingCart = new List<ShoppingCartViewModel>();
-            if (User.Identity != null && User.Identity.IsAuthenticated)
+            var userLiked = new LikeViewModel { ProductNumber = productNumber };
+            var userLikes = await _productControllerService.GetFavoritesForUserAsync();
+            userLiked.Liked = userLikes.Any(l => l.ProductNumber == productNumber);
+
+            return PartialView("/Views/Shared/Product/_ProductLikeButton.cshtml", userLiked);
+        }
+        public async Task<IActionResult> AddToFavorites(string productNumber, bool liked)
+        {
+            if (liked)
             {
-                var token = Request.Cookies["Token"];
-                if (token != null)
-                {
-                    shoppingCart = await _productControllerService.GetShoppingForUserCartAsync(token);
-                }
+                await _productControllerService.RemoveProductToFavoriteForUserAsync(productNumber);
             }
             else
             {
-                var shoppingCartCookie = Request.Cookies["ShoppingCart"];
-                if (shoppingCartCookie != null)
-                {
-                    shoppingCart = await _productControllerService.GetShoppingForGuestCartAsync(shoppingCartCookie);
-                }
+                await _productControllerService.AddProductToFavoriteForUserAsync(productNumber);
             }
-
-            return PartialView("/Views/Shared/ShoppingCart/_ShoppingCartPartial.cshtml", shoppingCart);
+            return RedirectToAction("Index", "Product", new { productNumber });
         }
-
         public async Task<IActionResult> AddItemToShoppingCart(int itemQuantity, string productNumber)
         {
 
             if (User.Identity != null && User.Identity.IsAuthenticated)
             {
-                var token = Request.Cookies["Token"];
-                if (token != null)
-                {
-                    await _productControllerService.AddProductToShoppingCartForUserAsync(token, itemQuantity, productNumber);
-                }
+                await _productControllerService.AddProductToShoppingCartForUserAsync(itemQuantity, productNumber);
             }
             else
             {
-                var existingShoppingCartCookie = Request.Cookies["ShoppingCart"];
-                _productControllerService.AddProductToShoppingCartForGuest(Response, existingShoppingCartCookie, itemQuantity, productNumber);
+                _productControllerService.AddProductToShoppingCartForGuest(itemQuantity, productNumber);
             }
 
             return RedirectToAction("Index", "Product", new { productNumber });

@@ -23,5 +23,6 @@ namespace ProductAPI.Dtos
         public decimal Rating { get; set; }
         public string? ImageUrl { get; set; }
         public virtual ICollection<ReviewDto>? Reviews { get; set; }
+        public string? Gender { get; set; }
     }
 }

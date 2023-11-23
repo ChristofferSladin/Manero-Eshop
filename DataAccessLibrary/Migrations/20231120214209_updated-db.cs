@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DataAccessLibrary.Migrations
 {
     /// <inheritdoc />
-    public partial class decoupleorder : Migration
+    public partial class updateddb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -52,6 +52,20 @@ namespace DataAccessLibrary.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CategoryName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImgUrl = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Payment",
                 columns: table => new
                 {
@@ -64,33 +78,6 @@ namespace DataAccessLibrary.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Payment", x => x.PaymentId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Products",
-                columns: table => new
-                {
-                    ProductId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ProductNumber = table.Column<string>(type: "nvarchar(12)", nullable: true),
-                    ProductName = table.Column<string>(type: "nvarchar(50)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(500)", nullable: true),
-                    Category = table.Column<string>(type: "nvarchar(50)", nullable: true),
-                    Type = table.Column<string>(type: "nvarchar(50)", nullable: true),
-                    Size = table.Column<string>(type: "nvarchar(20)", nullable: true),
-                    QuantityInStock = table.Column<int>(type: "int", nullable: false),
-                    Color = table.Column<string>(type: "nvarchar(100)", nullable: true),
-                    PriceExcTax = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    PriceIncTax = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    SalePricePercentage = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    IsOnSale = table.Column<bool>(type: "bit", nullable: false),
-                    IsFeatured = table.Column<bool>(type: "bit", nullable: false),
-                    Rating = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    ImageUrl = table.Column<string>(type: "nvarchar(300)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Products", x => x.ProductId);
                 });
 
             migrationBuilder.CreateTable(
@@ -322,34 +309,58 @@ namespace DataAccessLibrary.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Reviews",
+                name: "UserRefreshToken",
                 columns: table => new
                 {
-                    ReviewId = table.Column<int>(type: "int", nullable: false)
+                    TokenId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ProductName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Rating = table.Column<int>(type: "int", nullable: false),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Content = table.Column<string>(type: "nvarchar(500)", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(100)", nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RefreshTokenExpiry = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Reviews", x => x.ReviewId);
+                    table.PrimaryKey("PK_UserRefreshToken", x => x.TokenId);
                     table.ForeignKey(
-                        name: "FK_Reviews_AspNetUsers_Id",
+                        name: "FK_UserRefreshToken_AspNetUsers_Id",
                         column: x => x.Id,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Products",
+                columns: table => new
+                {
+                    ProductId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductNumber = table.Column<string>(type: "nvarchar(12)", nullable: true),
+                    ProductName = table.Column<string>(type: "nvarchar(50)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", nullable: true),
+                    Category = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    Type = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    Size = table.Column<string>(type: "nvarchar(20)", nullable: true),
+                    QuantityInStock = table.Column<int>(type: "int", nullable: false),
+                    Color = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    PriceExcTax = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    PriceIncTax = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    SalePricePercentage = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    IsOnSale = table.Column<bool>(type: "bit", nullable: false),
+                    IsFeatured = table.Column<bool>(type: "bit", nullable: false),
+                    Rating = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(300)", nullable: true),
+                    Gender = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    CategoryId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Products", x => x.ProductId);
                     table.ForeignKey(
-                        name: "FK_Reviews_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "ProductId",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_Products_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -406,6 +417,37 @@ namespace DataAccessLibrary.Migrations
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_FavoriteProducts_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "ProductId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Reviews",
+                columns: table => new
+                {
+                    ReviewId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Rating = table.Column<int>(type: "int", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(500)", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(100)", nullable: false),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Reviews", x => x.ReviewId);
+                    table.ForeignKey(
+                        name: "FK_Reviews_AspNetUsers_Id",
+                        column: x => x.Id,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Reviews_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "ProductId",
@@ -546,6 +588,11 @@ namespace DataAccessLibrary.Migrations
                 column: "PromoCodeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Products_CategoryId",
+                table: "Products",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Reviews_Id",
                 table: "Reviews",
                 column: "Id");
@@ -574,6 +621,12 @@ namespace DataAccessLibrary.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_UserProfiles_Id",
                 table: "UserProfiles",
+                column: "Id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserRefreshToken_Id",
+                table: "UserRefreshToken",
                 column: "Id",
                 unique: true);
         }
@@ -618,6 +671,9 @@ namespace DataAccessLibrary.Migrations
                 name: "UserProfiles");
 
             migrationBuilder.DropTable(
+                name: "UserRefreshToken");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
@@ -637,6 +693,9 @@ namespace DataAccessLibrary.Migrations
 
             migrationBuilder.DropTable(
                 name: "PromoCode");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
