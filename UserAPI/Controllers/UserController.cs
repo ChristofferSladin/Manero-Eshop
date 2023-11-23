@@ -212,16 +212,16 @@ namespace UserAPI.Controllers
 
 
         /// <summary>
-        /// 
+        /// Get user information
         /// </summary>
         /// <returns>
-        /// Boolean (True/False)
-        /// </returns>
+        /// user
+        /// </returns> 
         /// <remarks>
-        /// Example end point: POST /wishList/removeProduct?productId={id}&&userId={userId}
+        /// Example end point:  GET /user
         /// </remarks>
         /// <response code="200">
-        /// Deleted successfully
+        /// return user successfully
         /// </response>
         [HttpGet]
         [Route("/user")]
@@ -234,7 +234,7 @@ namespace UserAPI.Controllers
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 if (userId != null)
                 {
-                    var user = await _userRepository.GetUserByIdAsync(x => x.Id == userId);
+                    var user = await _userRepository.GetAsync(x => x.Id == userId);
 
                     return Ok(user);
                 }
