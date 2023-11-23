@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using DataAccessLibrary.Entities.ProductEntities;
+using Newtonsoft.Json;
 using ServiceLibrary.Models;
 using System.Diagnostics;
 
@@ -125,6 +126,27 @@ public class UserService : IUserService
         }
         catch (Exception e) { Debug.WriteLine(e.Message); }
 
+        return false;
+    }
+
+    public async Task<bool> CheckApiStatusAsync()
+    {
+        try
+        {
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri("https://localhost:7047/health")
+            };
+            var response = await _httpClient.SendAsync(request);
+            if (response.IsSuccessStatusCode)
+                return true;
+        }
+        catch (Exception e)
+        {
+            Debug.WriteLine(e.Message);
+            return false;
+        }
         return false;
     }
 }

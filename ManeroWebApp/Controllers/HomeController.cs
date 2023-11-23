@@ -141,7 +141,6 @@ namespace ManeroWebApp.Controllers
 
         public async Task<IActionResult> ShoppingCartPartial()
         {
-            var cartProducts = await _shoppingCartService.GetUserShoppingCartProductsAsync();
 
             var homeIndexViewModel = new HomeIndexViewModel
             {
@@ -152,6 +151,7 @@ namespace ManeroWebApp.Controllers
             };
             if (User.Identity != null && User.Identity.IsAuthenticated)
             {
+                var cartProducts = await _shoppingCartService.GetUserShoppingCartProductsAsync();
                 foreach (var cartProduct in cartProducts)
                 {
                     var product = await _productService.GetProductByIdAsync(cartProduct.ProductId);

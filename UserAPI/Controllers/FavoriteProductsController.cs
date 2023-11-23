@@ -1,5 +1,6 @@
 ﻿using DataAccessLibrary.Repositories;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Security.Claims;
@@ -7,6 +8,9 @@ using UserAPI.Dtos;
 
 namespace UserAPI.Controllers
 {
+    [Route("[controller]")]
+    [ApiController]
+    [EnableCors("AllowAll")]
     public class FavoriteProductsController : ControllerBase
     {
         private readonly FavoriteProductRepository _favoriteProductRepository;
