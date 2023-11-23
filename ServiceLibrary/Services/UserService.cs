@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Net.Http;
+using System;
 
 namespace ServiceLibrary.Services;
 
@@ -163,6 +164,31 @@ public class UserService : IUserService
             Debug.WriteLine(e.Message);
         }
         return null!;
+    }
+    public async Task<IdentityUser> GetIdentityUser()
+    {
+        var user = new IdentityUser();
+
+        try
+        {
+            var request = new HttpRequestMessage
+            {
+                RequestUri = new Uri("https://localhost:7047/user"),
+                Method = HttpMethod.Get
+            };
+
+            var response = await _httpClient.SendAsync(request);
+            if (response.IsSuccessStatusCode)
+            {
+                var responstring = await response.Content.ReadAsStringAsync();
+                user = JsonConvert.DeserializeObject<IdentityUser>(responstring);
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.WriteLine(e.Message);
+        }
+        return user!;
     }
 
 }

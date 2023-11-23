@@ -12,4 +12,5 @@ public interface IUserService
     Task<UserProfile> GetUserProfileAsync(string id);
     Task<bool> RemoveProductFromWishListAsync(int productId, string userId);
     Task<string> GetUserToken(string email, string password);
+    Task<IdentityUser> GetIdentityUser();
 }

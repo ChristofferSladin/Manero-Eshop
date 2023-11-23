@@ -1,10 +1,13 @@
 ﻿using DataAccessLibrary.Entities.UserEntities;
 using DataAccessLibrary.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using System.Linq.Expressions;
+using System.Security.Claims;
 using UserAPI.DTO;
 
 namespace UserAPI.Controllers
@@ -205,6 +208,40 @@ namespace UserAPI.Controllers
             }
             catch (Exception e) { Debug.WriteLine(e.Message); }
             return Problem();
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>
+        /// Boolean (True/False)
+        /// </returns>
+        /// <remarks>
+        /// Example end point: POST /wishList/removeProduct?productId={id}&&userId={userId}
+        /// </remarks>
+        /// <response code="200">
+        /// Deleted successfully
+        /// </response>
+        [HttpGet]
+        [Route("/user")]
+        [Authorize]
+        public async Task<IActionResult> GetUser()
+        {
+            try
+            {
+
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userId != null)
+                {
+                    var user = await _userRepository.GetUserByIdAsync(x => x.Id == userId);
+
+                    return Ok(user);
+                }
+                return Unauthorized();
+            }
+            catch (Exception e) { Debug.WriteLine(e.Message); return Unauthorized(); }
+
         }
     }
 }
