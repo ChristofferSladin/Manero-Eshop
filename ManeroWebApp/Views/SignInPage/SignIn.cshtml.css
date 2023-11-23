@@ -100,12 +100,11 @@
     background-color: #333;
 }
 
-.sign-up-link {
-    text-decoration: none;
+::deep .sign-up-link {
     color: #333;
 }
 
-    .sign-up-link:hover {
+    ::deep .sign-up-link:hover {
         transition: background-color 0.3s, box-shadow 0.3s;
         color: #3b5998;
     }
@@ -180,6 +179,15 @@
 }
 
     ::deep .guest-login:hover {
+        transition: background-color 0.3s, box-shadow 0.3s;
+        color: #3b5998;
+    }
+
+::deep .user-forgot-password{
+    color: #333;
+}
+
+    ::deep .user-forgot-password:hover {
         transition: background-color 0.3s, box-shadow 0.3s;
         color: #3b5998;
     }

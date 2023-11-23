@@ -8,5 +8,10 @@ namespace ManeroWebApp.Controllers
         {
             return View("~/Views/SignInPage/SignIn.cshtml");
         }
+
+        public IActionResult ForgotPassword()
+        {
+            return View("~/Views/SignInPage/ForgotPassword.cshtml");
+        }
     }
 }
