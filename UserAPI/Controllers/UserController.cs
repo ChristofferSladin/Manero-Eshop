@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using System.Linq.Expressions;
+using System.Security.Claims;
 using UserAPI.Dtos;
 
 namespace UserAPI.Controllers

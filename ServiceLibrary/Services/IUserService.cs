@@ -11,5 +11,5 @@ public interface IUserService
     Task<FavoriteProduct> AddProductToWishList(int productId, string userId);
     Task<UserProfile> GetUserProfileAsync(string id);
     Task<bool> RemoveProductFromWishListAsync(int productId, string userId);
-    Task<IdentityUser> GetIdentityUser();
+    Task<User> GetIdentityUser();
 }

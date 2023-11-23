@@ -4,7 +4,6 @@ using Newtonsoft.Json;
 using ServiceLibrary.Models;
 using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Text;
 
 namespace ServiceLibrary.Services

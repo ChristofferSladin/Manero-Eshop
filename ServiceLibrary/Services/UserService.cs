@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using ServiceLibrary.Models;
 using System.Diagnostics;
+using System.Text;
 
 namespace ServiceLibrary.Services;
 
@@ -158,9 +159,9 @@ public class UserService : IUserService
         }
         return null!;
     }
-    public async Task<IdentityUser> GetIdentityUser()
+    public async Task<User> GetIdentityUser()
     {
-        var user = new IdentityUser();
+        var user = new User();
 
         try
         {
@@ -174,7 +175,7 @@ public class UserService : IUserService
             if (response.IsSuccessStatusCode)
             {
                 var responstring = await response.Content.ReadAsStringAsync();
-                user = JsonConvert.DeserializeObject<IdentityUser>(responstring);
+                user = JsonConvert.DeserializeObject<User>(responstring);
             }
         }
         catch (Exception e)
