@@ -1,8 +1,10 @@
-﻿@{
+﻿@model PageTitleViewModel
+
+@{
 }
 <div class="custom-header">
     <div class="place-holder">placeHolder</div>
-    <div class="place-holder">placeHolder</div>
+    <div class="place-holder">@Model.Title</div>
     <div id="shopping-cart" class="shopping-cart"></div>
 </div>
 <script>
