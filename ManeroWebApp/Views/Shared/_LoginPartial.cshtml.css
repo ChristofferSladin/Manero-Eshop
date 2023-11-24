@@ -1,0 +1,55 @@
+﻿button {
+    position: relative;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding: 0;
+    margin: 0;
+    border: none;
+    outline: none;
+    background: none;
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    resize: none;
+}
+.navbar-user{
+
+}
+::deep .user-display-name {
+    text-decoration: none;
+    color: #111;
+    font-weight: 600;
+    transition: all 0.15s ease-in-out;
+}
+
+    ::deep .user-display-name:hover {
+        color: #808080;
+    }
+
+.user-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    padding: 20px;
+    line-height: 15px;
+    margin-top: 3px;
+}
+
+.logout-btn {
+    color: #111;
+    font-size: 0.8rem;
+    transition: all 0.15s ease-in-out;
+}
+
+    .logout-btn:hover {
+        color: #808080;
+    }
+
+::deep .user-login {
+    text-decoration: none;
+    color: #111;
+    font-weight: 600;
+    transition: all 0.15s ease-in-out;
+    padding: 20px;
+}

@@ -3,10 +3,61 @@
 @{
 }
 <div class="custom-header">
-    <div class="place-holder">placeHolder</div>
-    <div class="place-holder">@Model.Title</div>
-    <div id="shopping-cart" class="shopping-cart"></div>
+    <div class="header-titles">
+        <div class="header-title">Manero</div>
+        <div class="header-sub-title">@Model.Title</div>
+    </div>
+    @if (Model.Path == "/product")
+    {
+        <div onclick="goBack()" class="header-back-btn"><i class="fa-solid fa-angle-left angle-left"></i></div>
+        <div class="cart-and-login">
+            <partial name="_LoginPartial" />
+            <div id="shopping-cart" class="shopping-cart"></div>
+        </div>
+    }
+    else if (Model.Path == "/product/reviews")
+    {
+        <div onclick="goBack()" class="header-back-btn"><i class="fa-solid fa-angle-left angle-left"></i></div>
+        <div class="cart-and-login">
+            <partial name="_LoginPartial" />
+            <a class="leave-review-btn"><i class="fa-regular fa-pen-to-square"></i></a>
+        </div>
+    }
+    else
+    {
+        <div id="navigation-partial"></div>
+        <div class="cart-and-login">
+            <partial name="_LoginPartial" />
+            <div id="shopping-cart" class="shopping-cart"></div>
+        </div>
+    }
 </div>
+
+
+
+
+
+<script>
+
+    function goBack() {
+        window.history.back();
+    }
+</script>
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: '@Url.Action("NavigationPartial", "Navigation")',
+            data: {},
+            method: 'GET',
+            success: function (result) {
+                $('#navigation-partial').html(result);
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+    });
+</script>
 <script>
     $(document).ready(function () {
         loadShoppingCartPartial();
@@ -16,7 +67,7 @@
         var dropdownStatus = localStorage.getItem('dropdownStatus');
         var savedScrollPosition = localStorage.getItem('scrollPosition');
         $.ajax({
-            url: '@Url.Action("ShoppingCartPartial", "Home")',
+            url: '@Url.Action("ShoppingCartPartial", "ShoppingCart")',
             data: {},
             method: 'GET',
             success: function (result) {

@@ -134,7 +134,7 @@
         $('.scrollable-div').on('click', '#remove-product-btn', function () {
             var productNumber = $(this).data('product-number');
             $.ajax({
-                url: '@Url.Action("RemoveProductFromShoppingCart", "Home")',
+                url: '@Url.Action("RemoveProductFromShoppingCart", "ShoppingCart")',
                 method: 'POST',
                 data: { productNumber: productNumber },
                 success: function (result) {
@@ -152,7 +152,7 @@
         $('.scrollable-div').on('click', '#increment-btn', function () {
             var productNumber = $(this).data('product-number');
             $.ajax({
-                url: '@Url.Action("IncrementShoppingCartProduct", "Home")',
+                url: '@Url.Action("IncrementShoppingCartProduct", "ShoppingCart")',
                 method: 'POST',
                 data: { productNumber: productNumber, increment: 1 },
                 success: function (result) {
@@ -167,7 +167,7 @@
         $('.scrollable-div').on('click', '#decrement-btn', function () {
             var productNumber = $(this).data('product-number');
             $.ajax({
-                url: '@Url.Action("IncrementShoppingCartProduct", "Home")',
+                url: '@Url.Action("IncrementShoppingCartProduct", "ShoppingCart")',
                 method: 'POST',
                 data: { productNumber: productNumber, increment: 2 },
                 success: function (result) {

@@ -1,0 +1,21 @@
+﻿.navigation-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    color: #111;
+    z-index: 1;
+}
+.navigation-button {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+.navigation-items {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    background: #fff;
+    border: 1px solid red;
+}

@@ -1,18 +1,71 @@
 ﻿.custom-header {
-    position: absolute;
-    top: 50px;
-    left: 0;
+    position: fixed;
+    height: 60px;
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     background: #fff;
     padding: 0 10px;
+    z-index: 200;
+    box-shadow: 0px 0px 10px 1px rgba(1, 1, 1, 0.1);
 }
-.shopping-cart{
+
+.header-back-btn {
+    color: #111;
+    text-decoration: none;
+    transition: 0.2s all ease-in-out;
+    font-size: 1.5rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+    .header-back-btn:hover {
+        color: #626262;
+    }
+
+.leave-review-btn {
+    color: #111;
+    text-decoration: none;
+    transition: 0.2s all ease-in-out;
+    font-size: 1.6rem;
+    cursor: pointer;
+}
+
+    .leave-review-btn:hover {
+        color: #626262;
+    }
+
+.header-titles {
+    position: absolute;
+    left: calc(50% - 100px);
+    display: flex;
+    height: 100%;
+    width: 200px;
+    margin-top: 3px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-title {
+    font-size: 1.7rem;
+    font-weight: 600;
+    line-height: 18px;
+}
+
+.header-sub-title {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.shopping-cart {
     position: relative;
     height: 100%;
 }
-.place-holder {
+.cart-and-login {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     height: 100%;
 }
