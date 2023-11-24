@@ -1,12 +1,24 @@
 ﻿@{
 }
 <div class="navigation-container">
-    <div class="navigation-button"><i class="fa-regular fa-bars"></i></div>
-    <div class="navigation-items">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-        <a class="nav-link text-dark" asp-area="" asp-controller="FeaturedProducts" asp-action="Index">Featured</a>
-        <a class="nav-link text-dark" asp-area="" asp-controller="ProductCategory" asp-action="Index">Categories</a>
-        <a class="nav-link text-dark" asp-area="" asp-controller="WishList" asp-action="Index">WishList</a>
-    
+    <button id="toggle-navigation-window" class="navigation-button"><i class="fa-regular fa-bars"></i></button>
+    <div class="navigation-items" id="navigation-window">
+        <a class="drop-down-nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+        <a class="drop-down-nav-link" asp-area="" asp-controller="FeaturedProducts" asp-action="Index">Featured</a>
+        <a class="drop-down-nav-link" asp-area="" asp-controller="ProductCategory" asp-action="Index">Categories</a>
+        <a class="drop-down-nav-link" asp-area="" asp-controller="WishList" asp-action="Index">WishList</a>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $('#toggle-navigation-window').on('click', function () {
+            var navigationWindow = $('#navigation-window');
+            if (navigationWindow.css('display') === 'none') {
+                navigationWindow.css('display', 'flex');
+            } else {
+                navigationWindow.hide(); // Hides the element if it's already visible
+            }
+        });
+    });
+</script>

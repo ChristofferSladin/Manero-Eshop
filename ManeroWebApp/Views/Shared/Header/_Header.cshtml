@@ -3,33 +3,33 @@
 @{
 }
 <div class="custom-header">
-    <div class="header-titles">
+    <a class="header-titles" asp-controller="Home" asp-action="Index">
         <div class="header-title">Manero</div>
         <div class="header-sub-title">@Model.Title</div>
-    </div>
-    @if (Model.Path == "/product")
+    </a>
+    @switch (Model.Path)
     {
-        <div onclick="goBack()" class="header-back-btn"><i class="fa-solid fa-angle-left angle-left"></i></div>
-        <div class="cart-and-login">
-            <partial name="_LoginPartial" />
-            <div id="shopping-cart" class="shopping-cart"></div>
-        </div>
-    }
-    else if (Model.Path == "/product/reviews")
-    {
-        <div onclick="goBack()" class="header-back-btn"><i class="fa-solid fa-angle-left angle-left"></i></div>
-        <div class="cart-and-login">
-            <partial name="_LoginPartial" />
-            <a class="leave-review-btn"><i class="fa-regular fa-pen-to-square"></i></a>
-        </div>
-    }
-    else
-    {
-        <div id="navigation-partial"></div>
-        <div class="cart-and-login">
-            <partial name="_LoginPartial" />
-            <div id="shopping-cart" class="shopping-cart"></div>
-        </div>
+        case "/product":
+            <div onclick="goBack()" class="header-back-btn"><i class="fa-solid fa-angle-left angle-left"></i></div>
+            <div class="cart-and-login">
+                <partial name="_LoginPartial" />
+                <div id="shopping-cart" class="shopping-cart"></div>
+            </div>
+            break;
+        case "/product/reviews":
+            <div onclick="goBack()" class="header-back-btn"><i class="fa-solid fa-angle-left angle-left"></i></div>
+            <div class="cart-and-login">
+                <partial name="_LoginPartial" />
+                <a class="leave-review-btn"><i class="fa-regular fa-pen-to-square"></i></a>
+            </div>
+            break;
+        default:
+            <div id="navigation-partial"></div>
+            <div class="cart-and-login">
+                <partial name="_LoginPartial" />
+                <div id="shopping-cart" class="shopping-cart"></div>
+            </div>
+            break;
     }
 </div>
 
@@ -38,7 +38,6 @@
 
 
 <script>
-
     function goBack() {
         window.history.back();
     }

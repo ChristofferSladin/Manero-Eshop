@@ -1,21 +1,59 @@
-﻿.navigation-container {
+﻿button {
+    position: relative;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding: 0;
+    margin: 0;
+    border: none;
+    outline: none;
+    background: none;
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    resize: none;
+}
+
+.navigation-container {
     position: relative;
     display: flex;
     justify-content: center;
     color: #111;
     z-index: 1;
 }
+
 .navigation-button {
     font-size: 1.5rem;
     font-weight: 600;
 }
+
 .navigation-items {
     position: absolute;
     top: 50px;
-    left: 0;
-    display: flex;
+    left: -5px;
+    display: none;
     flex-direction: column;
     align-items: start;
     background: #fff;
-    border: 1px solid red;
+    border-radius: 5px;
+    min-width: 320px;
+    min-height: 400px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
+::deep .drop-down-nav-link {
+    padding: 5px 10px;
+    width: 100%;
+    text-decoration: none;
+    font-size: 1.2rem;
+    color: #111;
+    transition: all 0.15s;
+    background: #fff;
+}
+
+    ::deep .drop-down-nav-link:hover {
+        text-decoration: none;
+        background: #333;
+        color: #f2f2f2;
+    }

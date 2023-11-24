@@ -13,9 +13,7 @@
     color: inherit;
     resize: none;
 }
-.navbar-user{
 
-}
 ::deep .user-display-name {
     text-decoration: none;
     color: #111;
