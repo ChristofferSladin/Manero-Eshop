@@ -17,8 +17,7 @@ namespace ManeroWebApp.Controllers
             _productService = productService;
             _shoppingCartService = shoppingCartService;
         }
-
-        public async Task<IActionResult> Index()
+            public async Task<IActionResult> Index()
         {
 
             //Behöver läggas på en service!
@@ -134,14 +133,18 @@ namespace ManeroWebApp.Controllers
             return RedirectToAction("HeaderPartial", "Home");
         }
 
-        public IActionResult HeaderPartial()
+        public IActionResult HeaderPartial(string title)
         {
-            return PartialView("/Views/Shared/Header/_Header.cshtml");
+            PageTitleViewModel viewModel = new PageTitleViewModel
+            {
+                Title = title
+            };
+
+            return PartialView("/Views/Shared/Header/_Header.cshtml", viewModel);
         }
 
         public async Task<IActionResult> ShoppingCartPartial()
         {
-
             var homeIndexViewModel = new HomeIndexViewModel
             {
                 TestModel = new TestingShoppingCartViewModel
@@ -152,6 +155,7 @@ namespace ManeroWebApp.Controllers
             if (User.Identity != null && User.Identity.IsAuthenticated)
             {
                 var cartProducts = await _shoppingCartService.GetUserShoppingCartProductsAsync();
+
                 foreach (var cartProduct in cartProducts)
                 {
                     var product = await _productService.GetProductByIdAsync(cartProduct.ProductId);
