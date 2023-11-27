@@ -12,10 +12,9 @@ namespace ManeroWebApp.Controllers
             PageTitleViewModel viewModel = new()
             {
                 Title = title,
-                Path = page.ToLower()
+                Path = page
             };
             return PartialView("/Views/Shared/Header/_Header.cshtml", viewModel);
         }
-       
     }
 }
