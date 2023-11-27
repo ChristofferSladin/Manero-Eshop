@@ -7,7 +7,7 @@
         <div class="header-title">Manero</div>
         <div class="header-sub-title">@Model.Title</div>
     </a>
-    @switch (Model.Path)
+    @switch (Model.Path?.ToLower())
     {
         case "/product":
             <div onclick="goBack()" class="header-back-btn"><i class="fa-solid fa-angle-left angle-left"></i></div>
