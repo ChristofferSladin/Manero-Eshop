@@ -6,19 +6,66 @@
 <div class="navbar-user">
     @if (SignInManager.IsSignedIn(User))
     {
-        <div class="user-wrapper">
-            @{
-                var ser = await UserManager.FindByEmailAsync(User.Identity?.Name!);
-                var user = await UserService.GetUserProfileAsync(ser?.Id!);
-            }
-            <a class="user-display-name" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@user.FirstName @user.LastName</a>
-            <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                <button type="submit" class="logout-btn">Logout</button>
-            </form>
+        var ser = await UserManager.FindByEmailAsync(User.Identity?.Name!);
+        var user = await UserService.GetUserProfileAsync(ser?.Id!);
+        <div class="user-container">
+            <button id="toggle-user-window-icon" class="user-button">
+                <i class="fa-light fa-user user-icon"></i>
+            </button>
+            <button id="toggle-user-window" class="user-button">
+                <div class="user-display-name">@user.FirstName @user.LastName</div>
+                <i class="fa-regular fa-chevron-down chevron-down"></i>
+            </button>
+            <div id="user-window" class="user-items">
+                <div id="user-name" class="user-name">
+                    <div class="user-display-name">@user.FirstName @user.LastName</div>
+                </div>
+                <div class="user-links">
+                    <a class="drop-user-nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Manage</a>
+                    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                        <button class="drop-user-nav-link" type="submit">Sign out</button>
+                    </form>
+                </div>
+            </div>
         </div>
     }
     else
     {
-        <a class="user-login" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        <a class="user-login" asp-area="Identity" asp-page="/Account/Login">Sign in</a>
     }
 </div>
+<script>
+    function updateButtonContent() {
+        const screenWidth = window.innerWidth;
+        if (screenWidth < 500) {
+            $('#user-name').show();
+            $('#toggle-user-window').hide();
+            $('#toggle-user-window-icon').show();
+        } else {
+            $('#user-name').hide();
+            $('#toggle-user-window').show();
+            $('#toggle-user-window-icon').hide();
+        }
+    }
+    updateButtonContent();
+    $(window).on('resize', updateButtonContent);
+</script>
+<script>
+    $(document).ready(function () {
+        $('#toggle-user-window, #toggle-user-window-icon').on('click', function (event) {
+            event.stopPropagation();
+            var userWindow = $('#user-window');
+            if (userWindow.css('display') === 'none') {
+                userWindow.css('display', 'flex');
+            } else {
+                userWindow.hide();
+            }
+        });
+        $(document).on('click.userWindow', function (event) {
+            var userWindow = $('#user-window');
+            if (!userWindow.is(event.target) && !$('#toggle-user-window, #toggle-user-window-icon').is(event.target)) {
+                userWindow.hide();
+            }
+        });
+    });
+</script>

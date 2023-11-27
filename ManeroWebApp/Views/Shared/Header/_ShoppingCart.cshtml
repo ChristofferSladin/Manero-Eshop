@@ -116,15 +116,25 @@
         } else {
             $('#dropdown-content').show();
         }
+
         $('#dropdown-content').on('click', '#close-button', function () {
             $('#dropdown-content').hide();
             localStorage.setItem('dropdownStatus', 'hidden');
         });
 
-        $('#dropdown-button').on('click', function () {
+        $('#dropdown-button').on('click', function (event) {
+            event.stopPropagation();
             $('#dropdown-content').toggle();
             var currentStatus = $('#dropdown-content').is(':visible') ? 'shown' : 'hidden';
             localStorage.setItem('dropdownStatus', currentStatus);
+        });
+
+        $(document).on('click.shoppingCart', function (event) {
+            if (!$(event.target).closest('#dropdown-button').length &&
+                !$(event.target).closest('#dropdown-content').length) {
+                $('#dropdown-content').hide();
+                localStorage.setItem('dropdownStatus', 'hidden');
+            }
         });
     });
 </script>
