@@ -49,6 +49,9 @@ namespace ManeroWebApp.Areas.Identity.Pages.Account
             public string Email { get; set; }
         }
 
+        [TempData]
+        public string StatusMessage { get; set; }
+
         public async Task<IActionResult> OnPostAsync()
         {
             if (ModelState.IsValid)
@@ -56,7 +59,7 @@ namespace ManeroWebApp.Areas.Identity.Pages.Account
                 var user = await _userManager.FindByEmailAsync(Input.Email);
                 if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
                 {
-                    // Don't reveal that the user does not exist or is not confirmed
+                    StatusMessage = "Error: User not found";
                     return RedirectToPage("./ForgotPasswordConfirmation");
                 }
 
@@ -75,7 +78,8 @@ namespace ManeroWebApp.Areas.Identity.Pages.Account
                     "Reset Password",
                     $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
-                return RedirectToPage("./ForgotPasswordConfirmation");
+                StatusMessage = "Reset link has been sent to your email.";
+                return Page();
             }
 
             return Page();

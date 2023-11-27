@@ -1,15 +1,75 @@
 ﻿/*MANERO WELCOME CIRCLE*/
-
-.carousel-container {
+.welcome-page {
+    background-color: #dbe4f5;
     display: flex;
-    align-items: flex-end;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
     height: 100vh;
-    width: 100%;
-    overflow: hidden;
-    background-color: #dbe4f5;
+    overflow:hidden;
 }
 
+.title-animation{
+    display: flex;
+    justify-content:center;
+    align-items:center;
+    height: 50vh;
+    margin-bottom: 5vh;
+    cursor:default;
+}
+
+.title-animation p{
+    font-size: 14vw;
+    font-weight: bold;
+    margin: 0 1vw;
+    transition: transform 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.title-animation p:nth-child(1) {
+    animation: fadeIn 1s ease forwards;
+}
+
+.title-animation p:nth-child(2) {
+    animation: fadeIn 1.2s ease forwards;
+}
+
+.title-animation p:nth-child(3) {
+    animation: fadeIn 1.4s ease forwards;
+}
+
+.title-animation p:nth-child(4) {
+    animation: fadeIn 1.6s ease forwards;
+}
+
+.title-animation p:nth-child(5) {
+    animation: fadeIn 1.8s ease forwards;
+}
+
+.title-animation p:nth-child(6) {
+    animation: fadeIn 2s ease forwards;
+}
+
+    .title-animation p:hover {
+        transform: scale(1.1);
+    }
+
+.carousel-container{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
 
 .carousel {
     border: 5px solid;
@@ -116,3 +176,29 @@ input[name="carousel-radio"] {
         background-color: #333;
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
     }
+
+
+
+@media (min-width: 768px) {
+    .title-animation p {
+        font-size: 8vw;
+    }
+
+
+    .title-animation {
+        height: 100%;
+    }
+
+    .carousel-container {
+        height: 70%;
+    }
+
+    .carousel {
+        max-width: 85vmin;
+        height: 70vmin;
+    }
+
+    .slide{
+        height: 50vmin;
+    }
+}
