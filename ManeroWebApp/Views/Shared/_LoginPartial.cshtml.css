@@ -1,0 +1,114 @@
+﻿button {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding: 0;
+    margin: 0;
+    border: none;
+    outline: none;
+    background: none;
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    resize: none;
+}
+
+.user-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    color: #111;
+    height: 100%;
+    z-index: 1;
+}
+
+.user-button {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    color: #111;
+    margin-right: 20px;
+    transition: all 0.15s ease-in-out;
+}
+
+    .user-button:hover .user-display-name,
+    .user-button:hover i {
+        color: #808080;
+    }
+
+.chevron-down {
+    font-size: 0.7rem;
+    color: #111;
+    padding-right: 1px;
+}
+
+.user-display-name {
+    font-size: 1.4rem;
+    text-decoration: none;
+    font-weight: 600;
+    line-height: 20px;
+}
+
+.user-items {
+    position: absolute;
+    display: none;
+    flex-direction: column;
+    align-items: end;
+    justify-content: start;
+    background: #fff;
+    top: 49px;
+    right: 15px;
+    min-width: 220px;
+    min-height: 100px;
+    overflow: hidden;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+::deep .user-login {
+    text-decoration: none;
+    color: #111;
+    font-weight: 600;
+    transition: all 0.15s ease-in-out;
+    padding: 20px;
+}
+
+::deep form {
+    width: 100%;
+}
+
+::deep .drop-user-nav-link {
+    display: flex;
+    justify-content: end;
+    padding: 5px 10px;
+    width: 100%;
+    text-decoration: none;
+    font-size: 1.2rem;
+    color: #111;
+    transition: all 0.15s;
+    background: #fff;
+}
+
+    ::deep .drop-user-nav-link:hover {
+        text-decoration: none;
+        background: #333;
+        color: #f2f2f2;
+    }
+
+.user-name {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 5px 0;
+    font-size: 1.3rem;
+    border-bottom: 1px solid #111;
+}
+
+.user-icon {
+    font-size: 1.6rem;
+    padding: 4px 0;
+}
+
+.user-links {
+    width: 100%;
+}

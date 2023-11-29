@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using DataAccessLibrary.Entities.ProductEntities;
+using Newtonsoft.Json;
 using ServiceLibrary.Models;
 using System.Diagnostics;
 
@@ -31,5 +32,41 @@ public class UserService : IUserService
         }
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
         return userProfile;
+    }
+    public async Task<bool> RemoveProductFromWishListAsync(int productId, string userId)
+    {
+        try
+        {
+            var request = new HttpRequestMessage(HttpMethod.Post,
+                $"https://localhost:7047/wishList/removeProduct?productId={productId}&userId={userId}");
+            var response = await _httpClient.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+                return true;
+        }
+        catch (Exception e) { Debug.WriteLine(e.Message); }
+
+        return false;
+    }
+
+    public async Task<bool> CheckApiStatusAsync()
+    {
+        try
+        {
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri("https://localhost:7047/health")
+            };
+            var response = await _httpClient.SendAsync(request);
+            if (response.IsSuccessStatusCode)
+                return true;
+        }
+        catch (Exception e)
+        {
+            Debug.WriteLine(e.Message);
+            return false;
+        }
+        return false;
     }
 }

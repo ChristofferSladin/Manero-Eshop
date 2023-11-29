@@ -36,7 +36,7 @@ namespace UserAPI.Controllers
         /// </response>
         [HttpGet]
         [Route("/user/profile")]
-        public async Task<ActionResult<UserProfile>> GetProductAsync(string id)
+        public async Task<ActionResult<UserProfile>> GetUserAsync(string id)
         {
             Expression<Func<UserProfile, bool>> expression = user => user.Id == id;
             var user = await _userRepository.GetUserByIdAsync(expression);

@@ -1,5 +1,6 @@
 ﻿using DataAccessLibrary.Repositories;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Security.Claims;
@@ -7,7 +8,9 @@ using UserAPI.Dtos;
 
 namespace UserAPI.Controllers
 {
-
+    [Route("[controller]")]
+    [ApiController]
+    [EnableCors("AllowAll")]
     public class ShoppingCartController : ControllerBase
     {
         private readonly ShoppingCartProductRepository _shoppingCartProductRepository;
@@ -85,6 +88,7 @@ namespace UserAPI.Controllers
                 return NotFound();
             }
         }
+
         /// <summary>
         /// Remove product from user's cart
         /// </summary>
@@ -118,6 +122,7 @@ namespace UserAPI.Controllers
                 return NotFound();
             }
         }
+
         /// <summary>
         /// Increment product in user's cart
         /// </summary>
