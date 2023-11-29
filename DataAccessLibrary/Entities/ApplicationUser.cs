@@ -14,4 +14,7 @@ public class ApplicationUser : IdentityUser
     public virtual UserProfile? UserProfile { get; set; }
     public virtual ICollection<Favorite>? FavoriteProducts { get; set; }
     public UserRefreshToken? RefreshToken { get; set; }
+    public virtual ICollection<UserPromoCode>? UserPromoCodes { get; set; }
+
+
 }

@@ -1,29 +1,18 @@
-﻿<div class="promo-code">
-    <div class="image"><img /></div>
-    <div class="content">
-        <div class="company">Acme Co.</div>
-        <div class="percentage">50% off</div>
-        <div class="validity">Valid until June 30, 2022</div>
-    </div>
-    <div class="icon"><i class="fa-regular fa-clone fa-flip-vertical"></i></div>
-</div>
+﻿@model PromoCodeViewModel
 
 <div class="promo-code">
     <div class="image"><img /></div>
     <div class="content">
-        <div class="company">Acme Co.</div>
-        <div class="percentage">50% off</div>
-        <div class="validity">Valid until June 30, 2022</div>
+        <div class="company">@Model.PromoCodeName</div>
+        <div class="percentage" data-percentage="@((Model.PromoCodePercentage * 100).ToString("00"))">
+            @((Model.PromoCodePercentage * 100).ToString("00"))% off
+        </div>
+        <div class="validity">Valid until @Model.PromoCodeValidity.ToString("MMMM d, yyyy")</div>
     </div>
-    <div class="icon"><i class="fa-regular fa-clone fa-flip-vertical"></i></div>
+    <button class="icon"><i class="fa-regular fa-clone fa-flip-vertical"></i></button>
 </div>
 
-<div class="promo-code">
-    <div class="image"><img /></div>
-    <div class="content">
-        <div class="company">Acme Co.</div>
-        <div class="percentage">50% off</div>
-        <div class="validity">Valid until June 30, 2022</div>
-    </div>
-    <div class="icon"><i class="fa-regular fa-clone fa-flip-vertical"></i></div>
-</div>
+@section Scripts{
+    var elements = document.getElementsByClassName(".percentage");
+    console.log(elements);
+}

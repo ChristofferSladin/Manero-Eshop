@@ -24,12 +24,14 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
 builder.Services.AddScoped<IJwtAuthService, JwtAuthService>();
 builder.Services.AddScoped<IProductControllerService, ProductControllerService>();
+builder.Services.AddScoped<IPromoCodeService, PromoCodeService>();
 
 builder.Services.AddTransient<AuthHandler>();
 
 //Add this line of code with YOUR Service if using Authorization
 builder.Services.AddHttpClient<IShoppingCartService, ShoppingCartService>().AddHttpMessageHandler<AuthHandler>();
 builder.Services.AddHttpClient<IFavoriteService, FavoriteService>().AddHttpMessageHandler<AuthHandler>();
+builder.Services.AddHttpClient<IPromoCodeService, PromoCodeService>().AddHttpMessageHandler<AuthHandler>();
 
 
 

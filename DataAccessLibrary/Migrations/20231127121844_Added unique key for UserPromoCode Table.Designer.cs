@@ -4,6 +4,7 @@ using DataAccessLibrary.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLibrary.Migrations
 {
     [DbContext(typeof(ManeroDbContext))]
-    partial class ManeroDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231127121844_Added unique key for UserPromoCode Table")]
+    partial class AddeduniquekeyforUserPromoCodeTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -389,9 +392,6 @@ namespace DataAccessLibrary.Migrations
 
                     b.Property<decimal?>("PromoCodeAmount")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("PromoCodeImgUrl")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("PromoCodeIsUsed")
                         .HasColumnType("bit");

@@ -1,15 +1,32 @@
-﻿<div class="promo-page">
+﻿@model IEnumerable<PromoCodeViewModel>
+
+<div class="promo-page">
     <div class="navigation">
-        <a class="nav-item">Current</a>
-        <a class="nav-item">Used</a>
-@*         <a id="" class="nav-item"
-           asp-controller="ProductCategory"
-           asp-action="Index"
-           asp-route-genderCategory="">
+        <a id="current" class="nav-item"
+            asp-action="Index"
+            asp-controller="PromoCodes"
+            asp-route-status="current">
+            Current
+        </a>
+        <a id="used" class="nav-item"
+            asp-action="Index"
+            asp-controller="PromoCodes"
+            asp-route-status="used">
             Used
-        </a> *@
+        </a>
+
     </div>
-    <div>
-        <partial name="../Shared/PromoCodes/_PromoCodePartial" />
+    <div id="promo-codes">
+        @foreach(var promoCode in Model)
+        {
+            <partial name="../Shared/PromoCodes/_PromoCodePartial" model="@promoCode"/>
+        }
     </div>
 </div>
+
+@section Scripts{
+    <script>
+        @Html.Raw(ViewData["script"]);
+    </script>
+
+}

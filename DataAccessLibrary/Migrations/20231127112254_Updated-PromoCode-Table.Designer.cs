@@ -4,6 +4,7 @@ using DataAccessLibrary.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLibrary.Migrations
 {
     [DbContext(typeof(ManeroDbContext))]
-    partial class ManeroDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231127112254_Updated-PromoCode-Table")]
+    partial class UpdatedPromoCodeTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -390,9 +393,6 @@ namespace DataAccessLibrary.Migrations
                     b.Property<decimal?>("PromoCodeAmount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("PromoCodeImgUrl")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("PromoCodeIsUsed")
                         .HasColumnType("bit");
 
@@ -498,15 +498,8 @@ namespace DataAccessLibrary.Migrations
 
             modelBuilder.Entity("DataAccessLibrary.Entities.UserEntities.UserPromoCode", b =>
                 {
-                    b.Property<int>("UserPromoCodeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserPromoCodeId"));
-
                     b.Property<string>("Id")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("PromoCodeId")
                         .HasColumnType("int");
@@ -514,13 +507,13 @@ namespace DataAccessLibrary.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("UserPromoCodeId");
+                    b.HasKey("Id");
 
                     b.HasIndex("PromoCodeId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserPromoCodes");
+                    b.ToTable("UserPromoCode");
                 });
 
             modelBuilder.Entity("DataAccessLibrary.Entities.UserEntities.UserRefreshToken", b =>
