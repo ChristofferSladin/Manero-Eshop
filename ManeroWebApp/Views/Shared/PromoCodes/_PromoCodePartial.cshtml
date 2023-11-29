@@ -9,10 +9,5 @@
         </div>
         <div class="validity">Valid until @Model.PromoCodeValidity.ToString("MMMM d, yyyy")</div>
     </div>
-    <button class="icon"><i class="fa-regular fa-clone fa-flip-vertical"></i></button>
+    <button data-hidden-value="@Model.PromoCodeText" title="Copy" class="icon"><i class="fa-regular fa-clone fa-flip-vertical"></i></button>
 </div>
-
-@section Scripts{
-    var elements = document.getElementsByClassName(".percentage");
-    console.log(elements);
-}

@@ -1,10 +1,12 @@
 ﻿using ManeroWebApp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ServiceLibrary.Services;
 using System.Diagnostics;
 
 namespace ManeroWebApp.Controllers
 {
+    [Authorize]
     public class PromoCodesController : Controller
     {
         private readonly IPromoCodeService _promoCodeService;
