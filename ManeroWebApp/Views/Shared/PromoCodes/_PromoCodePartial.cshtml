@@ -1,0 +1,13 @@
+﻿@model PromoCodeViewModel
+
+<div class="promo-code">
+    <div class="image"><img /></div>
+    <div class="content">
+        <div class="company">@Model.PromoCodeName</div>
+        <div class="percentage" data-percentage="@((Model.PromoCodePercentage * 100).ToString("00"))">
+            @((Model.PromoCodePercentage * 100).ToString("00"))% off
+        </div>
+        <div class="validity">Valid until @Model.PromoCodeValidity.ToString("MMMM d, yyyy")</div>
+    </div>
+    <button data-hidden-value="@Model.PromoCodeText" title="Copy" class="icon"><i class="fa-regular fa-clone fa-flip-vertical"></i></button>
+</div>

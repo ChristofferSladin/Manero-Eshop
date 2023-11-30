@@ -1,0 +1,51 @@
+﻿.promo-page {
+    margin-top: 20px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.navigation {
+    overflow: hidden;
+    display: flex;
+    gap: 10px;
+    overflow: auto;
+    white-space: nowrap;
+    padding: 20px;
+    justify-content: center;
+    border-bottom: 3px solid #dbe3f5;
+}
+
+::deep .nav-item {
+    font-family: inherit;
+    color: inherit;
+    background: #dbe3f5;
+    text-decoration: none;
+    border-radius: 20px;
+    width: auto;
+    height: auto;
+    padding: 3px 30px;
+    font-size: 1rem;
+}
+
+.navigation ::deep .nav-item:hover {
+    background: #323b4e;
+    color: #ffffff;
+}
+
+.navigation ::deep .active {
+    background: #323b4e;
+    color: #ffffff;
+}
+
+@media (min-width: 576px) {
+    ::deep .nav-item {
+        font-size: 1.3rem;
+    }
+}
+
+@media (min-width: 768px) {
+    ::deep .nav-item {
+        font-size: 1.5rem;
+    }
+}

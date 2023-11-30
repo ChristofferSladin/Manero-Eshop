@@ -50,15 +50,16 @@ namespace ServiceLibrary.Services
 
         public async Task<bool> GetTokenAsync(string email, string password)
         {
-            var userLogin = new { Email = email, Password = password };
             try
             {
-                _httpClient.BaseAddress = new Uri("https://localhost:7047/login");
-                var jsonContent = JsonConvert.SerializeObject(userLogin);
-                var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-
-                var response = await _httpClient.PostAsync("/login", content);
-
+                var jsonContent = JsonConvert.SerializeObject(new { Email = email, Password = password });
+                var request = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Post,
+                    RequestUri = new Uri("https://localhost:7047/login"),
+                    Content = new StringContent(jsonContent, Encoding.UTF8, "application/json")
+                };
+                var response = await _httpClient.SendAsync(request);
                 if (!response.IsSuccessStatusCode) return false;
                 var responseString = await response.Content.ReadAsStringAsync();
                 var token = JsonConvert.DeserializeObject<RefreshModel>(responseString);
@@ -70,18 +71,20 @@ namespace ServiceLibrary.Services
                 Debug.WriteLine(e.Message);
                 return false;
             }
-
         }
 
         public async Task<bool> RefreshTokenAsync()
         {
             try
             {
-                var model = RetrieveCookieTokens();
-                _httpClient.BaseAddress = new Uri("https://localhost:7047/refresh");
-                var jsonContent = JsonConvert.SerializeObject(model);
-                var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-                var response = await _httpClient.PostAsync("/refresh", content);
+                var jsonContent = JsonConvert.SerializeObject(RetrieveCookieTokens());
+                var request = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Post,
+                    RequestUri = new Uri("https://localhost:7047/refresh"),
+                    Content = new StringContent(jsonContent, Encoding.UTF8, "application/json")
+                };
+                var response = await _httpClient.SendAsync(request);
                 if (!response.IsSuccessStatusCode) return false;
                 var responseString = await response.Content.ReadAsStringAsync();
                 var token = JsonConvert.DeserializeObject<RefreshModel>(responseString);
@@ -99,11 +102,14 @@ namespace ServiceLibrary.Services
         {
             try
             {
-                var model = RetrieveCookieTokens();
-                _httpClient.BaseAddress = new Uri("https://localhost:7047/revoke");
-                var jsonContent = JsonConvert.SerializeObject(model);
-                var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-                var response = await _httpClient.PostAsync("/revoke", content);
+                var jsonContent = JsonConvert.SerializeObject(RetrieveCookieTokens());
+                var request = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Post,
+                    RequestUri = new Uri("https://localhost:7047/revoke"),
+                    Content = new StringContent(jsonContent, Encoding.UTF8, "application/json")
+                };
+                var response = await _httpClient.SendAsync(request);
                 if (response.IsSuccessStatusCode) return true;
             }
             catch (Exception e) { Debug.WriteLine(e.Message); }

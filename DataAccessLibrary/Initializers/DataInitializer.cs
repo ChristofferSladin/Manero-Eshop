@@ -37,6 +37,7 @@ public class DataInitializer
         SeedCards();
         SeedAddresses();
         SeedReviews();
+        SeedPromoCodes();
     }
 
     private void SeedUserTokens()
@@ -524,5 +525,53 @@ public class DataInitializer
             _context.Update(addedProduct.Entity);
         }
         _context.SaveChanges();
+    }
+    private void SeedPromoCodes()
+    {
+        AddPromoCodeIfNotExisting("Sigma Apparel", .30M, null, false, DateTime.Now.AddDays(30), "HurryUpSale23", "https://images.unsplash.com/photo-1607082350899-7e105aa886ae?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+        AddPromoCodeIfNotExisting("Shoes4U", .50M, null, false, DateTime.Now.AddDays(15), "BlackWeek2023", "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YXBwYXJlbHxlbnwwfHwwfHx8MA%3D%3D");
+        AddPromoCodeIfNotExisting("Union Pants co.", .50M, null, false, DateTime.Now.AddDays(45), "JustForYou12", "");
+        AddPromoCodeIfNotExisting("Light is Right Inc.", .20M, null, true, DateTime.Now.AddDays(25), "SummerSale20", "");
+        AddPromoCodeIfNotExisting("Scandi Jackets Co.", .20M, null, false, DateTime.Now.AddDays(20), "WinterJackets20Off", "");
+        AddPromoCodeIfNotExisting("Future is Here Corp.", .10M, null, true, DateTime.Now.AddDays(10), "AllElectronics10Percent", "");
+        AddPromoCodeIfNotExisting("Around the corner co.", .50M, null, false, DateTime.Now.AddDays(14), "StoreClearance", "");
+        AddPromoCodeIfNotExisting("Brother 4 ever", .15M, null, true, DateTime.Now.AddDays(7), "FallIsHereSale15Percent", "");
+        AddPromoCodeIfNotExisting("Same are all by SAME Co. Ltd.", .15M, null, true, DateTime.Now.AddDays(7), "SameLikeOthers", "");
+        AddPromoCodeIfNotExisting("Brother 4 ever", .15M, null, true, DateTime.Now.AddDays(7), "LimitedOffer23", "");
+    }
+    private void AddPromoCodeIfNotExisting(string name, decimal percentage, decimal? amount, bool isUsed, DateTime validity, string codeText, string imgUrl)
+    {
+        var promoCodeExists = _context.PromoCodes.Any(x => x.PromoCodeText == codeText);
+        if(!promoCodeExists)
+        {
+            var promoCode = new PromoCode
+            {
+                PromoCodeName = name,
+                PromoCodePercentage = percentage,
+                PromoCodeAmount = amount,
+                PromoCodeIsUsed = isUsed,
+                PromoCodeValidity = validity,
+                PromoCodeText = codeText,
+                PromoCodeImgUrl = imgUrl
+            };
+
+            _context.PromoCodes.Add(promoCode);
+            _context.SaveChanges();
+
+            var users = _context.Users.ToList();
+
+            var random = new Random();
+            var user = users[random.Next(users.Count)];
+
+            var userPromoCode = new UserPromoCode();
+            if (users is not null)
+            {
+                userPromoCode.Id = user.Id;
+                userPromoCode.PromoCode = promoCode;
+
+                _context.UserPromoCodes.Add(userPromoCode);
+                _context.SaveChanges();
+            }
+        }
     }
 }

@@ -252,8 +252,8 @@
             method: 'GET',
             success: function (result) {
                 $('#productColor').html(result);
-                var newURL = '/product?productNumber=' + productNumber;
-                history.pushState({}, '', newURL);
+                var newURL = '/Product?productNumber=' + productNumber;
+                history.replaceState({}, '', newURL);
             },
             error: function (error) {
                 console.error(error);
