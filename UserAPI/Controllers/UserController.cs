@@ -57,7 +57,26 @@ namespace UserAPI.Controllers
             };
             return Ok(userProfile);
         }
+        [HttpGet]
+        [Route("/user")]
+        [Authorize]
+        public async Task<IActionResult> GetUser()
+        {
+            try
+            {
 
-       
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userId != null)
+                {
+                    var user = await _userRepository.GetAsync(x => x.Id == userId);
+
+                    return Ok(user);
+                }
+                return Unauthorized();
+            }
+            catch (Exception e) { Debug.WriteLine(e.Message); return Unauthorized(); }
+
+        }
+
     }
 }

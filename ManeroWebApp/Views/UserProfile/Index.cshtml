@@ -3,20 +3,6 @@
     ViewData["Title"] = "User Profile";
     ViewData["HideHeader"] = false;
 }
-@* <div class="headLine">
-    <div>
-        <a href="/Home/Index" class="btn-back">
-            <i class="fa-sharp fa-regular fa-bars-sort" style="color:black;"></i>
-        </a>
-    </div>
-    <h5>My Profile</h5>
-    <div>
-        <a asp-page="" class="btn-cart">
-            <i class="fa-light fa-bag-shopping" style="color:black;"></i>
-        </a>
-    </div>
-</div>
-<div class="boderLine" style="margin-top:0;"></div> *@
 
 <div class="profile-wrapper">
     <div class="cover-photo"></div>
@@ -37,7 +23,9 @@
 <div>
     <h2 class="lable-info">
         <i class="fa-light fa-calendar"></i> Order history
-        <button class="button-style"><span class="fa-solid fa-chevron-right"></span></button>
+        <form class="button-style" method="post">
+            <button type="submit" class="btn"><span class="fa-solid fa-chevron-right"></span></button>
+        </form>
     </h2>
 </div>
 
@@ -45,7 +33,9 @@
 <div>
     <h2 class="lable-info">
         <i class="fa-sharp fa-regular fa-credit-card"></i>Payment method
-        <button class="button-style"><span class="fa-solid fa-chevron-right"></span></button>
+        <form class="button-style" method="post">
+            <button type="submit" class="btn"><span class="fa-solid fa-chevron-right"></span></button>
+        </form>
     </h2>
 </div>
 
@@ -53,7 +43,9 @@
 <div>
     <h2 class="lable-info">
         <i class="fa-light fa-location-dot"></i> My address
-        <button class="button-style"><span class="fa-solid fa-chevron-right"></span></button>
+        <form class="button-style" method="post">
+            <button type="submit" class="btn"><span class="fa-solid fa-chevron-right"></span></button>
+        </form>
     </h2>
 </div>
 
@@ -61,7 +53,9 @@
 <div>
     <h2 class="lable-info">
         <i class="fa-regular fa-gift"></i>My promocodes
-        <button class="button-style"><span class="fa-solid fa-chevron-right"></span></button>
+        <form class="button-style" method="post" action="@Url.Action("Index", "PromoCodes")">
+        <button type="submit" class="btn" ><span class="fa-solid fa-chevron-right"></span></button>
+        </form>
     </h2>
 </div>
 
@@ -69,6 +63,9 @@
 <div>
     <h2 class="lable-info">
         <i class="fa-regular fa-arrow-right-from-bracket"></i>Sign out
-        <button class="button-style"><span></span></button>
+        <form class="button-style" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+            <button type="submit" class="btn"><span class="fa-solid fa-chevron-right"></span></button>
+        </form>
+    
     </h2>
 </div>
