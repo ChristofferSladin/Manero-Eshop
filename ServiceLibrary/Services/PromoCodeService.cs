@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Identity.Client;
+using Newtonsoft.Json;
 using ServiceLibrary.Models;
 using System;
 using System.Collections.Generic;
@@ -42,7 +43,6 @@ namespace ServiceLibrary.Services
             }
             return promoCodes;
         }
-
         public async Task<IEnumerable<PromoCode>> GetPromoCodesByUserAsync(string status)
         {
             List<PromoCode> promoCodes = new();
@@ -76,6 +76,25 @@ namespace ServiceLibrary.Services
                 Debug.WriteLine($"Exception: {ex.Message}");
             }
             return promoCodes;
+        }
+        public async Task<string> LinkPromoCodeToUserAsync(string promoCodeText)
+        {
+            try
+            {
+                var request = new HttpRequestMessage
+                {
+                    RequestUri = new Uri($"https://localhost:7047/user/link/promo-code?promoCodeText={promoCodeText}"),
+                    Method = HttpMethod.Post
+                };
+                var response = await _httpClient.SendAsync(request);
+                var reponseMessage = await response.Content.ReadAsStringAsync();
+                return reponseMessage;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception: {ex.Message}");
+            }
+            return null!;
         }
     }
 }

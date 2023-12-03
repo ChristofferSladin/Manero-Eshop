@@ -38,6 +38,29 @@
     color: #ffffff;
 }
 
+.button-container {
+    width: 100%;
+    padding: 80px;
+}
+
+::deep .add-button {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    height: 50px;
+    width: 100%;
+    color: #FFF;
+    font-size: 1rem;
+    background: #111111;
+    border-radius: 50px;
+    transition: all 0.15s ease-in-out;
+}
+
+    ::deep .add-button:hover {
+        background: #626262;
+    }
+
 @media (min-width: 576px) {
     ::deep .nav-item {
         font-size: 1.3rem;

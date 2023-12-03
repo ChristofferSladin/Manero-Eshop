@@ -1,4 +1,7 @@
 ﻿@model IEnumerable<PromoCodeViewModel>
+@{
+    ViewData["title"] = "My Promo Code";
+}
 
 <div class="promo-page">
     <div class="navigation">
@@ -14,13 +17,15 @@
             asp-route-status="used">
             Used
         </a>
-
     </div>
     <div id="promo-codes">
         @foreach(var promoCode in Model)
         {
             <partial name="../Shared/PromoCodes/_PromoCodePartial" model="@promoCode"/>
         }
+    </div>
+    <div class="button-container">
+        <a class="add-button" asp-action="AddPromoCode" asp-controller="PromoCodes">Add New</a>
     </div>
 </div>
 
@@ -36,11 +41,14 @@
             promoCodeElements.forEach(function (element) {
                 var percentageValue = element.getAttribute('data-percentage');
                 if (percentageValue <= 15) {
-                    element.style.color = "#085208";
+                    element.style.color = "#006600";
                 }
-                else if (percentageValue > 15) {
+                else if (percentageValue > 15 && percentageValue < 30) {
                     element.style.color = "#e0b016";
-                } else if (percentageValue > 30) {
+                } else if (percentageValue >= 30 && percentageValue < 50) {
+                    element.style.color = "#cc00ff";
+                }
+                else if (percentageValue >= 50) {
                     element.style.color = "#e8170c";
                 }
             })

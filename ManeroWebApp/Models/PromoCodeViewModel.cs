@@ -22,7 +22,8 @@ namespace ManeroWebApp.Models
                 PromoCodeAmount = promoCode.PromoCodeAmount,
                 PromoCodeIsUsed = promoCode.PromoCodeIsUsed,
                 PromoCodeValidity = promoCode.PromoCodeValidity,
-                PromoCodeText = promoCode.PromoCodeText
+                PromoCodeText = promoCode.PromoCodeText,
+                PromoCodeImgUrl = promoCode.PromoCodeImgUrl
             };
         }
     }
