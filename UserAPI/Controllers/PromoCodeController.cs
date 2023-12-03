@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Net;
 using System.Security.Claims;
 using UserAPI.Dtos;
 using UserAPI.Models;
@@ -82,15 +83,18 @@ namespace UserAPI.Controllers
                 if (userId is null)
                     return Unauthorized();
 
-                var currentPromoCodesForUser = await _userPromoCodeRepository
-                    .GetAllByUserAsync(userId);
-
                 var promoCode = await _promoCodeRepository
                     .GetAsync(x => x.PromoCodeText.ToLower() == promoCodeText.ToLower());
 
                 if(promoCode is null)
                     return NotFound("No such promo code exists.");
 
+                if (promoCode.PromoCodeValidity < DateTime.Now)
+                    return BadRequest("Promo code is no longer valid");
+
+                var currentPromoCodesForUser = await _userPromoCodeRepository
+                    .GetAllByUserAsync(userId);
+                
                 if (currentPromoCodesForUser.Any(x => x.PromoCodeText == promoCodeText))
                     return Conflict("Promo code is already registered.");
 
