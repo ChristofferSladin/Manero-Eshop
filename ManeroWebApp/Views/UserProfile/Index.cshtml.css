@@ -1,0 +1,86 @@
+﻿.cover-photo {
+    width: 100%;
+    height: 9px;
+    background: #FFFFFF;
+}
+.profile-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.profile-container {
+    position: relative;
+}
+
+.profile-picture {
+    border-radius: 50%;
+    overflow: hidden;
+    width: 115px;
+    height: 115px;
+    border: 4px solid #DBE3F5;
+    object-fit:cover;
+    aspect-ratio: 1 / 1;
+}
+
+.edit-icon {
+    position: absolute;
+    top: calc(50% + 40px);
+    left: calc(50% + 35px);
+    transform: translate(-50%, -50%);
+    background: #DBE3F5;
+    border-radius: 50%;
+    padding: 5px;
+}
+
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+    font-family: mulish;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.boderLine {
+    border: 1px solid #DBE3F5;
+    margin-top: 14px;
+    margin-bottom: 14px;
+}
+
+.lable-info {
+    display: flex;
+    align-items: center;
+    font-family: mulish;
+    font-size: 16px;
+    font-weight: normal;
+}
+
+    .lable-info i {
+        margin-right: 30px;
+        margin-left: 30px;
+    }
+::deep .btn {
+  
+}
+
+::deep .button-style {
+    background: none;
+    border: none;
+    margin-left: auto;
+    margin-right: 10px;
+    font-size: 12px;
+}
+ ::deep .button-edit {
+    background: none;
+    border: none;
+    margin-right:-5px;
+}
+
+@media (min-width: 768px) {
+}
+
+/* Desktop styles */
+@media (min-width: 1024px) {
+}

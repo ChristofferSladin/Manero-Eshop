@@ -31,6 +31,8 @@ builder.Services.AddTransient<AuthHandler>();
 //Add this line of code with YOUR Service if using Authorization
 builder.Services.AddHttpClient<IShoppingCartService, ShoppingCartService>().AddHttpMessageHandler<AuthHandler>();
 builder.Services.AddHttpClient<IFavoriteService, FavoriteService>().AddHttpMessageHandler<AuthHandler>();
+builder.Services.AddHttpClient<IUserService, UserService>().AddHttpMessageHandler<AuthHandler>();
+
 builder.Services.AddHttpClient<IPromoCodeService, PromoCodeService>().AddHttpMessageHandler<AuthHandler>();
 
 

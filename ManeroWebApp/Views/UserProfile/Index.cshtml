@@ -1,0 +1,71 @@
+﻿@model UserProfileViewModel
+@{
+    ViewData["Title"] = "User Profile";
+    ViewData["HideHeader"] = false;
+}
+
+<div class="profile-wrapper">
+    <div class="cover-photo"></div>
+    <div class="profile-container">
+        <img class="profile-picture" src="@Model.ProfileImage" alt="Profile Picture" />
+        <div class="edit-icon">
+            <button class="button-edit"><i class="fa-regular fa-pen-line"></i></button>
+        </div>
+    </div>
+    <div class="profile-info">
+        <h4>@Model.FirstName @Model.LastName</h4>
+        <p>@Model.Email</p>
+    </div>
+</div>
+
+
+<div class="boderLine"></div>
+<div>
+    <h2 class="lable-info">
+        <i class="fa-light fa-calendar"></i> Order history
+        <form class="button-style" method="post">
+            <button type="submit" class="btn"><span class="fa-solid fa-chevron-right"></span></button>
+        </form>
+    </h2>
+</div>
+
+<div class="boderLine"></div>
+<div>
+    <h2 class="lable-info">
+        <i class="fa-sharp fa-regular fa-credit-card"></i>Payment method
+        <form class="button-style" method="post">
+            <button type="submit" class="btn"><span class="fa-solid fa-chevron-right"></span></button>
+        </form>
+    </h2>
+</div>
+
+<div class="boderLine"></div>
+<div>
+    <h2 class="lable-info">
+        <i class="fa-light fa-location-dot"></i> My address
+        <form class="button-style" method="post">
+            <button type="submit" class="btn"><span class="fa-solid fa-chevron-right"></span></button>
+        </form>
+    </h2>
+</div>
+
+<div class="boderLine"></div>
+<div>
+    <h2 class="lable-info">
+        <i class="fa-regular fa-gift"></i>My promocodes
+        <form class="button-style" method="post" action="@Url.Action("Index", "PromoCodes")">
+        <button type="submit" class="btn" ><span class="fa-solid fa-chevron-right"></span></button>
+        </form>
+    </h2>
+</div>
+
+<div class="boderLine"></div>
+<div>
+    <h2 class="lable-info">
+        <i class="fa-regular fa-arrow-right-from-bracket"></i>Sign out
+        <form class="button-style" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+            <button type="submit" class="btn"><span class="fa-solid fa-chevron-right"></span></button>
+        </form>
+    
+    </h2>
+</div>

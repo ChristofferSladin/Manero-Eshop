@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using ServiceLibrary.Models;
 using System.Diagnostics;
+using System.Text;
 
 namespace ServiceLibrary.Services;
 
@@ -48,6 +49,33 @@ public class UserService : IUserService
 
         return false;
     }
+  
+    public async Task<User> GetIdentityUser()
+    {
+        var user = new User();
+
+        try
+        {
+            var request = new HttpRequestMessage
+            {
+                RequestUri = new Uri("https://localhost:7047/user"),
+                Method = HttpMethod.Get
+            };
+
+            var response = await _httpClient.SendAsync(request);
+            if (response.IsSuccessStatusCode)
+            {
+                var responstring = await response.Content.ReadAsStringAsync();
+                user = JsonConvert.DeserializeObject<User>(responstring);
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.WriteLine(e.Message);
+        }
+        return user!;
+    }
+
 
     public async Task<bool> CheckApiStatusAsync()
     {
