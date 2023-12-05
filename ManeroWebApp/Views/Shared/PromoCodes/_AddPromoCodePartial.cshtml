@@ -1,0 +1,34 @@
+﻿@model AddPromoCodeViewModel
+@{
+    ViewData["title"] = "Add Promo Code";
+}
+
+<partial name="_ToastrNotification" />
+<div class="main">
+    <div class="add-promo-container">
+        <div class="outer-circle">
+            <div class="inner-circle">
+                <i class="sale-tag fa-solid fa-tag"></i>
+            </div>
+        </div>
+        <div class="line">|</div>
+        <div class="main-text">You don't have promocodes yet!</div>
+        <div class="sub-text">Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</div>
+
+        @using (Html.BeginForm("AddPromoCode", "PromoCodes", FormMethod.Post, new { @class = "promocode-form" }))
+        {
+            <div class="input-container">
+                <label asp-for="@Model.Voucher" class="input-field-label">Enter the voucher</label>
+                @Html.TextBoxFor(model => model.Voucher, new { @class = "input-field"})
+                <span class="error-message" asp-validation-for="@Model.Voucher"></span>
+            </div>
+            <div class="button-container">
+                <input class="submit-button" type="submit" value="Submit" />
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

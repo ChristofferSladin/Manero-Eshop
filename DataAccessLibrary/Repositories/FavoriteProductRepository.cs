@@ -16,7 +16,11 @@ public class FavoriteProductRepository : Repository<FavoriteProduct>
     }
     public async Task<List<FavoriteProduct>> GetFavoriteProductsAsync(string claim)
     {
-        var favoriteProducts = await _context.Favorite.Include(u => u.FavoriteProducts).Where(s => s.Id == claim).SelectMany(s => s.FavoriteProducts!).ToListAsync();
+        var favoriteProducts = await _context.Favorite.Include(u => u.FavoriteProducts)
+            .Where(s => s.Id == claim).SelectMany(s => s.FavoriteProducts!).ToListAsync();
+
+        foreach (var favProduct in favoriteProducts)
+            favProduct.Product = await _context.Products.FirstOrDefaultAsync(p => p.ProductId == favProduct.ProductId);
 
         return favoriteProducts;
     }

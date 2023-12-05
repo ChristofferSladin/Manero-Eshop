@@ -13,8 +13,8 @@ public class FavoriteProductDto
     public decimal? SalePricePercentage { get; set; }
     public decimal? Rating { get; set; }
     public bool? IsOnSale { get; set; }
-    public string UserId { get; set; }
     public int ShoppingCartId { get; set; }
+    
 
     public static implicit operator FavoriteProductDto(FavoriteProduct favProduct)
     {
@@ -28,7 +28,7 @@ public class FavoriteProductDto
             PriceWithTax = favProduct.Product.PriceIncTax,
             PriceWithoutTax = favProduct.Product.PriceExcTax,
             Rating = favProduct.Product.Rating,
-            IsOnSale = favProduct.Product.IsOnSale,      
+            IsOnSale = favProduct.Product.IsOnSale,
         };
     }
 }

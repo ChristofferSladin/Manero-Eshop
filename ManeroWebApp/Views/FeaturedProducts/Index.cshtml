@@ -1,21 +1,13 @@
 ﻿@{
-    ViewData["Title"] = "Featured Products Page";
+    ViewData["Title"] = "Featured Products";
     ViewData["HideFooter"] = true;
 }
-
-<div class="headLine">
-    <div>
-        <a href="/Home/Index" class="btn-back">
-            <i class="fa-solid fa-chevron-left" style="color:black;"></i>
-        </a>
-    </div>
-    <h1>Featured Products</h1>
-    <div>
-        <a asp-page="" class="btn-cart">
-            <i class="fa-light fa-bag-shopping" style="color:black;"></i>
-        </a>
-    </div>
+<div class="breadcrumb">
+    <a href="/Home/Index">Home</a>
+    <span>&gt;</span>
+    <a href="/FeaturedProducts/Index">@ViewData["Title"]</a>
 </div>
+
 
 <div class="dropdownStyle">
     <select id="sortDropdown" onchange="sortProducts(this.value)">
@@ -31,7 +23,8 @@
     </select>
 </div>
 
-
+<link href="c:\users\admin\documents\kyh-2022\agila-arbetsmetoder\assignment\manerowebapp\views\featuredproducts\index.cshtml.css" rel="stylesheet" />
+<a href="c:\users\admin\documents\kyh-2022\agila-arbetsmetoder\assignment\manerowebapp\views\featuredproducts\index.cshtml">c:\users\admin\documents\kyh-2022\agila-arbetsmetoder\assignment\manerowebapp\views\featuredproducts\index.cshtml</a>
 
 <div class="product-grid" id="featuredProduct">
 </div>

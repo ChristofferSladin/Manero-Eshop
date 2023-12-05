@@ -1,14 +1,10 @@
 ﻿@model ProductViewModel
 @{
+    ViewData["Title"] = "Reviews";
 
 }
 <div class="review-wrapper">
     <div class="review-container">
-        <div class="review-title-bar">
-            <a class="back-btn" asp-area="" asp-controller="Product" asp-action="Index" asp-route-productNumber="@Model.ProductNumber"><i class="fa-solid fa-angle-left angle-left"></i></a>
-            <div class="review-title">Reviews</div>
-            <a class="leave-review-btn"><i class="fa-regular fa-pen-to-square"></i></a>
-        </div>
         <div id="productReviews"></div>
     </div>
 </div>

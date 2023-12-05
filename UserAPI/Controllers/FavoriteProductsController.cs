@@ -1,12 +1,17 @@
 ﻿using DataAccessLibrary.Repositories;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Security.Claims;
 using UserAPI.Dtos;
+using UserAPI.Services;
 
 namespace UserAPI.Controllers
 {
+    [Route("[controller]")]
+    [ApiController]
+    [EnableCors("AllowAll")]
     public class FavoriteProductsController : ControllerBase
     {
         private readonly FavoriteProductRepository _favoriteProductRepository;
@@ -31,15 +36,18 @@ namespace UserAPI.Controllers
         [HttpGet]
         [Route("/user/favorite/products")]
         [Authorize]
-        public async Task<ActionResult<ShoppingCartProductDto>> GetFavoriteProductsByUserAsync()
+        public async Task<ActionResult<List<FavoriteProductDto>>> GetFavoriteProductsByUserAsync()
         {
             try
             {
-                var user = User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
-                if (user != null!)
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
+
+                if (userId != null!)
                 {
-                    var query = await _favoriteProductRepository.GetFavoriteProductsAsync(user);
-                    return Ok(query);
+                    var query = await _favoriteProductRepository.GetFavoriteProductsAsync(userId);
+                    var favoriteProducts = query.Select(product => (FavoriteProductDto)product).ToList();
+                    
+                    return Ok(favoriteProducts);
                 }
                 return Unauthorized();
             }

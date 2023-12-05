@@ -1,0 +1,80 @@
+﻿@model IEnumerable<PromoCodeViewModel>
+@{
+    ViewData["title"] = "My Promo Code";
+}
+
+<div class="promo-page">
+    <div class="navigation">
+        <a id="current" class="nav-item"
+            asp-action="Index"
+            asp-controller="PromoCodes"
+            asp-route-status="current">
+            Current
+        </a>
+        <a id="used" class="nav-item"
+            asp-action="Index"
+            asp-controller="PromoCodes"
+            asp-route-status="used">
+            Used
+        </a>
+    </div>
+    <div id="promo-codes">
+        @foreach(var promoCode in Model)
+        {
+            <partial name="../Shared/PromoCodes/_PromoCodePartial" model="@promoCode"/>
+        }
+    </div>
+    <div class="button-container">
+        <a class="add-button" asp-action="AddPromoCode" asp-controller="PromoCodes">Add New</a>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        @Html.Raw(ViewData["script"]);
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var promoCodeElements = document.querySelectorAll('.percentage');
+
+            promoCodeElements.forEach(function (element) {
+                var percentageValue = element.getAttribute('data-percentage');
+                if (percentageValue <= 15) {
+                    element.style.color = "#006600";
+                }
+                else if (percentageValue > 15 && percentageValue < 30) {
+                    element.style.color = "#e0b016";
+                } else if (percentageValue >= 30 && percentageValue < 50) {
+                    element.style.color = "#cc00ff";
+                }
+                else if (percentageValue >= 50) {
+                    element.style.color = "#e8170c";
+                }
+            })
+        });
+    </script>
+    
+    <script>
+        //running javascript code when the page is properly loaded
+        document.addEventListener("DOMContentLoaded", function () {
+            
+            //getting all partial elements
+            var promoCodeElements = document.querySelectorAll('.promo-code');
+
+            //defining js code for each button in each promo code
+            promoCodeElements.forEach(function (element) {
+                var iconButton = element.querySelector('.icon');
+                iconButton.addEventListener("click", () => {
+                    var textToCopy = iconButton.getAttribute('data-hidden-value')
+                    
+                    //copying the text to clipboard
+                    navigator.clipboard.writeText(textToCopy)
+                        .then(function () {
+                            alert('Promo code copied to clipboard!');
+                        })
+                })
+            });
+        });
+    </script>
+}

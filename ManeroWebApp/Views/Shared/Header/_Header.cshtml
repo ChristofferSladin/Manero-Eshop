@@ -1,0 +1,94 @@
+﻿@model PageTitleViewModel
+
+@{
+}
+<div class="custom-header">
+    <a class="header-titles" asp-controller="Home" asp-action="Index">
+        <div class="header-title">Manero</div>
+        <div class="header-sub-title">@Model.Title</div>
+    </a>
+    @switch (Model.Path?.ToLower())
+    {
+        case "/product":
+            <div onclick="goBack()" class="header-back-btn"><i class="fa-solid fa-angle-left angle-left"></i></div>
+            <div class="cart-and-login">
+                <partial name="_LoginPartial" />
+                <div id="shopping-cart" class="shopping-cart"></div>
+            </div>
+            break;
+        case "/product/reviews":
+            <div onclick="goBack()" class="header-back-btn"><i class="fa-solid fa-angle-left angle-left"></i></div>
+            <div class="cart-and-login">
+                <partial name="_LoginPartial" />
+                <a class="leave-review-btn"><i class="fa-regular fa-pen-to-square"></i></a>
+            </div>
+            break;
+        default:
+            <div id="navigation-partial"></div>
+            <div class="cart-and-login">
+                <partial name="_LoginPartial" />
+                <div id="shopping-cart" class="shopping-cart"></div>
+            </div>
+            break;
+    }
+</div>
+
+
+
+
+
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: '@Url.Action("NavigationPartial", "Navigation")',
+            data: {},
+            method: 'GET',
+            success: function (result) {
+                $('#navigation-partial').html(result);
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        loadShoppingCartPartial();
+    });
+
+    function loadShoppingCartPartial() {
+        var dropdownStatus = localStorage.getItem('dropdownStatus');
+        var savedScrollPosition = localStorage.getItem('scrollPosition');
+        $.ajax({
+            url: '@Url.Action("ShoppingCartPartial", "ShoppingCart")',
+            data: {},
+            method: 'GET',
+            success: function (result) {
+                $('#shopping-cart').html(result);
+                if (dropdownStatus === 'hidden') {
+                    $('#dropdown-content').hide();
+                } else {
+                    $('#dropdown-content').show();
+                }
+                var scrollableDiv = $('.scrollable-div');
+                if (savedScrollPosition) {
+                    scrollableDiv.scrollTop(savedScrollPosition);
+                }
+
+                scrollableDiv.on('scroll', function () {
+                    var currentPosition = $(this).scrollTop();
+                    localStorage.setItem('scrollPosition', currentPosition);
+                });
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+    }
+</script>

@@ -2,13 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
-using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
 using ServiceLibrary.Services;
+using System.ComponentModel.DataAnnotations;
 
 namespace ManeroWebApp.Areas.Identity.Pages.Account
 {
@@ -16,13 +16,15 @@ namespace ManeroWebApp.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
-        private readonly IJwtAuthenticationService _jwtAuthenticationService;
+        private readonly IJwtAuthService _jwtAuthService;
+        private readonly IUserService _userService;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger, IJwtAuthenticationService jwtAuthenticationService)
+        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger, IJwtAuthService jwtAuthService, IUserService userService)
         {
             _signInManager = signInManager;
             _logger = logger;
-            _jwtAuthenticationService = jwtAuthenticationService;
+            _jwtAuthService = jwtAuthService;
+            _userService = userService;
         }
 
         /// <summary>
@@ -101,7 +103,11 @@ namespace ManeroWebApp.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= "~/Home";
-
+            if (!await _userService.CheckApiStatusAsync())
+            {
+                ModelState.AddModelError(string.Empty, "Service temporarily unavailable.");
+                return Page();
+            }
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             if (ModelState.IsValid)
@@ -110,7 +116,7 @@ namespace ManeroWebApp.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    await _jwtAuthenticationService.GetTokenAsync(Input.Email, Input.Password);
+                    await _jwtAuthService.GetTokenAsync(Input.Email, Input.Password);
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)

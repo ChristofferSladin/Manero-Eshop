@@ -1,0 +1,32 @@
+﻿@{
+}
+<div class="navigation-container">
+    <button id="toggle-navigation-window" class="navigation-button"><i class="fa-regular fa-bars"></i></button>
+    <div class="navigation-items" id="navigation-window">
+        <a class="drop-down-nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+        <a class="drop-down-nav-link" asp-area="" asp-controller="FeaturedProducts" asp-action="Index">Featured</a>
+        <a class="drop-down-nav-link" asp-area="" asp-controller="ProductCategory" asp-action="Index">Categories</a>
+        <a class="drop-down-nav-link" asp-area="" asp-controller="WishList" asp-action="Index">WishList</a>
+        <a class="drop-down-nav-link" asp-area="" asp-controller="PromoCodes" asp-action="Index">Promo Codes</a>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#toggle-navigation-window').on('click', function (event) {
+            event.stopPropagation();
+            var navigationWindow = $('#navigation-window');
+            if (navigationWindow.css('display') === 'none') {
+                navigationWindow.css('display', 'flex');
+            } else {
+                navigationWindow.hide();
+            }
+        });
+        $(document).on('click', function (event) {
+            var navigationWindow = $('#navigation-window');
+            if (!navigationWindow.is(event.target) && !$('#toggle-navigation-window').is(event.target)) {
+                navigationWindow.hide();
+            }
+        });
+    });
+</script>

@@ -1,4 +1,5 @@
 ﻿using ManeroWebApp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ServiceLibrary.Services;
@@ -7,20 +8,23 @@ using System.Security.Claims;
 
 namespace ManeroWebApp.Controllers
 {
+    [Authorize]
     public class WishListController : Controller
     {
-        private readonly IUserService _userService;
-        public WishListController(IUserService userService)
+        private readonly IFavoriteService _favoriteService;
+        private readonly IShoppingCartService _shoppingCartService;
+        public WishListController(IFavoriteService favoriteService, IShoppingCartService shoppingCartService)
         {
-            _userService = userService;
+            _favoriteService = favoriteService;
+            _shoppingCartService = shoppingCartService;
         }
         public async Task<IActionResult> Index()
         {
             try
             {
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
-                var favProductsByUser = await _userService.GetAllFavoriteProductsForUserAsync(userId);
-                
+                var favProductsByUser = await _favoriteService.GetUserFavoriteProductsAsync();
+
                 if (favProductsByUser is not null)
                     return View(favProductsByUser.Select(favProduct => (FavoriteProductViewModel)favProduct));
             }
@@ -28,12 +32,12 @@ namespace ManeroWebApp.Controllers
 
             return View(new List<FavoriteProductViewModel>());
         }
-        public async Task<IActionResult> AddProductToShoppingCart(int productId, int shoppingCartId)
+        public async Task<IActionResult> AddProductToShoppingCart(string productNumber)
         {
             try
             {
-                var result = await _userService.CreateShoppingCartProductEntry(productId, shoppingCartId);
-                if (result is not null)
+                var isSuccess = await _shoppingCartService.AddProductToShoppingCartAsync(1, productNumber);
+                if (isSuccess)
                 {
                     TempData["success"] = $"Product added to the shopping cart.";
                     return RedirectToAction("Index", "WishList");
@@ -44,12 +48,12 @@ namespace ManeroWebApp.Controllers
             TempData["error"] = $"Something went wrong.";
             return RedirectToAction("Index", "WishList");
         }
-        public async Task<IActionResult> RemoveProductFromWishList(int productId)
+        public async Task<IActionResult> RemoveProductFromWishList(string productNumber)
         {
             try
             {
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
-                var isSuccess = await _userService.RemoveProductFromWishListAsync(productId, userId);
+                var isSuccess = await _favoriteService.RemoveProductToFavoritesAsync(productNumber);
                 if (isSuccess)
                 {
                     TempData["success"] = $"Product deleted from the Wish List.";
@@ -61,14 +65,14 @@ namespace ManeroWebApp.Controllers
             TempData["error"] = $"Something went wrong.";
             return RedirectToAction("Index", "WishList");
         }
-        public async Task<IActionResult> AddProductToWishList(int productId)
+        public async Task<IActionResult> AddProductToWishList(string productNumber)
         {
             try
             {
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
-                var result = await _userService.AddProductToWishList(productId, userId);
+                var isSuccess = await _favoriteService.AddProductToFavoritesAsync(productNumber);
 
-                if (result is not null)
+                if (isSuccess)
                     TempData["success"] = "Product Added to the Wish List";
 
                 return View();

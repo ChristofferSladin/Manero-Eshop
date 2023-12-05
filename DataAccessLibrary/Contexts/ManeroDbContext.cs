@@ -33,5 +33,7 @@ public class ManeroDbContext : IdentityDbContext
     public DbSet<UserProfile> UserProfiles { get; set; }
     public DbSet<UserRefreshToken> UserRefreshToken { get; set; }
     public DbSet<Category> Categories { get; set; }
+    public DbSet<PromoCode> PromoCodes { get; set; }
+    public DbSet<UserPromoCode> UserPromoCodes { get; set; }
 
 }

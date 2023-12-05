@@ -387,8 +387,14 @@ namespace DataAccessLibrary.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PromoCodeId"));
 
-                    b.Property<decimal>("PromoCodeAmount")
+                    b.Property<decimal?>("PromoCodeAmount")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("PromoCodeImgUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PromoCodeIsUsed")
+                        .HasColumnType("bit");
 
                     b.Property<string>("PromoCodeName")
                         .IsRequired()
@@ -397,9 +403,16 @@ namespace DataAccessLibrary.Migrations
                     b.Property<decimal>("PromoCodePercentage")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<string>("PromoCodeText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("PromoCodeValidity")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("PromoCodeId");
 
-                    b.ToTable("PromoCode");
+                    b.ToTable("PromoCodes");
                 });
 
             modelBuilder.Entity("DataAccessLibrary.Entities.UserEntities.ShoppingCart", b =>
@@ -481,6 +494,33 @@ namespace DataAccessLibrary.Migrations
                         .IsUnique();
 
                     b.ToTable("UserProfiles");
+                });
+
+            modelBuilder.Entity("DataAccessLibrary.Entities.UserEntities.UserPromoCode", b =>
+                {
+                    b.Property<int>("UserPromoCodeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserPromoCodeId"));
+
+                    b.Property<string>("Id")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PromoCodeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UserPromoCodeId");
+
+                    b.HasIndex("PromoCodeId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserPromoCodes");
                 });
 
             modelBuilder.Entity("DataAccessLibrary.Entities.UserEntities.UserRefreshToken", b =>
@@ -873,6 +913,23 @@ namespace DataAccessLibrary.Migrations
                     b.Navigation("ApplicationUser");
                 });
 
+            modelBuilder.Entity("DataAccessLibrary.Entities.UserEntities.UserPromoCode", b =>
+                {
+                    b.HasOne("DataAccessLibrary.Entities.UserEntities.PromoCode", "PromoCode")
+                        .WithMany("UserPromoCodes")
+                        .HasForeignKey("PromoCodeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataAccessLibrary.Entities.ApplicationUser", "User")
+                        .WithMany("UserPromoCodes")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("PromoCode");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("DataAccessLibrary.Entities.UserEntities.UserRefreshToken", b =>
                 {
                     b.HasOne("DataAccessLibrary.Entities.ApplicationUser", "ApplicationUser")
@@ -959,6 +1016,11 @@ namespace DataAccessLibrary.Migrations
                     b.Navigation("FavoriteProducts");
                 });
 
+            modelBuilder.Entity("DataAccessLibrary.Entities.UserEntities.PromoCode", b =>
+                {
+                    b.Navigation("UserPromoCodes");
+                });
+
             modelBuilder.Entity("DataAccessLibrary.Entities.UserEntities.ShoppingCart", b =>
                 {
                     b.Navigation("ShoppingCartProducts");
@@ -979,6 +1041,8 @@ namespace DataAccessLibrary.Migrations
                     b.Navigation("ShoppingCart");
 
                     b.Navigation("UserProfile");
+
+                    b.Navigation("UserPromoCodes");
                 });
 #pragma warning restore 612, 618
         }
