@@ -237,7 +237,8 @@ namespace ProductAPI.Controllers
         /// </response>
         [HttpGet]
         [Route("/products/filter")]
-        public async Task<ActionResult<List<Product>>> GetProductsFilteredAsync(int? page, int? take, string? gender, string filterByName = null!, string filterByCategory = null!, string? orderByField = null!, string orderDirection = null!)
+        public async Task<ActionResult<List<Product>>> GetProductsFilteredAsync(int? page, int? take, string? gender, string filterByName = null!, string filterByCategory = null!, string? orderByField = null!, string orderDirection = null!
+            , string color = null!)
         {
             if (page <= 0 && take <= 0) { return BadRequest($"Invalid page & take, value \"{page}\" & value \"{take}\" is not allowed."); }
             if (page <= 0) { return BadRequest($"Invalid page, value \"{page}\" is not allowed."); }
@@ -293,13 +294,19 @@ namespace ProductAPI.Controllers
             }
 
             Expression<Func<Product, bool>> _gender = null!;
-
             if (!string.IsNullOrEmpty(gender))
             {
                 _gender = product => product.Gender != null && product.Gender.ToLower() == gender.ToLower();
             }
 
-            var products = await _productRepository.GetFilteredProductsAsync(_skip, _take, _filterByName, _filterByCategory, _orderByField, orderDirection, _gender);
+            Expression<Func<Product, bool>> _color = null!;
+            if (!string.IsNullOrEmpty(color))
+            {
+                _color = product => product.Color.ToLower() == color.ToLower();
+            }
+
+            var products = await _productRepository.GetFilteredProductsAsync(_skip, _take, _filterByName, _filterByCategory, _orderByField, orderDirection, _gender
+                , _color);
 
             if (products.Count == 0 && !string.IsNullOrEmpty(filterByName)) { return NotFound("Invalid product name, the product does not exist."); }
             if (products.Count == 0 && !string.IsNullOrEmpty(filterByCategory)) { return NotFound("Invalid category name, the category does not exist."); }
@@ -422,7 +429,7 @@ namespace ProductAPI.Controllers
             var categories = await _productRepository.GetProductSubCategories(genderCategory);
             if (categories is not null)
                 return Ok(categories);
-            
+
             return null!;
         }
     }
