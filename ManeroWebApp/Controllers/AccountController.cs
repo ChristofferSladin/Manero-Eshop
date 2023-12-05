@@ -2,10 +2,15 @@
 
 namespace ManeroWebApp.Controllers
 {
-    public class SignInController : Controller
+    public class AccountController : Controller
     {
-        public IActionResult SignIn()
+        public IActionResult SignIn(string? returnUrl = null)
         {
+            if(returnUrl == null) 
+            {
+                returnUrl = "~/Home";
+            }
+            ViewData["returnUrl"] = returnUrl;
             return View("~/Views/SignInPage/SignIn.cshtml");
         }
 

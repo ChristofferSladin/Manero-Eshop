@@ -34,7 +34,7 @@ builder.Services.AddHttpClient<IFavoriteService, FavoriteService>().AddHttpMessa
 builder.Services.AddHttpClient<IUserService, UserService>().AddHttpMessageHandler<AuthHandler>();
 
 builder.Services.AddHttpClient<IPromoCodeService, PromoCodeService>().AddHttpMessageHandler<AuthHandler>();
-
+builder.Services.ConfigureApplicationCookie(options => options.LoginPath = "/Account/SignIn");
 
 
 builder.Services.Configure<CookiePolicyOptions>(options =>
