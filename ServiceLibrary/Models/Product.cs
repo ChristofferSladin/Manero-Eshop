@@ -11,6 +11,7 @@ public class Product
     public string? Size { get; set; }
     public int QuantityInStock { get; set; }
     public string? Color { get; set; }
+    public string? Gender { get; set; }
     public decimal PriceExcTax { get; set; }
     public decimal PriceIncTax { get; set; }
     public decimal SalePricePercentage { get; set; }
