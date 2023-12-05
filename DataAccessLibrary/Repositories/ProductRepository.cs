@@ -97,7 +97,8 @@ public class ProductRepository
 
         return await query.Skip(skip).Take(take).ToListAsync();
     }
-    public async Task<List<Product>> GetFilteredProductsAsync(int skip, int take, Expression<Func<Product, bool>> filterByName = null!, Expression<Func<Product, bool>> filterByCategory = null!, Expression<Func<Product, dynamic>> orderByField = null!, string orderDirection = null!, Expression<Func<Product, bool>> gender = null!)
+    public async Task<List<Product>> GetFilteredProductsAsync(int skip, int take, Expression<Func<Product, bool>> filterByName = null!, Expression<Func<Product, bool>> filterByCategory = null!, Expression<Func<Product, dynamic>> orderByField = null!, string orderDirection = null!, Expression<Func<Product, bool>> gender = null!,
+        Expression<Func<Product, bool>> color = null!)
     {
         var query = _context.Products.AsQueryable();
 
@@ -114,6 +115,11 @@ public class ProductRepository
         if (gender != null!)
         {
             query = query.Where(gender);
+        }
+
+        if (color != null!)
+        {
+            query = query.Where(color);
         }
 
         if (orderByField != null!)
@@ -145,7 +151,7 @@ public class ProductRepository
             foreach (var category in query)
                 if (!categoryList.Any(x => x == category))
                     categoryList.Add(category!);
-            
+
             return categoryList;
         }
         return null!;
@@ -163,7 +169,7 @@ public class ProductRepository
                 foreach (var category in query)
                     if (!categoryList.Contains(category))
                         categoryList.Add(category);
-            
+
             return categoryList;
         }
 
