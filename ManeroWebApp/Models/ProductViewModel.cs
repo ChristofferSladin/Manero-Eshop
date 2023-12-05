@@ -13,6 +13,7 @@ namespace ManeroWebApp.Models
         public string? Size { get; set; }
         public int QuantityInStock { get; set; }
         public string? Color { get; set; }
+        public string? Gender { get; set; }
         public decimal PriceExcTax { get; set; }
         public decimal PriceIncTax { get; set; }
         public decimal SalePricePercentage { get; set; }
@@ -35,6 +36,7 @@ namespace ManeroWebApp.Models
                 Size = product.Size,
                 QuantityInStock = product.QuantityInStock,
                 Color = product.Color,
+                Gender = product.Gender,
                 PriceExcTax = product.PriceExcTax,
                 PriceIncTax = product.PriceIncTax,
                 SalePricePercentage = product.SalePricePercentage,
