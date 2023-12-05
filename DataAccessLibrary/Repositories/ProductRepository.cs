@@ -98,7 +98,7 @@ public class ProductRepository
         return await query.Skip(skip).Take(take).ToListAsync();
     }
     public async Task<List<Product>> GetFilteredProductsAsync(int skip, int take, Expression<Func<Product, bool>> filterByName = null!, Expression<Func<Product, bool>> filterByCategory = null!, Expression<Func<Product, dynamic>> orderByField = null!, string orderDirection = null!, Expression<Func<Product, bool>> gender = null!,
-        Expression<Func<Product, bool>> color = null!)
+        Expression<Func<Product, bool>> color = null!, decimal? minPrice = null, decimal? maxPrice = null)
     {
         var query = _context.Products.AsQueryable();
 
@@ -121,6 +121,17 @@ public class ProductRepository
         {
             query = query.Where(color);
         }
+
+        if (minPrice.HasValue)
+        {
+            query = query.Where(product => product.PriceIncTax >= minPrice.Value);
+        }
+
+        if (maxPrice.HasValue)
+        {
+            query = query.Where(product => product.PriceIncTax <= maxPrice.Value);
+        }
+
 
         if (orderByField != null!)
         {
