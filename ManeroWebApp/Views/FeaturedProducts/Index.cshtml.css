@@ -50,7 +50,11 @@
     margin-top: 20px;
 }
 
-
+.page-head {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+}
 
 
 @media (min-width: 768px) {
