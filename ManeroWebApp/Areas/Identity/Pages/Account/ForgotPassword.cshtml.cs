@@ -60,7 +60,7 @@ namespace ManeroWebApp.Areas.Identity.Pages.Account
                 if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
                 {
                     StatusMessage = "Error: User not found";
-                    return RedirectToPage("./ForgotPasswordConfirmation");
+                    return RedirectToPage("~/Views/SignInPage/ForgotPassword");
                 }
 
                 // For more information on how to enable account confirmation and password reset please
@@ -79,6 +79,7 @@ namespace ManeroWebApp.Areas.Identity.Pages.Account
                     $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
                 StatusMessage = "Reset link has been sent to your email.";
+
                 return Page();
             }
 

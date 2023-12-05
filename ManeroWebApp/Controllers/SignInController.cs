@@ -11,7 +11,7 @@ namespace ManeroWebApp.Controllers
 
         public IActionResult ForgotPassword()
         {
-            return View("~/Views/SignInPage/ForgotPassword.cshtml");
+            return View("~/Views/SignInPage/PasswordForgot.cshtml");
         }
     }
 }
