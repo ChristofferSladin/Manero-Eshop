@@ -37,7 +37,7 @@ namespace UserAPI.Controllers
         [HttpGet]
         [Route("/user/promo-code")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<PromoCodeDto>>> LinkPromoCodeToUserAsync()
+        public async Task<ActionResult<IEnumerable<PromoCodeDto>>> GetPromoCodesByUserAsync()
         {
             try
             {
