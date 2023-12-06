@@ -6,19 +6,19 @@
 <div class="navbar-user">
     @if (SignInManager.IsSignedIn(User))
     {
-        var ser = await UserManager.FindByEmailAsync(User.Identity?.Name!);
-        var user = await UserService.GetUserProfileAsync(ser?.Id!);
+        var user = await UserManager.FindByEmailAsync(User.Identity?.Name!);
+        var userProfile = await UserService.GetUserProfileAsync(user?.Id!);
         <div class="user-container">
             <button id="toggle-user-window-icon" class="user-button">
                 <i class="fa-light fa-user user-icon"></i>
             </button>
             <button id="toggle-user-window" class="user-button">
-                <div class="user-display-name">@user.FirstName @user.LastName</div>
+                <div class="user-display-name">@userProfile.FirstName @userProfile.LastName</div>
                 <i class="fa-regular fa-chevron-down chevron-down"></i>
             </button>
             <div id="user-window" class="user-items">
                 <div id="user-name" class="user-name">
-                    <div class="user-display-name">@user.FirstName @user.LastName</div>
+                    <div class="user-display-name">@userProfile.FirstName @userProfile.LastName</div>
                 </div>
                 <div class="user-links">
                     <a class="drop-user-nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Manage</a>
@@ -31,7 +31,7 @@
     }
     else
     {
-        <a class="user-login" asp-area="Identity" asp-page="/Account/Login">Sign in</a>
+        <a asp-controller="Account" asp-action="SignIn" class="user-login">Login</a>
     }
 </div>
 <script>
