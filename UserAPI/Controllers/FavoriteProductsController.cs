@@ -113,7 +113,7 @@ namespace UserAPI.Controllers
                 var user = User.FindFirst(ClaimTypes.NameIdentifier)?.Value!;
                 if (user != null!)
                 {
-                    var query = await _favoriteProductRepository.RemoveProductToFavorites(user, productNumber);
+                    var query = await _favoriteProductRepository.RemoveProductFromFavorites(user, productNumber);
                     return Ok(query);
                 }
                 return Unauthorized();

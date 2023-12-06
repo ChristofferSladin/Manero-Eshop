@@ -55,7 +55,7 @@ public class FavoriteProductRepository : Repository<FavoriteProduct>
         await _context.SaveChangesAsync();
         return true;
     }
-    public async Task<bool> RemoveProductToFavorites(string user, string productNumber)
+    public async Task<bool> RemoveProductFromFavorites(string user, string productNumber)
     {
         var userExists = await _context.Users.FirstOrDefaultAsync(u => u.Id == user);
         if (userExists == null) return false;
