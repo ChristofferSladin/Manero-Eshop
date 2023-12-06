@@ -17,6 +17,7 @@
     </div>
 
     <form class="login" method="post" action="~/Identity/Account/Login">
+        <input type="hidden" name="returnUrl" value="@ViewData["returnUrl"]"/>
         <div class="form-parent">
             <label asp-for="Input.Email" class="email-label">Email</label>
             <input asp-for="Input.Email" class="email-input" autocomplete="username" aria-required="true" placeholder="name@example.com" />
@@ -33,7 +34,9 @@
         </div>
 
         <div class="options-group">
-                <input asp-for="Input.RememberMe" type="hidden" value="true" />
+            <input asp-for="Input.RememberMe" type="hidden" value="true" />
+
+            <a class="user-forgot-password" asp-area="" asp-controller="Account" asp-action="ForgotPassword">Forgot your password?</a>
         </div>
 
         <div class="button-container">
@@ -41,9 +44,10 @@
 
         </div>
         <div class="footer">
-            <p> Don't have an account?
+            <p>
+                Don't have an account
+                <a class="sign-up-link" asp-area="" asp-controller="Account" asp-action="SignUp">Sign up!</a>
             </p>
-
             <p>
                 <a class="guest-login" asp-area="" asp-controller="Home" asp-action="Index">Continue as a guest</a>
             </p>

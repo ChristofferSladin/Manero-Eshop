@@ -11,5 +11,6 @@ namespace ServiceLibrary.Services
     {
         Task<IEnumerable<PromoCode>> GetPromoCodesByUserAsync();
         Task<IEnumerable<PromoCode>> GetPromoCodesByUserAsync(string status);
+        Task<string> LinkPromoCodeToUserAsync(string promoCodeText);
     }
 }

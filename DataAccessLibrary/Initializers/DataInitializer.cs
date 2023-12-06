@@ -530,14 +530,14 @@ public class DataInitializer
     {
         AddPromoCodeIfNotExisting("Sigma Apparel", .30M, null, false, DateTime.Now.AddDays(30), "HurryUpSale23", "https://images.unsplash.com/photo-1607082350899-7e105aa886ae?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
         AddPromoCodeIfNotExisting("Shoes4U", .50M, null, false, DateTime.Now.AddDays(15), "BlackWeek2023", "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YXBwYXJlbHxlbnwwfHwwfHx8MA%3D%3D");
-        AddPromoCodeIfNotExisting("Union Pants co.", .50M, null, false, DateTime.Now.AddDays(45), "JustForYou12", "");
-        AddPromoCodeIfNotExisting("Light is Right Inc.", .20M, null, true, DateTime.Now.AddDays(25), "SummerSale20", "");
-        AddPromoCodeIfNotExisting("Scandi Jackets Co.", .20M, null, false, DateTime.Now.AddDays(20), "WinterJackets20Off", "");
-        AddPromoCodeIfNotExisting("Future is Here Corp.", .10M, null, true, DateTime.Now.AddDays(10), "AllElectronics10Percent", "");
-        AddPromoCodeIfNotExisting("Around the corner co.", .50M, null, false, DateTime.Now.AddDays(14), "StoreClearance", "");
-        AddPromoCodeIfNotExisting("Brother 4 ever", .15M, null, true, DateTime.Now.AddDays(7), "FallIsHereSale15Percent", "");
-        AddPromoCodeIfNotExisting("Same are all by SAME Co. Ltd.", .15M, null, true, DateTime.Now.AddDays(7), "SameLikeOthers", "");
-        AddPromoCodeIfNotExisting("Brother 4 ever", .15M, null, true, DateTime.Now.AddDays(7), "LimitedOffer23", "");
+        AddPromoCodeIfNotExisting("Union Pants co.", .50M, null, false, DateTime.Now.AddDays(45), "JustForYou12", "https://images.unsplash.com/photo-1607082349566-187342175e2f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+        AddPromoCodeIfNotExisting("Light is Right Inc.", .20M, null, true, DateTime.Now.AddDays(25), "SummerSale20", "https://images.unsplash.com/photo-1607083206968-13611e3d76db?q=80&w=2115&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+        AddPromoCodeIfNotExisting("Scandi Jackets Co.", .20M, null, false, DateTime.Now.AddDays(20), "WinterJackets20Off", "https://images.unsplash.com/photo-1577538928305-3807c3993047?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+        AddPromoCodeIfNotExisting("Future is Here Corp.", .10M, null, true, DateTime.Now.AddDays(10), "AllElectronics10Percent", "https://images.unsplash.com/photo-1577387196112-579d95312c6d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+        AddPromoCodeIfNotExisting("Around the corner co.", .50M, null, false, DateTime.Now.AddDays(14), "StoreClearance", "https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+        AddPromoCodeIfNotExisting("Brother 4 ever", .15M, null, true, DateTime.Now.AddDays(3), "FallIsHereSale15Percent", "https://images.unsplash.com/photo-1561069934-eee225952461?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+        AddPromoCodeIfNotExisting("Same are all by SAME Co. Ltd.", .15M, null, true, DateTime.Now.AddDays(7), "SameLikeOthers", "https://images.unsplash.com/photo-1607083207685-aaf05f2c908c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+        AddPromoCodeIfNotExisting("Brother 4 ever", .15M, null, true, DateTime.Now.AddDays(1), "LimitedOffer23", "https://images.unsplash.com/photo-1531303435785-3853ba035cda?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
     }
     private void AddPromoCodeIfNotExisting(string name, decimal percentage, decimal? amount, bool isUsed, DateTime validity, string codeText, string imgUrl)
     {

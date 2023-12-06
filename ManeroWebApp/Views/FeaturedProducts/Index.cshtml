@@ -2,22 +2,26 @@
     ViewData["Title"] = "Featured Products";
     ViewData["HideFooter"] = true;
 }
-
-<div class="dropdownStyle">
-    <select id="sortDropdown" onchange="sortProducts(this.value)">
-        <option value="">Sorting by</option>
-        <option value="productName,asc">Name (asc)</option>
-        <option value="productName,desc">Name (desc)</option>
-        <option value="priceIncTax,asc">Price (asc)</option>
-        <option value="priceIncTax,desc">Price (desc)</option>
-        <option value="rating,asc">Rating (asc)</option>
-        <option value="rating,desc">Rating (desc)</option>
-        <option value="Category,asc">Category (asc)</option>
-        <option value="Category,desc">Category (desc)</option>
-    </select>
+<div class="page-head">
+    <div class="breadcrumb">
+        <a href="/Home/Index">Home</a>
+        <span>&gt;</span>
+        <a href="/FeaturedProducts/Index">@ViewData["Title"]</a>
+    </div>
+    <div class="dropdownStyle">
+        <select id="sortDropdown" onchange="sortProducts(this.value)">
+            <option value="">Sorting by</option>
+            <option value="productName,asc">Name (asc)</option>
+            <option value="productName,desc">Name (desc)</option>
+            <option value="priceIncTax,asc">Price (asc)</option>
+            <option value="priceIncTax,desc">Price (desc)</option>
+            <option value="rating,asc">Rating (asc)</option>
+            <option value="rating,desc">Rating (desc)</option>
+            <option value="Category,asc">Category (asc)</option>
+            <option value="Category,desc">Category (desc)</option>
+        </select>
+    </div>
 </div>
-
-
 
 <div class="product-grid" id="featuredProduct">
 </div>
@@ -30,7 +34,4 @@
 
         $('#featuredProduct').load("/FeaturedProducts/ProductCardsPartial");
     </script>
-    @*  <script>
-            $('#barMenuPartial').load("/FeaturedProducts/BarMenuPartial");
-        </script> *@
     }

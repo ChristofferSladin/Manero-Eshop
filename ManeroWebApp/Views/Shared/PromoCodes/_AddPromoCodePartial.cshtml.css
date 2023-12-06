@@ -1,0 +1,114 @@
+﻿.main {
+    display: flex;
+    justify-content:center;
+}
+.add-promo-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 40px;
+    gap: 10px;
+}
+.outer-circle {
+    border: 4px solid #9bbffa;
+    width: 160px;
+    height: 160px;
+    max-width: 240px;
+    max-height: 240px;
+    border-radius: 50%;
+    position: relative;
+}
+.inner-circle {
+    background-color: #9bbffa;
+    width: 92%;
+    height: 92%;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.sale-tag {
+    font-size: 50px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.line{
+    font-size: 40px;
+}
+.main-text{
+    font-size: 22px;
+    word-wrap: anywhere;
+    text-align: center;
+    margin: 0 6px 0 6px;
+    line-height: 24px;
+    font-weight: 500;
+}
+.sub-text{
+    word-wrap: anywhere;
+    text-align: center;
+    margin: 10px 30px 0 30px;
+    line-height: 20px;
+    font-size: 14px;
+}
+
+::deep .promocode-form {
+    width: 100%;
+}
+
+.input-container{
+    width: 100%;
+    padding: 10px;
+    position: relative;
+}
+::deep .input-field{
+    width: 100%;
+    height: 50px;
+    border-radius: 50px;
+    padding: 0 40px 0 40px;
+}
+::deep .input-field-label {
+    position: absolute;
+    z-index: 1;
+    left: 40px;
+    top: 0px;
+    background: #ffffff;
+    padding: 0 10px 0 10px;
+}
+::deep .error-message {
+    color: red;
+    margin-left: 40px;
+}
+
+.button-container {
+    width: 100%;
+    padding: 10px;
+}
+::deep .submit-button {
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    width: 100%;
+    color: #FFF;
+    font-size: 1rem;
+    background: #111111;
+    border-radius: 50px;
+    transition: all 0.15s ease-in-out;
+}
+
+    ::deep .submit-button:hover {
+        background: #626262;
+    }
+
+@media (min-width: 576px){
+    .outer-circle {
+        width: 240px;
+        height: 240px;
+    }
+    .sale-tag{
+        font-size: 80px;
+    }
+}

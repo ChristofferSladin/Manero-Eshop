@@ -1,7 +1,11 @@
 ﻿@model PromoCodeViewModel
+@{
+    ViewData["Title"] = "My Promo Codes";
+}
+<partial name="_ToastrNotification" />
 
 <div class="promo-code">
-    <div class="image"><img /></div>
+    <div class="image"><img src="@Model.PromoCodeImgUrl" /></div>
     <div class="content">
         <div class="company">@Model.PromoCodeName</div>
         <div class="percentage" data-percentage="@((Model.PromoCodePercentage * 100).ToString("00"))">

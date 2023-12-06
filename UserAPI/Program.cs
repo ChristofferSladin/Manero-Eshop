@@ -29,6 +29,7 @@ builder.Services.AddScoped<ProductRepository>();
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<UserPromoCodeRepository>();
+builder.Services.AddScoped<PromoCodeRepository>();
 
 builder.Services.AddSwaggerGen(sw =>
 {
