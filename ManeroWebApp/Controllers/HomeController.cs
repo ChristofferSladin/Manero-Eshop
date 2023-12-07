@@ -1,4 +1,5 @@
 ﻿using ManeroWebApp.Models;
+using ManeroWebApp.Services;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using ServiceLibrary.Services;
@@ -11,27 +12,20 @@ namespace ManeroWebApp.Controllers
     {
         private readonly IProductService _productService;
         private readonly IShoppingCartService _shoppingCartService;
+        private readonly ICookieService _cookieService;
 
-        public HomeController(IProductService productService, IShoppingCartService shoppingCartService)
+        public HomeController(IProductService productService, IShoppingCartService shoppingCartService, ICookieService cookieService)
         {
             _productService = productService;
             _shoppingCartService = shoppingCartService;
+            _cookieService = cookieService;
         }
         public async Task<IActionResult> Index()
         {
-
-            //Behöver läggas på en service!
-            var cookie = Request.Cookies["UserHasSelectedLogin"];
-            if (cookie == null)
+            if (_cookieService.CreateUserHasSelectedLoginCookie(HttpContext))
             {
-                var cookieOptions = new CookieOptions
-                {
-                    Expires = DateTime.UtcNow.AddYears(69),
-                };
-                Response.Cookies.Append("UserHasSelectedLogin", "", cookieOptions);
                 return RedirectToAction("Index", "WelcomePage");
             }
-
             var onSaleProducts = await _productService.GetOnSaleProductsWithReviewsAsync();
             var featuredProducts = await _productService.GetFeaturedProductsWithReviewsAsync();
 
