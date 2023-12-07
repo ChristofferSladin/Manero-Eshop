@@ -238,7 +238,7 @@ namespace ProductAPI.Controllers
         [HttpGet]
         [Route("/products/filter")]
         public async Task<ActionResult<List<Product>>> GetProductsFilteredAsync(int? page, int? take, string? gender, string filterByName = null!, string filterByCategory = null!, string? orderByField = null!, string orderDirection = null!
-            , string color = null!)
+            , string color = null!, decimal? minPrice = null, decimal? maxPrice = null, [FromQuery] List<string> sizes = null)
         {
             if (page <= 0 && take <= 0) { return BadRequest($"Invalid page & take, value \"{page}\" & value \"{take}\" is not allowed."); }
             if (page <= 0) { return BadRequest($"Invalid page, value \"{page}\" is not allowed."); }
@@ -305,8 +305,14 @@ namespace ProductAPI.Controllers
                 _color = product => product.Color.ToLower() == color.ToLower();
             }
 
+            Expression<Func<Product, bool>> _sizes = null!;
+            if (sizes != null && sizes.Any())
+            {
+                _sizes = product => sizes.Any(size => product.Size.Contains(size));
+            }
+
             var products = await _productRepository.GetFilteredProductsAsync(_skip, _take, _filterByName, _filterByCategory, _orderByField, orderDirection, _gender
-                , _color);
+                , _color, minPrice, maxPrice, sizes);
 
             if (products.Count == 0 && !string.IsNullOrEmpty(filterByName)) { return NotFound("Invalid product name, the product does not exist."); }
             if (products.Count == 0 && !string.IsNullOrEmpty(filterByCategory)) { return NotFound("Invalid category name, the category does not exist."); }
