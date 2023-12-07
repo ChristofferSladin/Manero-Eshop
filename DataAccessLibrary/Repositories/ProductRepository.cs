@@ -98,7 +98,7 @@ public class ProductRepository
         return await query.Skip(skip).Take(take).ToListAsync();
     }
     public async Task<List<Product>> GetFilteredProductsAsync(int skip, int take, Expression<Func<Product, bool>> filterByName = null!, Expression<Func<Product, bool>> filterByCategory = null!, Expression<Func<Product, dynamic>> orderByField = null!, string orderDirection = null!, Expression<Func<Product, bool>> gender = null!,
-        Expression<Func<Product, bool>> color = null!, decimal? minPrice = null, decimal? maxPrice = null)
+        Expression<Func<Product, bool>> color = null!, decimal? minPrice = null, decimal? maxPrice = null, List<string> sizes = null)
     {
         var query = _context.Products.AsQueryable();
 
@@ -132,6 +132,10 @@ public class ProductRepository
             query = query.Where(product => product.PriceIncTax <= maxPrice.Value);
         }
 
+        if (sizes != null && sizes.Any())
+        {
+            query = query.Where(product => sizes.Contains(product.Size));
+        }
 
         if (orderByField != null!)
         {
@@ -150,6 +154,7 @@ public class ProductRepository
 
         return await query.Skip(skip).Take(take).ToListAsync();
     }
+
     public async Task<IEnumerable<string>> GetGenderCategories()
     {
         var categoryList = new List<string>();
