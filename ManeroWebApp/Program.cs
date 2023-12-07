@@ -25,6 +25,7 @@ builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
 builder.Services.AddScoped<IJwtAuthService, JwtAuthService>();
 builder.Services.AddScoped<IProductControllerService, ProductControllerService>();
 builder.Services.AddScoped<IPromoCodeService, PromoCodeService>();
+builder.Services.AddScoped<ICookieService, CookieService>();
 
 builder.Services.AddTransient<AuthHandler>();
 
