@@ -1,6 +1,4 @@
-﻿using ManeroWebApp.Controllers;
-using ManeroWebApp.Models;
-using ManeroWebApp.Tests.Helpers;
+﻿using ManeroWebApp.Tests.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using ServiceLibrary.Services;
