@@ -1,6 +1,6 @@
-﻿using DataAccessLibrary.Entities.UserEntities;
-using Microsoft.AspNetCore.Mvc;
-using ServiceLibrary.Models;
+﻿using Moq;
+using Moq.Protected;
+using Newtonsoft.Json;
 using ServiceLibrary.Services;
 using System.Net;
 
@@ -213,4 +213,90 @@ public class ProductServiceTests
             Assert.InRange(product.SalePricePercentage, 0, decimal.MaxValue);
         }
     }
+
+
+    //Product Categories Tests
+    [Fact]
+    public async Task GetGenderCategoriesAsync_Returns_ListOfString_For_GenderCategories_For_Products()
+    {
+        //Arrange
+        var _httpMessageHandler = new Mock<HttpMessageHandler>();
+        var _httpClient = new HttpClient(_httpMessageHandler.Object);
+        IProductService _productService = new ProductService(_httpClient);
+        var _genderCategories = new List<string> { "Men", "Women", "Kids", "Girls" };
+        var successfulResponse = new HttpResponseMessage
+        {
+            StatusCode = HttpStatusCode.OK,
+            Content = new StringContent(JsonConvert.SerializeObject(_genderCategories))
+        };
+
+        _httpMessageHandler.Protected()
+            .Setup<Task<HttpResponseMessage>>(
+                "SendAsync",
+                ItExpr.Is<HttpRequestMessage>(x =>
+                    x.RequestUri == new Uri("https://localhost:7067/products/genderCategories")),
+                ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(successfulResponse);
+
+
+        //Act
+        var genderCategories = await _productService.GetGenderCategoriesAsync();
+
+        //Assert
+        Assert.NotEmpty(genderCategories);
+        Assert.IsType<List<string>>(genderCategories);
+        Assert.Equal(_genderCategories, genderCategories);
+    }
+    [Fact]
+    public async Task GetProductSubCategoriesAsync_Returns_ListOfCategoryModel_For_ProductCategories_For_Men_Gender()
+    {
+        //Arrange
+        var genderCategory = "Men";
+        var _httpMessageHandler = new Mock<HttpMessageHandler>();
+        var _httpClient = new HttpClient(_httpMessageHandler.Object);
+        IProductService _productService = new ProductService(_httpClient);
+        var _categories = new List<DataAccessLibrary.Entities.ProductEntities.Category>();
+        switch (genderCategory)
+        {
+            case "Men":
+                _categories.AddRange(new List<DataAccessLibrary.Entities.ProductEntities.Category> 
+                {
+                    new DataAccessLibrary.Entities.ProductEntities.Category {CategoryName = "Pants" }, 
+                    new DataAccessLibrary.Entities.ProductEntities.Category {CategoryName = "T-Shirts" }, 
+                    new DataAccessLibrary.Entities.ProductEntities.Category {CategoryName = "Shoes" } 
+                });
+                break;
+            case "Women":
+                _categories.AddRange(new List<DataAccessLibrary.Entities.ProductEntities.Category> 
+                {
+                    new DataAccessLibrary.Entities.ProductEntities.Category {CategoryName = "Sweaters" }, 
+                    new DataAccessLibrary.Entities.ProductEntities.Category {CategoryName = "Accessories" }, 
+                    new DataAccessLibrary.Entities.ProductEntities.Category {CategoryName = "Jackets" } 
+                });
+                break;
+        }
+        
+        var successfulResponse = new HttpResponseMessage
+        {
+            StatusCode = HttpStatusCode.OK,
+            Content = new StringContent(JsonConvert.SerializeObject(_categories))
+        };
+
+        _httpMessageHandler.Protected()
+            .Setup<Task<HttpResponseMessage>>(
+                "SendAsync",
+                ItExpr.Is<HttpRequestMessage>(x =>
+                    x.RequestUri == new Uri($"https://localhost:7067/products/subcategories?genderCategory={genderCategory}")),
+                ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(successfulResponse);
+
+
+        //Act
+        var genderCategories = await _productService.GetProductSubCategoriesAsync(genderCategory);
+
+        //Assert
+        Assert.IsType<List<ServiceLibrary.Models.Category>>(genderCategories);
+        Assert.NotEmpty(genderCategories);
+    }
+
 }

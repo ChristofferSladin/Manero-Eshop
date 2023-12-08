@@ -308,12 +308,11 @@ public class ProductService : IProductService
     {
         try
         {
-            var baseUrl = new StringBuilder("https://localhost:7067/products/genderCategories?");
-            using var client = new HttpClient();
+            var baseUrl = new StringBuilder("https://localhost:7067/products/genderCategories");
             var request = new HttpRequestMessage();
             request.RequestUri = new Uri(baseUrl.ToString());
             request.Method = HttpMethod.Get;
-            var response = await client.SendAsync(request);
+            var response = await _httpClient.SendAsync(request);
             
             if (response.IsSuccessStatusCode)
             {
@@ -333,11 +332,10 @@ public class ProductService : IProductService
         {
             var baseUrl = new StringBuilder("https://localhost:7067/products/subcategories?");
             baseUrl.Append($"genderCategory={Uri.EscapeDataString(genderCategory)}");
-            using var client = new HttpClient();
             var request = new HttpRequestMessage();
             request.RequestUri = new Uri(baseUrl.ToString());
             request.Method = HttpMethod.Get;
-            var response = await client.SendAsync(request);
+            var response = await _httpClient.SendAsync(request);
             
             if (response.IsSuccessStatusCode)
             {
