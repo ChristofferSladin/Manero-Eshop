@@ -1,0 +1,187 @@
+﻿.filtering-panel {
+    background-color: #fff;
+    position: fixed;
+    top: 0;
+    right: -100%; /* Initially off-screen */
+    width: 100%;
+    height: 100%;
+    transition: right 0.3s ease; /* Transition property for sliding effect */
+    z-index: 999;
+}
+
+    .filtering-panel.active {
+        right: 0; /* Slide in when active class is applied */
+    }
+
+.header {
+    padding: 15px 0 0 0;
+    display: flex;
+    align-items: center;
+}
+
+.back-btn {
+    flex: 0.9;
+    display: flex;
+    font-size: 21px;
+}
+
+.title {
+    flex: 1.1;
+    text-align: center;
+    font-size: 21px;
+    text-align: left;
+}
+
+.secondary-title {
+    font-size: 19px;
+    margin: 0;
+}
+
+.size-section {
+    margin: 15px 0 0 0;
+}
+
+.size-filter {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.checkbox {
+    position: relative;
+}
+
+.checkbox-container {
+    display: flex;
+    font-weight: 500;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    align-items: center;
+    margin: 0;
+}
+
+.checkbox-input {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 50px;
+    height: 50px;
+    border: 1px solid #DBE3F5;
+    border-radius: 50%;
+    outline: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+    /* Style for checked state */
+    .checkbox-input:checked {
+        background-color: #DBE3F5;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+.color-section {
+    margin: 25px 0 0 0;
+}
+
+.color-space {
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+
+.color-filter {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 15px;
+}
+
+.color-circle {
+    appearance: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    border: 2px solid #DBE3F5;
+    margin-left: 10px;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+    .color-circle:checked {
+        border-color: #000;
+    }
+
+.charcoal {
+    background-color: #0c0c0c;
+}
+
+.black {
+    background-color: #000000;
+}
+
+.gray {
+    background-color: gray;
+}
+
+.white {
+    background-color: #FFFFFF;
+}
+
+.olive {
+    background-color: olive;
+}
+
+.red {
+    background-color: red;
+}
+
+.navy {
+    background-color: navy;
+}
+
+.price-section {
+    display: flex;
+    flex-direction: column;
+    margin-top: 25px;
+}
+
+.price-input-field {
+    margin-top: 10px;
+}
+
+.input-price {
+    border: 1px solid #DBE3F5;
+    border-radius: 25px;
+    font-weight: 500;
+    height: 29px;
+    width: 80%;
+    padding: 0 10px;
+    color: black;
+    transition: box-shadow 0.3s ease;
+}
+
+    .input-price:focus {
+        outline: none;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+
+.label-price {
+    font-weight: 500;
+}
+
+.apply-section {
+    display: flex;
+    flex-direction: column;
+}
+.apply-button {
+    margin-top: 35px;
+    border-radius: 25px;
+    color: #fff;
+    background-color: black;
+    border: none;
+    font-weight: 500;
+    padding: 15px 0;
+}

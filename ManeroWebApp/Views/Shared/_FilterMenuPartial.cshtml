@@ -1,0 +1,94 @@
+﻿<div class="filtering-panel">
+    <div class="container">
+        <div class="header">
+
+            <div class="back-btn" onclick="toggleFilterPanel()">
+                <div>
+                    <i class="fa-solid fa-chevron-left"></i>
+                </div>
+            </div>
+            <div class="title">Filter</div>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <div class="size-section">
+            <div class="container">
+                <p class="secondary-title">Size</p>
+                <div class="size-filter">
+
+                    <div class="checkbox">
+                        <input type="checkbox" class="checkbox-input" id="sizeL" name="selectedSizes" value="L" />
+                        <label for="sizeL" class="checkbox-container">L</label>
+                    </div>
+
+                    <div class="checkbox">
+                        <input type="checkbox" class="checkbox-input" id="size10" name="selectedSizes" value="10" />
+                        <label for="size10" class="checkbox-container">10</label>
+                    </div>
+
+                    <div class="checkbox">
+                        <input type="checkbox" class="checkbox-input" id="size16" name="selectedSizes" value="16" />
+                        <label for="size16" class="checkbox-container">16</label>
+                    </div>
+                    <div class="checkbox">
+
+                        <input type="checkbox" class="checkbox-input" id="sizeM" name="selectedSizes" value="M" />
+                        <label for="sizeM" class="checkbox-container">M</label>
+                    </div>
+                    <div class="checkbox">
+
+                        <input type="checkbox" class="checkbox-input" id="size42" name="selectedSizes" value="42" />
+                        <label for="size42" class="checkbox-container">42</label>
+
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" class="checkbox-input" id="size11" name="selectedSizes" value="11" />
+                        <label for="size11" class="checkbox-container">11</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="container">
+
+        <div class="color-section">
+            <div class="container">
+                <div class="color-space">
+                    <p class="secondary-title">Color</p>
+                    <div class="color-filter">
+                        <input type="checkbox" id="red" class="color-circle red">
+                        <input type="checkbox" id="navy" class="color-circle navy">
+                        <input type="checkbox" id="charcoal" class="color-circle charcoal">
+                        <input type="checkbox" id="black" class="color-circle black">
+                        <input type="checkbox" id="gray" class="color-circle gray">
+                        <input type="checkbox" id="white" class="color-circle white">
+                        <input type="checkbox" id="olive" class="color-circle olive">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="price-section">
+
+            <div class="price-input-field">
+                <label class="label-price" for="minPrice">Min Price:</label>
+                <input class="input-price" type="number" id="minPrice" name="minPrice" />
+            </div>
+            <div class="price-input-field">
+                <label class="label-price" for="maxPrice">Max Price:</label>
+                <input class="input-price" type="number" id="maxPrice" name="maxPrice" />
+            </div>
+
+        </div>
+
+        <div class="apply-section">
+            <button class="apply-button" id="applyFiltersBtn" onclick="applyFilters()">Apply Filters</button>
+        </div>
+    </div>
+</div>
