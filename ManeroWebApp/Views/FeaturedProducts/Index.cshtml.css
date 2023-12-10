@@ -25,6 +25,21 @@
         margin: 0 5px;
     }
 
+.filter-section {
+    display: flex;
+    justify-content: space-between;
+}
+
+.filter-btn {
+    border: none;
+    background: none;
+    margin: 5px 0 0 5px;
+}
+
+    .filter-btn:hover {
+        background-color: #f1f1f1;
+    }
+
 
 .dropdownStyle {
     text-align: right;
