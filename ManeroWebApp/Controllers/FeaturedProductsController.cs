@@ -1,6 +1,7 @@
 ﻿using ManeroWebApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using ServiceLibrary.Services;
+using System.Drawing;
 
 namespace ManeroWebApp.Controllers
 {
@@ -15,22 +16,29 @@ namespace ManeroWebApp.Controllers
         }
         public IActionResult Index()
         {
+
             return View();
         }
 
 
-        public async Task<IActionResult> ProductCardsPartial(string sort)
+        public async Task<IActionResult> ProductCardsPartial(string sort, List<string>? selectedSizes = null)
         {
+            var orderBy = string.Empty;
+            var orderDirection = string.Empty;
+            var gender = string.Empty;
+            var color = string.Empty;
 
-            var orderBy = "";
-            var orderDirection = "";
+            decimal? minPrice = null;
+            decimal? maxPrice = null;
+            selectedSizes ??= new List<string>();
+
             if (!string.IsNullOrEmpty(sort))
             {
                 orderBy = sort.Split(",")[0];
                 orderDirection = sort.Split(",")[1];
             }
 
-            var products = await _productService.GetFilteredProductsAsync(null, null, null, orderBy, orderDirection, null);
+            var products = await _productService.SelectFilteredProductsAsync(null, null, null, orderBy, orderDirection, null, gender, color, minPrice, maxPrice, selectedSizes);
             var productViewModels = products.Select(product => new ProductViewModel
             {
                 ProductId = product.ProductId,
@@ -52,6 +60,7 @@ namespace ManeroWebApp.Controllers
 
             }).DistinctBy(p => p.ProductName).Where(p => p.IsFeatured)
             .ToList();
+
 
             return PartialView("/Views/Shared/Product/_ProductCards.cshtml", productViewModels);
         }
