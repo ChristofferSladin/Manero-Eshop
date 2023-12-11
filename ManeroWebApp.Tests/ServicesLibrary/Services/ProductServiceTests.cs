@@ -1,4 +1,6 @@
-﻿using Moq;
+﻿using DataAccessLibrary.Entities.ProductEntities;
+using FluentAssertions;
+using Moq;
 using Moq.Protected;
 using Newtonsoft.Json;
 using ServiceLibrary.Services;
@@ -259,23 +261,23 @@ public class ProductServiceTests
         switch (genderCategory)
         {
             case "Men":
-                _categories.AddRange(new List<DataAccessLibrary.Entities.ProductEntities.Category> 
+                _categories.AddRange(new List<DataAccessLibrary.Entities.ProductEntities.Category>
                 {
-                    new DataAccessLibrary.Entities.ProductEntities.Category {CategoryName = "Pants" }, 
-                    new DataAccessLibrary.Entities.ProductEntities.Category {CategoryName = "T-Shirts" }, 
-                    new DataAccessLibrary.Entities.ProductEntities.Category {CategoryName = "Shoes" } 
+                    new DataAccessLibrary.Entities.ProductEntities.Category {CategoryName = "Pants" },
+                    new DataAccessLibrary.Entities.ProductEntities.Category {CategoryName = "T-Shirts" },
+                    new DataAccessLibrary.Entities.ProductEntities.Category {CategoryName = "Shoes" }
                 });
                 break;
             case "Women":
-                _categories.AddRange(new List<DataAccessLibrary.Entities.ProductEntities.Category> 
+                _categories.AddRange(new List<DataAccessLibrary.Entities.ProductEntities.Category>
                 {
-                    new DataAccessLibrary.Entities.ProductEntities.Category {CategoryName = "Sweaters" }, 
-                    new DataAccessLibrary.Entities.ProductEntities.Category {CategoryName = "Accessories" }, 
-                    new DataAccessLibrary.Entities.ProductEntities.Category {CategoryName = "Jackets" } 
+                    new DataAccessLibrary.Entities.ProductEntities.Category {CategoryName = "Sweaters" },
+                    new DataAccessLibrary.Entities.ProductEntities.Category {CategoryName = "Accessories" },
+                    new DataAccessLibrary.Entities.ProductEntities.Category {CategoryName = "Jackets" }
                 });
                 break;
         }
-        
+
         var successfulResponse = new HttpResponseMessage
         {
             StatusCode = HttpStatusCode.OK,
@@ -299,4 +301,98 @@ public class ProductServiceTests
         Assert.NotEmpty(genderCategories);
     }
 
+    [Fact]
+    public async Task GetProductByIdAsync_SuccessfulResponse_ReturnsProduct()
+    {
+        // Arrange
+        int productId = 1;
+        var expectedProduct = new Product
+        {
+            ProductId = productId
+        };
+
+        var handlerMock = new Mock<HttpMessageHandler>();
+        handlerMock
+            .Protected()
+            .Setup<Task<HttpResponseMessage>>(
+                "SendAsync",
+                ItExpr.Is<HttpRequestMessage>(req => req.RequestUri.ToString().Contains($"https://localhost:7067/product?id={productId}")),
+                ItExpr.IsAny<CancellationToken>()
+            )
+            .ReturnsAsync(new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent(JsonConvert.SerializeObject(expectedProduct)),
+            });
+
+        var httpClient = new HttpClient(handlerMock.Object);
+        var productService = new ProductService(httpClient);
+
+        // Act
+        var result = await productService.GetProductByIdAsync(productId);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(expectedProduct.ProductId, result.ProductId);
+    }
+
+    [Fact]
+    public async Task GetFilteredProductsWithGenderAsync_SuccessfulResponse_ReturnsProducts()
+    {
+        // Arrange
+        int? page = null;
+        int? take = null;
+        string gender = "Male";
+        string orderBy = "Name";
+        string orderDirection = "Asc";
+        string filterByName = "";
+
+        var expectedProducts = new List<Product>
+        {
+            // Create one or more expected products with the properties you expect
+            new Product
+            {
+                ProductName = "ABC",
+                Gender = gender,
+            },
+            new Product
+            {
+                ProductName = "BCD",
+                Gender = gender,
+            }
+            // Add more expected products as needed
+        };
+
+        var handlerMock = new Mock<HttpMessageHandler>();
+        handlerMock
+            .Protected()
+            .Setup<Task<HttpResponseMessage>>(
+                "SendAsync",
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>()
+            )
+            .ReturnsAsync(new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent(JsonConvert.SerializeObject(expectedProducts)),
+            });
+
+        var httpClient = new HttpClient(handlerMock.Object);
+        var productService = new ProductService(httpClient);
+
+        // Act
+        var result = await productService.GetFilteredProductsWithGenderAsync(page, take, gender, orderBy, orderDirection, filterByName);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Should().BeEquivalentTo(expectedProducts);
+
+        // Optionally, you can also verify that the HttpClient was called with the expected URI
+        handlerMock.Protected().Verify(
+            "SendAsync",
+            Times.Once(),
+            ItExpr.IsAny<HttpRequestMessage>(),
+            ItExpr.IsAny<CancellationToken>()
+        );
+    }
 }
