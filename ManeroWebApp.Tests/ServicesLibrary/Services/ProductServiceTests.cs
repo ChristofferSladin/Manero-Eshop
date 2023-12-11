@@ -5,12 +5,20 @@ using Moq.Protected;
 using Newtonsoft.Json;
 using ServiceLibrary.Services;
 using System.Net;
+using System.Text;
+using Xunit.Abstractions;
 
 namespace ManeroWebApp.Tests.ServicesLibrary.Services;
 
 public class ProductServiceTests
 {
     private readonly ProductService _productService = new(new HttpClient());
+    private readonly ITestOutputHelper _output;
+
+    public ProductServiceTests(ITestOutputHelper output)
+    {
+        _output = output;
+    }
 
     [Fact]
     public async Task Get_ProductAsync_By_ProductNumber_Returns_Valid_Product()
@@ -337,31 +345,39 @@ public class ProductServiceTests
     }
 
     [Fact]
-    public async Task GetFilteredProductsWithGenderAsync_SuccessfulResponse_ReturnsProducts()
+    public async Task GetFilteredProductsWithReviewsAsync_SuccessfulResponse_ReturnsProductsWithReviews()
     {
         // Arrange
         int? page = null;
         int? take = null;
-        string gender = "Male";
-        string orderBy = "Name";
+        string category = "Clothing";
+        string orderBy = "ProductName";
         string orderDirection = "Asc";
         string filterByName = "";
 
         var expectedProducts = new List<Product>
+    {
+        new Product
         {
-            // Create one or more expected products with the properties you expect
-            new Product
+            ProductName = "ABC",
+            Category = category,
+            Reviews = new List<Review>
             {
-                ProductName = "ABC",
-                Gender = gender,
-            },
-            new Product
-            {
-                ProductName = "BCD",
-                Gender = gender,
+                new Review { Id = "1", Rating = 4 },
+                new Review { Id = "2", Rating = 5 }
             }
-            // Add more expected products as needed
-        };
+        },
+        new Product
+        {
+            ProductName = "BCD",
+            Category = category,
+            Reviews = new List<Review>
+            {
+                new Review { Id = "3", Rating = 3 },
+                new Review { Id = "4", Rating = 4 }
+            }
+        }
+    };
 
         var handlerMock = new Mock<HttpMessageHandler>();
         handlerMock
@@ -374,25 +390,23 @@ public class ProductServiceTests
             .ReturnsAsync(new HttpResponseMessage
             {
                 StatusCode = HttpStatusCode.OK,
-                Content = new StringContent(JsonConvert.SerializeObject(expectedProducts)),
+                Content = new StringContent(JsonConvert.SerializeObject(expectedProducts), Encoding.UTF8, "application/json"),
             });
 
         var httpClient = new HttpClient(handlerMock.Object);
         var productService = new ProductService(httpClient);
 
         // Act
-        var result = await productService.GetFilteredProductsWithGenderAsync(page, take, gender, orderBy, orderDirection, filterByName);
+        var result = await productService.GetFilteredProductsWithReviewsAsync(page, take, category, orderBy, orderDirection, filterByName);
 
         // Assert
         result.Should().NotBeNull();
-        result.Should().BeEquivalentTo(expectedProducts);
-
-        // Optionally, you can also verify that the HttpClient was called with the expected URI
-        handlerMock.Protected().Verify(
-            "SendAsync",
-            Times.Once(),
-            ItExpr.IsAny<HttpRequestMessage>(),
-            ItExpr.IsAny<CancellationToken>()
-        );
+        result.Should().BeEquivalentTo(expectedProducts, options => options
+            .ExcludingMissingMembers()); // Ignore missing members in the expectation
+        foreach (var product in result)
+        {
+            Assert.NotNull(product.Reviews);
+            Assert.NotEmpty(product.Reviews);
+        }
     }
 }
