@@ -349,7 +349,6 @@ public class ProductServiceTests
 
         var expectedProducts = new List<Product>
         {
-            // Create one or more expected products with the properties you expect
             new Product
             {
                 ProductName = "ABC",
@@ -360,7 +359,6 @@ public class ProductServiceTests
                 ProductName = "BCD",
                 Gender = gender,
             }
-            // Add more expected products as needed
         };
 
         var handlerMock = new Mock<HttpMessageHandler>();
@@ -387,7 +385,6 @@ public class ProductServiceTests
         result.Should().NotBeNull();
         result.Should().BeEquivalentTo(expectedProducts);
 
-        // Optionally, you can also verify that the HttpClient was called with the expected URI
         handlerMock.Protected().Verify(
             "SendAsync",
             Times.Once(),
